@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Warga {
+  id           String       @id @default(cuid())
+  nik          String       @unique
+  namaLengkap  String
+  tempatLahir  String
+  tanggalLahir DateTime
+  jenisKelamin JenisKelamin
+  agama        String
+  alamat       String
+  rt           String
+  rw           String
+  statusKawin  StatusKawin  @default(BELUM_KAWIN)
+  pekerjaan    String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  surat        Surat[]
+
+  @@map("warga")
+}
+
+enum JenisKelamin {
+  LAKI_LAKI
+  PEREMPUAN
+}
+
+enum StatusKawin {
+  BELUM_KAWIN
+  KAWIN
+  CERAI_HIDUP
+  CERAI_MATI
+}
+
+model JenisSurat {
+  id             String   @id @default(cuid())
+  nama           String   @unique
+  deskripsi      String
+  icon           String
+  kodeFormat     String
+  templateFields Json
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  surat          Surat[]
+
+  @@map("jenis_surat")
+}
+
+model Surat {
+  id            String      @id @default(cuid())
+  nomorSurat    String      @unique
+  status        StatusSurat @default(DRAFT)
+  dataForm      Json
+  petugas       String      @default("Admin Desa")
+  tanggalDibuat DateTime    @default(now())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  warga         Warga       @relation(fields: [wargaId], references: [id])
+  wargaId       String
+
+  jenisSurat    JenisSurat  @relation(fields: [jenisSuratId], references: [id])
+  jenisSuratId  String
+
+  @@map("surat")
+}
+
+enum StatusSurat {
+  DRAFT
+  FINAL
+}
