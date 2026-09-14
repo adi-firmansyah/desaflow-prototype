@@ -1429,6 +1429,7 @@ export type WargaCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * The data used to create many Wargas.
    */
   data: Prisma.WargaCreateManyInput | Prisma.WargaCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1447,6 +1448,7 @@ export type WargaCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many Wargas.
    */
   data: Prisma.WargaCreateManyInput | Prisma.WargaCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

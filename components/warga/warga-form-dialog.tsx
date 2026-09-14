@@ -44,17 +44,23 @@ export function WargaFormDialog({
 }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const isEdit = !!warga;
 
   async function handleSubmit(formData: FormData) {
     setLoading(true);
+    setError(null);
     try {
-      if (isEdit) {
-        await updateWarga(warga.id, formData);
-      } else {
-        await createWarga(formData);
+      const result = isEdit
+        ? await updateWarga(warga.id, formData)
+        : await createWarga(formData);
+
+      if (!result.success) {
+        setError(result.message ?? "Terjadi kesalahan.");
+        return;
       }
+
       setOpen(false);
       formRef.current?.reset();
     } finally {
@@ -64,7 +70,14 @@ export function WargaFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <div onClick={() => setOpen(true)}>{trigger}</div>
+      <div
+        onClick={() => {
+          setError(null);
+          setOpen(true);
+        }}
+      >
+        {trigger}
+      </div>
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>
@@ -73,7 +86,14 @@ export function WargaFormDialog({
         </DialogHeader>
 
         {open && (
-          <form ref={formRef} action={handleSubmit} className="space-y-4">
+          <form
+            ref={formRef}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit(new FormData(e.currentTarget));
+            }}
+            className="space-y-4"
+          >
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="nik">NIK</Label>
@@ -195,6 +215,12 @@ export function WargaFormDialog({
                 defaultValue={warga?.pekerjaan ?? ""}
               />
             </div>
+
+            {error && (
+              <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">
+                {error}
+              </p>
+            )}
 
             <DialogFooter>
               <Button type="submit" disabled={loading}>

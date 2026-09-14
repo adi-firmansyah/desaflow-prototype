@@ -22,23 +22,33 @@ export async function createWarga(formData: FormData) {
     | "CERAI_MATI";
   const pekerjaan = formData.get("pekerjaan") as string;
 
-  await prisma.warga.create({
-    data: {
-      nik,
-      namaLengkap,
-      tempatLahir,
-      tanggalLahir: new Date(tanggalLahir),
-      jenisKelamin,
-      agama,
-      alamat,
-      rt,
-      rw,
-      statusKawin,
-      pekerjaan: pekerjaan || null,
-    },
-  });
-
-  revalidatePath("/data-warga");
+  try {
+    await prisma.warga.create({
+      data: {
+        nik,
+        namaLengkap,
+        tempatLahir,
+        tanggalLahir: new Date(tanggalLahir),
+        jenisKelamin,
+        agama,
+        alamat,
+        rt,
+        rw,
+        statusKawin,
+        pekerjaan: pekerjaan || null,
+      },
+    });
+    revalidatePath("/data-warga");
+    return { success: true };
+  } catch (error: any) {
+    if (error.code === "P2002") {
+      return {
+        success: false,
+        message: "NIK sudah terdaftar. Gunakan NIK yang berbeda.",
+      };
+    }
+    return { success: false, message: "Terjadi kesalahan. Silakan coba lagi." };
+  }
 }
 
 export async function updateWarga(id: string, formData: FormData) {
@@ -60,24 +70,34 @@ export async function updateWarga(id: string, formData: FormData) {
     | "CERAI_MATI";
   const pekerjaan = formData.get("pekerjaan") as string;
 
-  await prisma.warga.update({
-    where: { id },
-    data: {
-      nik,
-      namaLengkap,
-      tempatLahir,
-      tanggalLahir: new Date(tanggalLahir),
-      jenisKelamin,
-      agama,
-      alamat,
-      rt,
-      rw,
-      statusKawin,
-      pekerjaan: pekerjaan || null,
-    },
-  });
-
-  revalidatePath("/data-warga");
+  try {
+    await prisma.warga.update({
+      where: { id },
+      data: {
+        nik,
+        namaLengkap,
+        tempatLahir,
+        tanggalLahir: new Date(tanggalLahir),
+        jenisKelamin,
+        agama,
+        alamat,
+        rt,
+        rw,
+        statusKawin,
+        pekerjaan: pekerjaan || null,
+      },
+    });
+    revalidatePath("/data-warga");
+    return { success: true };
+  } catch (error: any) {
+    if (error.code === "P2002") {
+      return {
+        success: false,
+        message: "NIK sudah terdaftar. Gunakan NIK yang berbeda.",
+      };
+    }
+    return { success: false, message: "Terjadi kesalahan. Silakan coba lagi." };
+  }
 }
 
 export async function deleteWarga(id: string) {

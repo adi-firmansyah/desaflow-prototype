@@ -542,6 +542,7 @@ export type SuratCreateOrConnectWithoutWargaInput = {
 
 export type SuratCreateManyWargaInputEnvelope = {
   data: Prisma.SuratCreateManyWargaInput | Prisma.SuratCreateManyWargaInput[]
+  skipDuplicates?: boolean
 }
 
 export type SuratUpsertWithWhereUniqueWithoutWargaInput = {
@@ -607,6 +608,7 @@ export type SuratCreateOrConnectWithoutJenisSuratInput = {
 
 export type SuratCreateManyJenisSuratInputEnvelope = {
   data: Prisma.SuratCreateManyJenisSuratInput | Prisma.SuratCreateManyJenisSuratInput[]
+  skipDuplicates?: boolean
 }
 
 export type SuratUpsertWithWhereUniqueWithoutJenisSuratInput = {
@@ -1476,6 +1478,7 @@ export type SuratCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * The data used to create many Surats.
    */
   data: Prisma.SuratCreateManyInput | Prisma.SuratCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1494,6 +1497,7 @@ export type SuratCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many Surats.
    */
   data: Prisma.SuratCreateManyInput | Prisma.SuratCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

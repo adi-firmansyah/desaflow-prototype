@@ -1211,6 +1211,7 @@ export type JenisSuratCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * The data used to create many JenisSurats.
    */
   data: Prisma.JenisSuratCreateManyInput | Prisma.JenisSuratCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1229,6 +1230,7 @@ export type JenisSuratCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * The data used to create many JenisSurats.
    */
   data: Prisma.JenisSuratCreateManyInput | Prisma.JenisSuratCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

@@ -49,7 +49,7 @@ export function StepLengkapiForm({
     <div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <div className="border rounded-lg p-6">
-          <h2 className="text-lg font-semibold mb-4">👤 Data Pemohon</h2>
+          <h2 className="text-lg font-semibold mb-4">Data Pemohon</h2>
           <div className="space-y-4 text-sm">
             <ReadOnlyField label="Nama Lengkap" value={warga.namaLengkap} />
             <ReadOnlyField label="NIK" value={warga.nik} />
@@ -81,7 +81,7 @@ export function StepLengkapiForm({
 
         <div className="border rounded-lg p-6">
           <h2 className="text-lg font-semibold mb-4">
-            📝 Detail {jenisSurat.nama}
+            Detail {jenisSurat.nama}
           </h2>
           <div className="space-y-4">
             {fields.map((field) => (
