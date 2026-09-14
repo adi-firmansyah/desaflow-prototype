@@ -1,0 +1,86 @@
+"use server";
+
+import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
+
+export async function createWarga(formData: FormData) {
+  const nik = formData.get("nik") as string;
+  const namaLengkap = formData.get("namaLengkap") as string;
+  const tempatLahir = formData.get("tempatLahir") as string;
+  const tanggalLahir = formData.get("tanggalLahir") as string;
+  const jenisKelamin = formData.get("jenisKelamin") as
+    | "LAKI_LAKI"
+    | "PEREMPUAN";
+  const agama = formData.get("agama") as string;
+  const alamat = formData.get("alamat") as string;
+  const rt = formData.get("rt") as string;
+  const rw = formData.get("rw") as string;
+  const statusKawin = formData.get("statusKawin") as
+    | "BELUM_KAWIN"
+    | "KAWIN"
+    | "CERAI_HIDUP"
+    | "CERAI_MATI";
+  const pekerjaan = formData.get("pekerjaan") as string;
+
+  await prisma.warga.create({
+    data: {
+      nik,
+      namaLengkap,
+      tempatLahir,
+      tanggalLahir: new Date(tanggalLahir),
+      jenisKelamin,
+      agama,
+      alamat,
+      rt,
+      rw,
+      statusKawin,
+      pekerjaan: pekerjaan || null,
+    },
+  });
+
+  revalidatePath("/data-warga");
+}
+
+export async function updateWarga(id: string, formData: FormData) {
+  const nik = formData.get("nik") as string;
+  const namaLengkap = formData.get("namaLengkap") as string;
+  const tempatLahir = formData.get("tempatLahir") as string;
+  const tanggalLahir = formData.get("tanggalLahir") as string;
+  const jenisKelamin = formData.get("jenisKelamin") as
+    | "LAKI_LAKI"
+    | "PEREMPUAN";
+  const agama = formData.get("agama") as string;
+  const alamat = formData.get("alamat") as string;
+  const rt = formData.get("rt") as string;
+  const rw = formData.get("rw") as string;
+  const statusKawin = formData.get("statusKawin") as
+    | "BELUM_KAWIN"
+    | "KAWIN"
+    | "CERAI_HIDUP"
+    | "CERAI_MATI";
+  const pekerjaan = formData.get("pekerjaan") as string;
+
+  await prisma.warga.update({
+    where: { id },
+    data: {
+      nik,
+      namaLengkap,
+      tempatLahir,
+      tanggalLahir: new Date(tanggalLahir),
+      jenisKelamin,
+      agama,
+      alamat,
+      rt,
+      rw,
+      statusKawin,
+      pekerjaan: pekerjaan || null,
+    },
+  });
+
+  revalidatePath("/data-warga");
+}
+
+export async function deleteWarga(id: string) {
+  await prisma.warga.delete({ where: { id } });
+  revalidatePath("/data-warga");
+}

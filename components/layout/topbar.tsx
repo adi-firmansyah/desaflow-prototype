@@ -18,9 +18,7 @@ export function Topbar() {
         <div className="h-6 w-px bg-neutral-200" />
         <span className="text-sm font-medium">Admin Desa</span>
         <Avatar className="h-9 w-9">
-          <AvatarFallback className="bg-neutral-200">
-            <span className="sr-only">Admin</span>
-          </AvatarFallback>
+          <AvatarFallback className="bg-neutral-200">AD</AvatarFallback>
         </Avatar>
       </div>
     </header>
