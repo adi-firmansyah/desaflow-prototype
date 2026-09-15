@@ -2,9 +2,9 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-3.0.x"]
-  output   = "./generated"
+  output        = "./generated"
 }
 
 datasource db {
@@ -28,7 +28,7 @@ model Warga {
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
-  surat        Surat[]
+  surat Surat[]
 
   @@map("warga")
 }
@@ -55,7 +55,7 @@ model JenisSurat {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  surat          Surat[]
+  surat Surat[]
 
   @@map("jenis_surat")
 }
@@ -70,11 +70,11 @@ model Surat {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
-  warga         Warga       @relation(fields: [wargaId], references: [id])
-  wargaId       String
+  warga   Warga  @relation(fields: [wargaId], references: [id])
+  wargaId String
 
-  jenisSurat    JenisSurat  @relation(fields: [jenisSuratId], references: [id])
-  jenisSuratId  String
+  jenisSurat   JenisSurat @relation(fields: [jenisSuratId], references: [id])
+  jenisSuratId String
 
   @@map("surat")
 }
