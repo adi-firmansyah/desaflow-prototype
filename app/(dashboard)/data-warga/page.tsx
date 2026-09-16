@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { DeleteWargaButton } from "@/components/warga/delete-warga-button";
+import { ExportWargaButtons } from "@/components/warga/export-warga-buttons";
 import { WargaFormDialog } from "@/components/warga/warga-form-dialog";
 import { prisma } from "@/lib/prisma";
 import { EyeIcon, PencilIcon, PlusIcon, SearchIcon } from "lucide-react";
@@ -47,16 +48,19 @@ export default async function DataWargaPage({
         />
       </div>
 
-      <form className="relative max-w-sm mb-4">
-        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
-        <input
-          type="text"
-          name="q"
-          defaultValue={q}
-          placeholder="Cari NIK atau nama..."
-          className="w-full pl-9 pr-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-neutral-300"
-        />
-      </form>
+      <div className="flex items-center justify-between mb-4 gap-4">
+        <form className="relative max-w-sm flex-1">
+          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
+          <input
+            type="text"
+            name="q"
+            defaultValue={q}
+            placeholder="Cari NIK atau nama..."
+            className="w-full pl-9 pr-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-neutral-300"
+          />
+        </form>
+        <ExportWargaButtons query={q} />
+      </div>
 
       <div className="border rounded-lg">
         {wargaList.length === 0 ? (
