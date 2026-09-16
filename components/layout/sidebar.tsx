@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import {
+  FileStackIcon,
   FileTextIcon,
   HistoryIcon,
   LayoutDashboardIcon,
@@ -17,6 +18,7 @@ const navItems = [
   { label: "Register Surat", href: "/register-surat", icon: ListChecksIcon },
   { label: "Riwayat Surat", href: "/riwayat-surat", icon: HistoryIcon },
   { label: "Data Warga", href: "/data-warga", icon: UsersIcon },
+  { label: "Jenis Surat", href: "/jenis-surat", icon: FileStackIcon },
 ];
 
 export function Sidebar() {

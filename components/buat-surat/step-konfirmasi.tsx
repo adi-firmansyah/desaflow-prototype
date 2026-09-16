@@ -173,7 +173,7 @@ export function StepKonfirmasi({
             sesungguhnya bahwa:
           </p>
 
-          <table className="text-sm w-full mb-6">
+          <table className="text-sm w-full mb-6 table-fixed">
             <tbody>
               <PreviewRow label="Nama Lengkap" value={warga.namaLengkap} bold />
               <PreviewRow label="NIK" value={warga.nik} />
@@ -265,7 +265,7 @@ function PreviewRow({
   return (
     <tr>
       <td className="py-1 pr-4 w-48 text-neutral-600 align-top">{label}</td>
-      <td className="py-1 pr-2 align-top">:</td>
+      <td className="py-1 pr-2 w-3 align-top">:</td>
       <td className={`py-1 align-top ${bold ? "font-semibold" : ""}`}>
         {value}
       </td>

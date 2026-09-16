@@ -1,6 +1,7 @@
 "use client";
 
-import { FileDown, Loader2 } from "lucide-react";
+import { cn } from "cn";
+import { FileDownIcon, Loader2Icon } from "lucide-react";
 import { useState } from "react";
 
 export function DownloadPdfButton({
@@ -43,20 +44,21 @@ export function DownloadPdfButton({
     <button
       onClick={handleDownload}
       disabled={loading}
-      className={
+      className={cn(
+        "transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
         iconOnly
           ? "text-neutral-400 hover:text-neutral-700"
-          : "w-full inline-flex items-center justify-center gap-2 px-4 py-2 border rounded-md text-sm font-medium hover:bg-neutral-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-      }
+          : "w-full inline-flex items-center justify-center gap-2 px-4 py-2 border rounded-md text-sm font-medium hover:bg-neutral-50",
+      )}
     >
       {loading ? (
         <>
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <Loader2Icon className="h-4 w-4 animate-spin" />
           {!iconOnly && "Mengunduh..."}
         </>
       ) : (
         <>
-          <FileDown className="h-4 w-4" />
+          <FileDownIcon className="h-4 w-4" />
           {!iconOnly && "Unduh PDF"}
         </>
       )}
