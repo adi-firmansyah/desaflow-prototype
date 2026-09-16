@@ -2,7 +2,7 @@
 
 import { createSurat } from "@/app/(dashboard)/buat-surat/actions";
 import { Button } from "@/components/ui/button";
-import { Check, Eye, Plus, Printer } from "lucide-react";
+import { CheckIcon, EyeIcon, PlusIcon, PrinterIcon } from "lucide-react";
 import { useState } from "react";
 import type { JenisSurat, Warga } from "./buat-surat-wizard";
 
@@ -57,7 +57,7 @@ export function StepKonfirmasi({
     return (
       <div className="flex flex-col items-center text-center py-12">
         <div className="h-16 w-16 rounded-lg bg-neutral-100 flex items-center justify-center mb-6">
-          <Check className="h-8 w-8" />
+          <CheckIcon className="h-8 w-8" />
         </div>
         <h2 className="text-3xl font-bold mb-2">Surat Berhasil Dibuat</h2>
         <p className="text-neutral-500 mb-8">
@@ -85,15 +85,15 @@ export function StepKonfirmasi({
 
         <div className="flex gap-3">
           <Button onClick={() => window.print()}>
-            <Printer className="h-4 w-4 mr-2" />
+            <PrinterIcon className="h-4 w-4 mr-2" />
             Cetak Surat
           </Button>
           <Button variant="outline" onClick={() => setShowPreview(true)}>
-            <Eye className="h-4 w-4 mr-2" />
+            <EyeIcon className="h-4 w-4 mr-2" />
             Preview Surat
           </Button>
           <Button variant="outline" onClick={onReset}>
-            <Plus className="h-4 w-4 mr-2" />
+            <PlusIcon className="h-4 w-4 mr-2" />
             Buat Surat Baru
           </Button>
         </div>

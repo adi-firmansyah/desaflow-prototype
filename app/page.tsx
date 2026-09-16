@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import { ArrowRight } from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 
@@ -49,7 +49,7 @@ export default async function LandingPage() {
           className="inline-flex items-center gap-2 bg-neutral-900 text-white px-6 py-3 rounded-md font-medium hover:bg-neutral-800 transition-colors"
         >
           Mulai Buat Surat
-          <ArrowRight className="h-4 w-4" />
+          <ArrowRightIcon className="h-4 w-4" />
         </Link>
       </main>
 

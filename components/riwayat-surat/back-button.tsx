@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeftIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export function BackButton() {
@@ -23,7 +23,7 @@ export function BackButton() {
       onClick={() => router.push(href)}
       className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900 mb-6"
     >
-      <ArrowLeft className="h-4 w-4" />
+      <ArrowLeftIcon className="h-4 w-4" />
       {label}
     </button>
   );

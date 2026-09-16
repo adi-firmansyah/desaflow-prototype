@@ -2,7 +2,7 @@
 
 import { finalisasiSurat } from "@/app/(dashboard)/buat-surat/actions";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2Icon } from "lucide-react";
 import { useTransition } from "react";
 
 export function FinalisasiButton({ id }: { id: string }) {
@@ -21,7 +21,7 @@ export function FinalisasiButton({ id }: { id: string }) {
       onClick={handleClick}
       disabled={isPending}
     >
-      <CheckCircle2 className="h-4 w-4 mr-2" />
+      <CheckCircle2Icon className="h-4 w-4 mr-2" />
       {isPending ? "Memproses..." : "Jadikan Final"}
     </Button>
   );

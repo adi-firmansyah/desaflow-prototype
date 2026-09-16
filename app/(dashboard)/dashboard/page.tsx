@@ -1,7 +1,12 @@
 export const dynamic = "force-dynamic";
 
 import { prisma } from "@/lib/prisma";
-import { Calendar, FileText, MoreVertical, Plus } from "lucide-react";
+import {
+  CalendarIcon,
+  FileTextIcon,
+  MoreVerticalIcon,
+  PlusIcon,
+} from "lucide-react";
 import Link from "next/link";
 
 export default async function DashboardPage() {
@@ -32,7 +37,7 @@ export default async function DashboardPage() {
             <span className="text-xs font-semibold tracking-wider text-neutral-500">
               SURAT HARI INI
             </span>
-            <FileText className="h-4 w-4 text-neutral-400" />
+            <FileTextIcon className="h-4 w-4 text-neutral-400" />
           </div>
           <p className="text-4xl font-bold">{suratHariIni}</p>
         </div>
@@ -42,7 +47,7 @@ export default async function DashboardPage() {
             <span className="text-xs font-semibold tracking-wider text-neutral-500">
               SURAT BULAN INI
             </span>
-            <Calendar className="h-4 w-4 text-neutral-400" />
+            <CalendarIcon className="h-4 w-4 text-neutral-400" />
           </div>
           <p className="text-4xl font-bold">{suratBulanIni}</p>
         </div>
@@ -51,7 +56,7 @@ export default async function DashboardPage() {
           href="/buat-surat"
           className="bg-neutral-900 text-white rounded-lg p-5 flex flex-col items-center justify-center gap-2 hover:bg-neutral-800 transition-colors"
         >
-          <Plus className="h-6 w-6" />
+          <PlusIcon className="h-6 w-6" />
           <span className="font-semibold">Buat Surat Baru</span>
         </Link>
       </div>
@@ -89,7 +94,7 @@ export default async function DashboardPage() {
                   <td className="px-5 py-4">{surat.jenisSurat.nama}</td>
                   <td className="px-5 py-4 text-right">
                     <button className="text-neutral-400 hover:text-neutral-700">
-                      <MoreVertical className="h-4 w-4 inline" />
+                      <MoreVerticalIcon className="h-4 w-4 inline" />
                     </button>
                   </td>
                 </tr>

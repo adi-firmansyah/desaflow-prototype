@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { ArrowLeft, EyeIcon } from "lucide-react";
+import { ArrowLeftIcon, EyeIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -42,7 +42,7 @@ export default async function DetailWargaPage({
         href="/data-warga"
         className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900 mb-6"
       >
-        <ArrowLeft className="h-4 w-4" />
+        <ArrowLeftIcon className="h-4 w-4" />
         Kembali ke Data Warga
       </Link>
 
@@ -136,7 +136,7 @@ export default async function DetailWargaPage({
                         className="text-neutral-400 hover:text-neutral-700 inline-flex"
                         title="Detail surat"
                       >
-                        <EyeIcon className="h-5 w-5" />
+                        <EyeIcon className="h-4 w-4" />
                       </Link>
                     </td>
                   </tr>

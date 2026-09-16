@@ -1,7 +1,7 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
-import { LogOut } from "lucide-react";
+import { LogOutIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export function LogoutButton() {
@@ -19,7 +19,7 @@ export function LogoutButton() {
       className="text-neutral-500 hover:text-red-600 transition-colors"
       title="Keluar"
     >
-      <LogOut className="h-5 w-5" />
+      <LogOutIcon className="h-5 w-5" />
     </button>
   );
 }

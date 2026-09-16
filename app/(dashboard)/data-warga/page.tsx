@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { DeleteWargaButton } from "@/components/warga/delete-warga-button";
 import { WargaFormDialog } from "@/components/warga/warga-form-dialog";
 import { prisma } from "@/lib/prisma";
-import { EyeIcon, Pencil, Plus, Search } from "lucide-react";
+import { EyeIcon, PencilIcon, PlusIcon, SearchIcon } from "lucide-react";
 import Link from "next/link";
 
 const statusLabel: Record<string, string> = {
@@ -40,7 +40,7 @@ export default async function DataWargaPage({
         <WargaFormDialog
           trigger={
             <Button>
-              <Plus className="h-4 w-4 mr-2" />
+              <PlusIcon className="h-4 w-4 mr-2" />
               Tambah Warga
             </Button>
           }
@@ -48,7 +48,7 @@ export default async function DataWargaPage({
       </div>
 
       <form className="relative max-w-sm mb-4">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
+        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
         <input
           type="text"
           name="q"
@@ -94,7 +94,7 @@ export default async function DataWargaPage({
                         className="hover:text-neutral-700 text-neutral-400"
                         title="Detail warga"
                       >
-                        <EyeIcon className="h-5 w-5" />
+                        <EyeIcon className="h-4 w-4" />
                       </Link>
                       <WargaFormDialog
                         key={warga.id}
@@ -104,7 +104,7 @@ export default async function DataWargaPage({
                             className="text-neutral-400 hover:text-neutral-700"
                             title="Edit warga"
                           >
-                            <Pencil className="h-4 w-4" />
+                            <PencilIcon className="h-4 w-4" />
                           </button>
                         }
                       />

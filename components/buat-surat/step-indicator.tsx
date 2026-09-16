@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Check } from "lucide-react";
+import { CheckIcon } from "lucide-react";
 
 const steps = [
   "Data Pemohon",
@@ -27,7 +27,7 @@ export function StepIndicator({ current }: { current: number }) {
                     : "border text-neutral-400",
                 )}
               >
-                {isDone ? <Check className="h-4 w-4" /> : stepNum}
+                {isDone ? <CheckIcon className="h-4 w-4" /> : stepNum}
               </div>
               <span
                 className={cn(

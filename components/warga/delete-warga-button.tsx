@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Trash2 } from "lucide-react";
+import { Trash2Icon } from "lucide-react";
 import { useState } from "react";
 
 export function DeleteWargaButton({ id, nama }: { id: string; nama: string }) {
@@ -31,7 +31,7 @@ export function DeleteWargaButton({ id, nama }: { id: string; nama: string }) {
         className="text-neutral-400 hover:text-red-600 transition-colors"
         title="Hapus warga"
       >
-        <Trash2 className="h-4 w-4" />
+        <Trash2Icon className="h-4 w-4" />
       </button>
       <DialogContent>
         <DialogHeader>

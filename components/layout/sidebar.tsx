@@ -2,21 +2,21 @@
 
 import { cn } from "@/lib/utils";
 import {
-  FileText,
-  History,
-  LayoutDashboard,
-  ListChecks,
-  Users,
+  FileTextIcon,
+  HistoryIcon,
+  LayoutDashboardIcon,
+  ListChecksIcon,
+  UsersIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navItems = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Buat Surat", href: "/buat-surat", icon: FileText },
-  { label: "Register Surat", href: "/register-surat", icon: ListChecks },
-  { label: "Riwayat Surat", href: "/riwayat-surat", icon: History },
-  { label: "Data Warga", href: "/data-warga", icon: Users },
+  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboardIcon },
+  { label: "Buat Surat", href: "/buat-surat", icon: FileTextIcon },
+  { label: "Register Surat", href: "/register-surat", icon: ListChecksIcon },
+  { label: "Riwayat Surat", href: "/riwayat-surat", icon: HistoryIcon },
+  { label: "Data Warga", href: "/data-warga", icon: UsersIcon },
 ];
 
 export function Sidebar() {

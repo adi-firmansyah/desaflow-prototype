@@ -2,28 +2,28 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  ArrowRight,
-  Briefcase,
-  Check,
-  Church,
-  Ellipsis,
-  HeartHandshake,
-  MapPin,
-  Search,
-  User,
-  Users,
+  ArrowRightIcon,
+  BriefcaseIcon,
+  CheckIcon,
+  ChurchIcon,
+  EllipsisIcon,
+  HeartHandshakeIcon,
+  MapPinIcon,
+  SearchIcon,
+  UserIcon,
+  UsersIcon,
 } from "lucide-react";
 import { useState } from "react";
 import type { JenisSurat } from "./buat-surat-wizard";
 
 const iconMap: Record<string, React.ElementType> = {
-  church: Church,
-  users: Users,
-  user: User,
-  briefcase: Briefcase,
-  "map-pin": MapPin,
-  "heart-handshake": HeartHandshake,
-  ellipsis: Ellipsis,
+  church: ChurchIcon,
+  users: UsersIcon,
+  user: UserIcon,
+  briefcase: BriefcaseIcon,
+  "map-pin": MapPinIcon,
+  "heart-handshake": HeartHandshakeIcon,
+  ellipsis: EllipsisIcon,
 };
 
 export function StepPilihJenisSurat({
@@ -51,7 +51,7 @@ export function StepPilihJenisSurat({
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold">Pilih Jenis Surat</h2>
           <div className="relative w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
+            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
             <input
               type="text"
               value={query}
@@ -69,7 +69,7 @@ export function StepPilihJenisSurat({
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {filtered.map((jenis) => {
-              const Icon = iconMap[jenis.icon] ?? Ellipsis;
+              const Icon = iconMap[jenis.icon] ?? EllipsisIcon;
               const isSelected = selected?.id === jenis.id;
 
               return (
@@ -88,7 +88,7 @@ export function StepPilihJenisSurat({
                     </div>
                     {isSelected && (
                       <div className="h-6 w-6 rounded-full bg-neutral-900 flex items-center justify-center">
-                        <Check className="h-3.5 w-3.5 text-white" />
+                        <CheckIcon className="h-3.5 w-3.5 text-white" />
                       </div>
                     )}
                   </div>
@@ -100,7 +100,7 @@ export function StepPilihJenisSurat({
 
                   <div className="pt-3 border-t flex items-center justify-between text-sm font-medium">
                     {isSelected ? "Terpilih" : "Pilih"}
-                    <ArrowRight className="h-4 w-4" />
+                    <ArrowRightIcon className="h-4 w-4" />
                   </div>
                 </button>
               );

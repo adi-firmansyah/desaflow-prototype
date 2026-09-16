@@ -1,8 +1,9 @@
 import { BackButton } from "@/components/riwayat-surat/back-button";
+import { DownloadPdfButton } from "@/components/riwayat-surat/download-pdf-button";
 import { FinalisasiButton } from "@/components/riwayat-surat/finalisasi-button";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
-import { Printer } from "lucide-react";
+import { PrinterIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 
 type FieldSchema = {
@@ -61,12 +62,20 @@ export default async function DetailSuratPage({
             </div>
           </div>
 
-          {surat.status === "DRAFT" && <FinalisasiButton id={surat.id} />}
+          <div className="border rounded-lg p-6 space-y-3">
+            <h3 className="font-semibold mb-1">Tindakan</h3>
+            {surat.status === "DRAFT" && <FinalisasiButton id={surat.id} />}
 
-          <Button className="w-full justify-center" onClick={undefined}>
-            <Printer className="h-4 w-4 mr-2" />
-            Cetak Surat
-          </Button>
+            <Button className="w-full justify-center" onClick={undefined}>
+              <PrinterIcon className="h-4 w-4 mr-2" />
+              Cetak Surat
+            </Button>
+
+            <DownloadPdfButton
+              suratId={surat.id}
+              nomorSurat={surat.nomorSurat}
+            />
+          </div>
         </div>
 
         <div className="border rounded-lg p-10 bg-white">

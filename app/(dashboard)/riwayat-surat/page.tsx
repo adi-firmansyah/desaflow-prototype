@@ -1,3 +1,4 @@
+import { DownloadPdfButton } from "@/components/riwayat-surat/download-pdf-button";
 import { prisma } from "@/lib/prisma";
 import { EyeIcon } from "lucide-react";
 import Link from "next/link";
@@ -90,14 +91,20 @@ export default async function RiwayatSuratPage({
                       {statusLabel[surat.status]}
                     </span>
                   </td>
-                  <td className="px-5 py-4 text-right">
+                  <td className="px-5 py-4 text-right flex items-center justify-end gap-3">
                     <Link
                       href={`/riwayat-surat/${surat.id}`}
-                      className="text-neutral-400 hover:text-neutral-700 inline-flex"
+                      className="text-neutral-400 hover:text-neutral-700"
                       title="Detail surat"
                     >
-                      <EyeIcon className="h-5 w-5" />
+                      <EyeIcon className="h-4 w-4" />
                     </Link>
+
+                    <DownloadPdfButton
+                      suratId={surat.id}
+                      nomorSurat={surat.nomorSurat}
+                      iconOnly
+                    />
                   </td>
                 </tr>
               ))}
