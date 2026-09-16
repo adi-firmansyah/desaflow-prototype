@@ -1,0 +1,151 @@
+"use client";
+
+import { globalSearch } from "@/app/actions/global-search";
+import { FileTextIcon, Loader2Icon, SearchIcon, UserIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState, useTransition } from "react";
+
+type Warga = {
+  id: string;
+  nik: string;
+  namaLengkap: string;
+};
+
+type Surat = {
+  id: string;
+  nomorSurat: string;
+  warga: { namaLengkap: string };
+  jenisSurat: { nama: string };
+};
+
+export function GlobalSearch() {
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<{ warga: Warga[]; surat: Surat[] }>({
+    warga: [],
+    surat: [],
+  });
+  const [isOpen, setIsOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    if (query.trim().length < 2) {
+      setResults({ warga: [], surat: [] });
+      setIsOpen(false);
+      return;
+    }
+
+    debounceRef.current = setTimeout(() => {
+      startTransition(async () => {
+        const data = await globalSearch(query);
+        setResults(data);
+        setIsOpen(true);
+      });
+    }, 300);
+
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [query]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  function goTo(path: string) {
+    setIsOpen(false);
+    setQuery("");
+    router.push(path);
+  }
+
+  const hasResults = results.warga.length > 0 || results.surat.length > 0;
+  const showEmpty = query.trim().length >= 2 && !isPending && !hasResults;
+
+  return (
+    <div ref={containerRef} className="relative w-full max-w-md">
+      <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onFocus={() => query.trim().length >= 2 && setIsOpen(true)}
+        placeholder="Cari surat atau warga..."
+        className="w-full pl-9 pr-9 py-2 text-sm border rounded-md bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-neutral-300"
+      />
+      {isPending && (
+        <Loader2Icon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 animate-spin" />
+      )}
+
+      {isOpen && (hasResults || showEmpty) && (
+        <div className="absolute top-full mt-2 w-full bg-white border rounded-md shadow-lg z-50 max-h-96 overflow-y-auto">
+          {showEmpty && (
+            <p className="text-sm text-neutral-500 text-center py-6">
+              Tidak ditemukan hasil untuk &quot;{query}&quot;.
+            </p>
+          )}
+
+          {results.warga.length > 0 && (
+            <div>
+              <p className="text-xs font-semibold text-neutral-400 px-3 pt-3 pb-1">
+                WARGA
+              </p>
+              {results.warga.map((w) => (
+                <button
+                  key={w.id}
+                  onClick={() => goTo(`/data-warga/${w.id}`)}
+                  className="w-full flex items-center gap-3 px-3 py-2 hover:bg-neutral-100 text-left"
+                >
+                  <UserIcon className="h-4 w-4 text-neutral-400 shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium truncate">
+                      {w.namaLengkap}
+                    </p>
+                    <p className="text-xs text-neutral-500">{w.nik}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {results.surat.length > 0 && (
+            <div className="pb-2">
+              <p className="text-xs font-semibold text-neutral-400 px-3 pt-3 pb-1">
+                SURAT
+              </p>
+              {results.surat.map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => goTo(`/riwayat-surat/${s.id}`)}
+                  className="w-full flex items-center gap-3 px-3 py-2 hover:bg-neutral-100 text-left"
+                >
+                  <FileTextIcon className="h-4 w-4 text-neutral-400 shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium truncate">
+                      {s.nomorSurat}
+                    </p>
+                    <p className="text-xs text-neutral-500 truncate">
+                      {s.warga.namaLengkap} · {s.jenisSurat.nama}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

@@ -23,7 +23,10 @@ export default async function DataWargaPage({
   const wargaList = await prisma.warga.findMany({
     where: q
       ? {
-          OR: [{ nik: { contains: q } }, { namaLengkap: { contains: q } }],
+          OR: [
+            { nik: { contains: q, mode: "insensitive" } },
+            { namaLengkap: { contains: q, mode: "insensitive" } },
+          ],
         }
       : undefined,
     orderBy: { namaLengkap: "asc" },

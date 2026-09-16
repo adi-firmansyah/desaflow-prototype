@@ -24,8 +24,8 @@ export default async function RiwayatSuratPage({
     where: q
       ? {
           OR: [
-            { nomorSurat: { contains: q } },
-            { warga: { namaLengkap: { contains: q } } },
+            { nomorSurat: { contains: q, mode: "insensitive" } },
+            { warga: { namaLengkap: { contains: q, mode: "insensitive" } } },
           ],
         }
       : undefined,

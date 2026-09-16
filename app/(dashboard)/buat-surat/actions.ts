@@ -8,7 +8,10 @@ export async function searchWarga(query: string) {
 
   return prisma.warga.findMany({
     where: {
-      OR: [{ nik: { contains: query } }, { namaLengkap: { contains: query } }],
+      OR: [
+        { nik: { contains: query, mode: "insensitive" } },
+        { namaLengkap: { contains: query, mode: "insensitive" } },
+      ],
     },
     take: 5,
   });
