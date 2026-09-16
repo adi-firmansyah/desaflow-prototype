@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { CheckIcon } from "lucide-react";
+import { Check } from "lucide-react";
 
 const steps = [
   "Data Pemohon",
@@ -8,13 +8,19 @@ const steps = [
   "Konfirmasi",
 ];
 
-export function StepIndicator({ current }: { current: number }) {
+export function StepIndicator({
+  current,
+  completed,
+}: {
+  current: number;
+  completed?: boolean;
+}) {
   return (
-    <div className="flex items-center mb-8">
+    <div className="flex items-center justify-center mb-10">
       {steps.map((label, index) => {
         const stepNum = index + 1;
-        const isDone = stepNum < current;
-        const isActive = stepNum === current;
+        const isDone = completed || stepNum < current;
+        const isActive = !completed && stepNum === current;
 
         return (
           <div key={label} className="flex items-center">
@@ -27,12 +33,14 @@ export function StepIndicator({ current }: { current: number }) {
                     : "border text-neutral-400",
                 )}
               >
-                {isDone ? <CheckIcon className="h-4 w-4" /> : stepNum}
+                {isDone ? <Check className="h-4 w-4" /> : stepNum}
               </div>
               <span
                 className={cn(
                   "text-sm font-medium whitespace-nowrap",
-                  isActive ? "text-neutral-900" : "text-neutral-400",
+                  isActive || completed
+                    ? "text-neutral-900"
+                    : "text-neutral-400",
                 )}
               >
                 {label}

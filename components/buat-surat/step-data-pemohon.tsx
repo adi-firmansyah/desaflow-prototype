@@ -30,7 +30,7 @@ export function StepDataPemohon({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 space-y-6">
-        <div className="border rounded-lg p-6">
+        <div className="border rounded-lg p-6 bg-white">
           <h2 className="text-xl font-semibold mb-4">Pencarian Data Warga</h2>
           <label className="text-sm font-medium mb-1.5 block">
             Nomor Induk Kependudukan (NIK)
@@ -54,7 +54,7 @@ export function StepDataPemohon({
         </div>
 
         {hasSearched && (
-          <div className="border rounded-lg p-6">
+          <div className="border rounded-lg p-6 bg-white">
             <h3 className="text-xs font-semibold tracking-wider text-neutral-500 mb-4">
               HASIL PENCARIAN ({results.length})
             </h3>
@@ -105,7 +105,7 @@ export function StepDataPemohon({
         )}
       </div>
 
-      <div className="border-2 border-neutral-900 rounded-lg p-6 h-fit">
+      <div className="border-2 border-neutral-900 rounded-lg p-6 h-fit bg-white">
         <div className="flex items-center gap-2 mb-4">
           <div className="h-5 w-5 rounded-full bg-neutral-900 flex items-center justify-center shrink-0">
             <span className="text-white text-xs">✓</span>

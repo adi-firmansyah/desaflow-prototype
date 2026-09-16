@@ -52,7 +52,7 @@ export default async function DataWargaPage({
       </div>
 
       <div className="flex items-center justify-between mb-4 gap-4">
-        <form className="relative max-w-sm flex-1">
+        <form className="relative max-w-sm flex-1 bg-white">
           <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
           <input
             type="text"
@@ -65,7 +65,7 @@ export default async function DataWargaPage({
         <ExportWargaButtons query={q} />
       </div>
 
-      <div className="border rounded-lg">
+      <div className="border rounded-lg bg-white overflow-x-auto">
         {wargaList.length === 0 ? (
           <div className="px-5 py-10 text-center text-neutral-500 text-sm">
             {q

@@ -1,12 +1,8 @@
 export const dynamic = "force-dynamic";
 
+import { DownloadPdfButton } from "@/components/riwayat-surat/download-pdf-button";
 import { prisma } from "@/lib/prisma";
-import {
-  CalendarIcon,
-  FileTextIcon,
-  MoreVerticalIcon,
-  PlusIcon,
-} from "lucide-react";
+import { CalendarIcon, EyeIcon, FileTextIcon, PlusIcon } from "lucide-react";
 import Link from "next/link";
 
 export default async function DashboardPage() {
@@ -32,7 +28,7 @@ export default async function DashboardPage() {
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="border rounded-lg p-5">
+        <div className="border rounded-lg p-5 bg-white">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold tracking-wider text-neutral-500">
               SURAT HARI INI
@@ -42,7 +38,7 @@ export default async function DashboardPage() {
           <p className="text-4xl font-bold">{suratHariIni}</p>
         </div>
 
-        <div className="border rounded-lg p-5">
+        <div className="border rounded-lg p-5 bg-white">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold tracking-wider text-neutral-500">
               SURAT BULAN INI
@@ -61,7 +57,7 @@ export default async function DashboardPage() {
         </Link>
       </div>
 
-      <div className="border rounded-lg">
+      <div className="border rounded-lg bg-white">
         <div className="flex items-center justify-between px-5 py-4 border-b">
           <h2 className="font-semibold text-lg">Daftar Surat Terbaru</h2>
           <Link
@@ -92,10 +88,20 @@ export default async function DashboardPage() {
                   <td className="px-5 py-4 font-medium">{surat.nomorSurat}</td>
                   <td className="px-5 py-4">{surat.warga.namaLengkap}</td>
                   <td className="px-5 py-4">{surat.jenisSurat.nama}</td>
-                  <td className="px-5 py-4 text-right">
-                    <button className="text-neutral-400 hover:text-neutral-700">
-                      <MoreVerticalIcon className="h-4 w-4 inline" />
-                    </button>
+                  <td className="px-5 py-4 text-right flex items-center justify-end gap-3">
+                    <Link
+                      href={`/riwayat-surat/${surat.id}?from=dashboard`}
+                      className="text-neutral-400 hover:text-neutral-700"
+                      title="Detail surat"
+                    >
+                      <EyeIcon className="h-4 w-4" />
+                    </Link>
+
+                    <DownloadPdfButton
+                      suratId={surat.id}
+                      nomorSurat={surat.nomorSurat}
+                      iconOnly
+                    />
                   </td>
                 </tr>
               ))}

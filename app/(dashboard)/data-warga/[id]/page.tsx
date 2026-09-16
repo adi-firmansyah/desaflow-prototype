@@ -47,7 +47,7 @@ export default async function DetailWargaPage({
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-6">
-        <div className="border rounded-lg p-6 h-fit">
+        <div className="border rounded-lg p-6 h-fit bg-white">
           <h2 className="text-xl font-bold mb-1">{warga.namaLengkap}</h2>
           <p className="text-neutral-500 text-sm mb-6">NIK: {warga.nik}</p>
 
@@ -81,7 +81,7 @@ export default async function DetailWargaPage({
           </div>
         </div>
 
-        <div className="border rounded-lg">
+        <div className="border rounded-lg bg-white">
           <div className="px-5 py-4 border-b">
             <h3 className="font-semibold text-lg">Riwayat Surat</h3>
             <p className="text-sm text-neutral-500">

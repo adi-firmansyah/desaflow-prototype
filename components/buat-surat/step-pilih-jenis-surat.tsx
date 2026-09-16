@@ -47,7 +47,7 @@ export function StepPilihJenisSurat({
 
   return (
     <div>
-      <div className="border rounded-lg p-6 mb-6">
+      <div className="border rounded-lg p-6 mb-6 bg-white">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold">Pilih Jenis Surat</h2>
           <div className="relative w-64">

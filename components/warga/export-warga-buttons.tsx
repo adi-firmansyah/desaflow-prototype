@@ -41,7 +41,7 @@ export function ExportWargaButtons({ query }: { query?: string }) {
       <button
         onClick={() => handleExport("xlsx")}
         disabled={loadingFormat !== null}
-        className="inline-flex items-center gap-2 px-3 py-2 border rounded-md text-sm font-medium hover:bg-neutral-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="inline-flex items-center gap-2 px-3 py-2 border rounded-md text-sm font-medium bg-white hover:bg-neutral-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loadingFormat === "xlsx" ? (
           <Loader2Icon className="h-4 w-4 animate-spin" />
@@ -53,7 +53,7 @@ export function ExportWargaButtons({ query }: { query?: string }) {
       <button
         onClick={() => handleExport("csv")}
         disabled={loadingFormat !== null}
-        className="inline-flex items-center gap-2 px-3 py-2 border rounded-md text-sm font-medium hover:bg-neutral-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="inline-flex items-center gap-2 px-3 py-2 border rounded-md text-sm font-medium bg-white hover:bg-neutral-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loadingFormat === "csv" ? (
           <Loader2Icon className="h-4 w-4 animate-spin" />

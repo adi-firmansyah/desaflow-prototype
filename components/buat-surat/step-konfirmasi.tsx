@@ -65,7 +65,7 @@ export function StepKonfirmasi({
           ditandatangani.
         </p>
 
-        <div className="border rounded-lg p-6 w-full max-w-md text-left space-y-3 mb-8">
+        <div className="border rounded-lg p-6 w-full max-w-md text-left space-y-3 mb-8 bg-white">
           <h3 className="font-semibold mb-2">Ringkasan Dokumen</h3>
           <SummaryRow label="No. Surat" value={suratHasil.nomorSurat} />
           <SummaryRow label="Nama Warga" value={warga.namaLengkap} />
@@ -106,7 +106,7 @@ export function StepKonfirmasi({
     <div>
       <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 mb-6">
         <div className="space-y-6">
-          <div className="border rounded-lg p-6">
+          <div className="border rounded-lg p-6 bg-white">
             <h3 className="font-semibold mb-4">Informasi Surat</h3>
             <div className="space-y-3 text-sm">
               <SummaryRow
@@ -137,7 +137,7 @@ export function StepKonfirmasi({
           </div>
 
           {!suratHasil && (
-            <div className="border rounded-lg p-6 space-y-3">
+            <div className="border rounded-lg p-6 space-y-3 bg-white">
               <h3 className="font-semibold mb-1">Tindakan</h3>
               <Button
                 variant="outline"

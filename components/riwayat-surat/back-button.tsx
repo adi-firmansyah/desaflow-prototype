@@ -13,9 +13,17 @@ export function BackButton() {
   let label = "Kembali ke Riwayat Surat";
   let href = "/riwayat-surat";
 
-  if (from === "warga" && wargaId) {
-    label = "Kembali ke Detail Warga";
-    href = `/data-warga/${wargaId}`;
+  switch (from) {
+    case "dashboard":
+      label = "Kembali ke Dashboard";
+      href = "/dashboard";
+      break;
+    case "warga":
+      if (wargaId) {
+        label = "Kembali ke Detail Warga";
+        href = `/data-warga/${wargaId}`;
+      }
+      break;
   }
 
   return (

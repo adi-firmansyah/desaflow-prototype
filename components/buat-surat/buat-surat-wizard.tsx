@@ -63,11 +63,17 @@ export function BuatSuratWizard({
     if (saved) {
       try {
         const parsed: WizardState = JSON.parse(saved);
-        setStep(parsed.step);
-        setSelectedWarga(parsed.selectedWarga);
-        setSelectedJenisSurat(parsed.selectedJenisSurat);
-        setFormData(parsed.formData);
-        setSuratHasil(parsed.suratHasil);
+
+        // Kalau surat sudah selesai dibuat, jangan restore state lama — mulai baru
+        if (parsed.suratHasil) {
+          sessionStorage.removeItem(STORAGE_KEY);
+        } else {
+          setStep(parsed.step);
+          setSelectedWarga(parsed.selectedWarga);
+          setSelectedJenisSurat(parsed.selectedJenisSurat);
+          setFormData(parsed.formData);
+          setSuratHasil(parsed.suratHasil);
+        }
       } catch {
         // abaikan kalau data corrupt
       }
@@ -108,7 +114,7 @@ export function BuatSuratWizard({
 
   return (
     <div>
-      <StepIndicator current={step} />
+      <StepIndicator current={step} completed={step === 4 && !!suratHasil} />
 
       {step === 1 && (
         <StepDataPemohon

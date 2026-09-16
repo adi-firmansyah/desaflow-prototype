@@ -33,7 +33,7 @@ export default async function JenisSuratPage() {
         />
       </div>
 
-      <div className="border rounded-lg">
+      <div className="border rounded-lg bg-white overflow-x-auto">
         {jenisSuratList.length === 0 ? (
           <div className="px-5 py-10 text-center text-neutral-500 text-sm">
             Belum ada jenis surat. Tambahkan jenis surat pertama.

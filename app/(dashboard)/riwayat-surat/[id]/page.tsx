@@ -37,7 +37,7 @@ export default async function DetailSuratPage({
 
       <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
         <div className="space-y-6">
-          <div className="border rounded-lg p-6">
+          <div className="border rounded-lg p-6 bg-white">
             <h3 className="font-semibold mb-4">Informasi Surat</h3>
             <div className="space-y-3 text-sm">
               <InfoRow label="Nomor Surat" value={surat.nomorSurat} />
@@ -62,7 +62,7 @@ export default async function DetailSuratPage({
             </div>
           </div>
 
-          <div className="border rounded-lg p-6 space-y-3">
+          <div className="border rounded-lg p-6 space-y-3 bg-white">
             <h3 className="font-semibold mb-1">Tindakan</h3>
             {surat.status === "DRAFT" && <FinalisasiButton id={surat.id} />}
 

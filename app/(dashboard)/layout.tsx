@@ -11,7 +11,16 @@ export default function DashboardLayout({
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Topbar />
-        <main className="flex-1 p-6">{children}</main>
+        <main
+          className="flex-1 p-6 relative"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, #e5e5e5 1px, transparent 1px)",
+            backgroundSize: "24px 24px",
+          }}
+        >
+          <div className="relative z-10">{children}</div>
+        </main>
       </div>
     </div>
   );

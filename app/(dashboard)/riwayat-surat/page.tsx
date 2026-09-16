@@ -40,7 +40,7 @@ export default async function RiwayatSuratPage({
         Daftar seluruh surat yang pernah dibuat dan tersimpan di sistem.
       </p>
 
-      <form className="max-w-sm mb-4">
+      <form className="max-w-sm mb-4 bg-white">
         <input
           type="text"
           name="q"
@@ -50,7 +50,7 @@ export default async function RiwayatSuratPage({
         />
       </form>
 
-      <div className="border rounded-lg">
+      <div className="border rounded-lg bg-white overflow-x-auto">
         {suratList.length === 0 ? (
           <div className="px-5 py-10 text-center text-neutral-500 text-sm">
             {q
