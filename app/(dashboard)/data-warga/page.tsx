@@ -2,7 +2,8 @@ import { Button } from "@/components/ui/button";
 import { DeleteWargaButton } from "@/components/warga/delete-warga-button";
 import { WargaFormDialog } from "@/components/warga/warga-form-dialog";
 import { prisma } from "@/lib/prisma";
-import { Pencil, Plus, Search } from "lucide-react";
+import { EyeIcon, Pencil, Plus, Search } from "lucide-react";
+import Link from "next/link";
 
 const statusLabel: Record<string, string> = {
   BELUM_KAWIN: "Belum Kawin",
@@ -88,11 +89,21 @@ export default async function DataWargaPage({
                   </td>
                   <td className="px-5 py-4">
                     <div className="flex items-center justify-end gap-3">
+                      <Link
+                        href={`/data-warga/${warga.id}`}
+                        className="hover:text-neutral-700 text-neutral-400"
+                        title="Detail warga"
+                      >
+                        <EyeIcon className="h-5 w-5" />
+                      </Link>
                       <WargaFormDialog
                         key={warga.id}
                         warga={warga}
                         trigger={
-                          <button className="text-neutral-400 hover:text-neutral-700">
+                          <button
+                            className="text-neutral-400 hover:text-neutral-700"
+                            title="Edit warga"
+                          >
                             <Pencil className="h-4 w-4" />
                           </button>
                         }

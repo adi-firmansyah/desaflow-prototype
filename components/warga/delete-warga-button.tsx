@@ -29,6 +29,7 @@ export function DeleteWargaButton({ id, nama }: { id: string; nama: string }) {
       <button
         onClick={() => setOpen(true)}
         className="text-neutral-400 hover:text-red-600 transition-colors"
+        title="Hapus warga"
       >
         <Trash2 className="h-4 w-4" />
       </button>

@@ -1,7 +1,22 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { auth } from "@/lib/auth";
 import { HelpCircle, Search } from "lucide-react";
+import { headers } from "next/headers";
+import { LogoutButton } from "./logout-button";
 
-export function Topbar() {
+export async function Topbar() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const name = session?.user?.name ?? "Admin Desa";
+  const initials = name
+    .split(" ")
+    .map((word) => word[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
   return (
     <header className="h-[73px] border-b flex items-center justify-between px-6 gap-4">
       <div className="relative w-full max-w-md">
@@ -16,10 +31,14 @@ export function Topbar() {
       <div className="flex items-center gap-4 shrink-0">
         <HelpCircle className="h-5 w-5 text-neutral-500" />
         <div className="h-6 w-px bg-neutral-200" />
-        <span className="text-sm font-medium">Admin Desa</span>
+        <span className="text-sm font-medium">{name}</span>
         <Avatar className="h-9 w-9">
-          <AvatarFallback className="bg-neutral-200">AD</AvatarFallback>
+          <AvatarFallback className="bg-neutral-200 text-xs font-medium">
+            {initials}
+          </AvatarFallback>
         </Avatar>
+        <div className="h-6 w-px bg-neutral-200" />
+        <LogoutButton />
       </div>
     </header>
   );

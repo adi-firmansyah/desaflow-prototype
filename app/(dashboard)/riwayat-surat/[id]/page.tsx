@@ -1,8 +1,8 @@
+import { BackButton } from "@/components/riwayat-surat/back-button";
 import { FinalisasiButton } from "@/components/riwayat-surat/finalisasi-button";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
-import { ArrowLeft, Printer } from "lucide-react";
-import Link from "next/link";
+import { Printer } from "lucide-react";
 import { notFound } from "next/navigation";
 
 type FieldSchema = {
@@ -32,13 +32,7 @@ export default async function DetailSuratPage({
 
   return (
     <div>
-      <Link
-        href="/riwayat-surat"
-        className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900 mb-6"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Kembali ke Riwayat Surat
-      </Link>
+      <BackButton />
 
       <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
         <div className="space-y-6">

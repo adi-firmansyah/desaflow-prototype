@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Eye } from "lucide-react";
+import { EyeIcon } from "lucide-react";
 import Link from "next/link";
 
 const statusLabel: Record<string, string> = {
@@ -94,8 +94,9 @@ export default async function RiwayatSuratPage({
                     <Link
                       href={`/riwayat-surat/${surat.id}`}
                       className="text-neutral-400 hover:text-neutral-700 inline-flex"
+                      title="Detail surat"
                     >
-                      <Eye className="h-4 w-4" />
+                      <EyeIcon className="h-5 w-5" />
                     </Link>
                   </td>
                 </tr>
