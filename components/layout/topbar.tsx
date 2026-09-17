@@ -1,5 +1,4 @@
 import { auth } from "@/lib/auth/server";
-import { HelpCircleIcon } from "lucide-react";
 import { headers } from "next/headers";
 import { GlobalSearch } from "./global-search";
 import { LogoutButton } from "./logout-button";
@@ -16,8 +15,6 @@ export async function Topbar() {
       <GlobalSearch />
 
       <div className="flex items-center gap-4 shrink-0">
-        <HelpCircleIcon className="h-5 w-5 text-neutral-500" />
-        <div className="h-6 w-px bg-neutral-200" />
         <span className="text-sm font-medium">{name}</span>
         <div className="h-6 w-px bg-neutral-200" />
         <LogoutButton />

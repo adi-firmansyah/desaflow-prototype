@@ -6,7 +6,6 @@ import {
   FileTextIcon,
   HistoryIcon,
   LayoutDashboardIcon,
-  ListChecksIcon,
   UsersIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -30,7 +29,7 @@ export function Sidebar() {
         <p className="text-sm text-neutral-500 mt-1">Admin Sistem Desa</p>
       </div>
 
-      <nav className="flex-1 px-3">
+      <nav className="flex-1 px-4">
         {navItems.map((item) => {
           const isActive = pathname.startsWith(item.href);
           const Icon = item.icon;

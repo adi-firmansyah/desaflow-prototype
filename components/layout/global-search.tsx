@@ -2,7 +2,13 @@
 
 import { globalSearch } from "@/app/actions/global-search";
 import type { SuratSearchResult, WargaSearchResult } from "@/types";
-import { FileTextIcon, Loader2Icon, SearchIcon, UserIcon } from "lucide-react";
+import {
+  FileTextIcon,
+  Loader2Icon,
+  SearchIcon,
+  UserIcon,
+  XIcon,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 
@@ -62,23 +68,41 @@ export function GlobalSearch() {
     router.push(path);
   }
 
+  function handleClear() {
+    setQuery("");
+    setResults({ warga: [], surat: [] });
+    setIsOpen(false);
+  }
+
   const hasResults = results.warga.length > 0 || results.surat.length > 0;
   const showEmpty = query.trim().length >= 2 && !isPending && !hasResults;
 
   return (
     <div ref={containerRef} className="relative w-full max-w-md">
-      <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
+      <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 pointer-events-none" />
       <input
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onFocus={() => query.trim().length >= 2 && setIsOpen(true)}
         placeholder="Cari surat atau warga..."
-        className="w-full pl-9 pr-9 py-2 text-sm border rounded-md bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-neutral-300"
+        className="w-full pl-9 pr-14 py-2 text-sm border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-neutral-300"
       />
-      {isPending && (
-        <Loader2Icon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 animate-spin" />
-      )}
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+        {isPending && (
+          <Loader2Icon className="h-4 w-4 text-neutral-400 animate-spin" />
+        )}
+        {query && (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="text-neutral-400 hover:text-neutral-600 rounded p-0.5"
+            title="Hapus pencarian"
+          >
+            <XIcon className="h-3.5 w-3.5" />
+          </button>
+        )}
+      </div>
 
       {isOpen && (hasResults || showEmpty) && (
         <div className="absolute top-full mt-2 w-full bg-white border rounded-md shadow-lg z-50 max-h-96 overflow-y-auto">
@@ -91,7 +115,7 @@ export function GlobalSearch() {
           {results.warga.length > 0 && (
             <div>
               <p className="text-xs font-semibold text-neutral-400 px-3 pt-3 pb-1">
-                WARGA
+                Warga
               </p>
               {results.warga.map((w) => (
                 <button
@@ -112,9 +136,9 @@ export function GlobalSearch() {
           )}
 
           {results.surat.length > 0 && (
-            <div className="pb-2">
+            <div>
               <p className="text-xs font-semibold text-neutral-400 px-3 pt-3 pb-1">
-                SURAT
+                Surat
               </p>
               {results.surat.map((s) => (
                 <button
