@@ -1,3 +1,4 @@
+import { InfoRow } from "@/components/ui/detail-rows";
 import { statusLabel, suratStatusColor } from "@/lib/constants";
 import { prisma } from "@/lib/prisma";
 import { ArrowLeftIcon, EyeIcon } from "lucide-react";
@@ -135,15 +136,6 @@ export default async function DetailWargaPage({
           )}
         </div>
       </div>
-    </div>
-  );
-}
-
-function InfoRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="pb-3 border-b last:border-0">
-      <p className="text-neutral-500 text-xs mb-1">{label}</p>
-      <p className="font-medium">{value}</p>
     </div>
   );
 }

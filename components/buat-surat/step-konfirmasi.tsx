@@ -2,6 +2,7 @@
 
 import { createSurat } from "@/app/(dashboard)/buat-surat/actions";
 import { Button } from "@/components/ui/button";
+import { PreviewRow } from "@/components/ui/detail-rows";
 import type { FieldSchema, JenisSurat, Warga } from "@/types";
 import { CheckIcon, EyeIcon, PlusIcon, PrinterIcon } from "lucide-react";
 import { useState } from "react";
@@ -220,7 +221,6 @@ export function StepKonfirmasi({
     </div>
   );
 }
-
 function SummaryRow({
   label,
   value,
@@ -243,25 +243,5 @@ function SummaryRow({
       <span className="text-neutral-500">{label}</span>
       <span className="font-medium">{value}</span>
     </div>
-  );
-}
-
-function PreviewRow({
-  label,
-  value,
-  bold,
-}: {
-  label: string;
-  value: string;
-  bold?: boolean;
-}) {
-  return (
-    <tr>
-      <td className="py-1 pr-4 w-48 text-neutral-600 align-top">{label}</td>
-      <td className="py-1 pr-2 w-3 align-top">:</td>
-      <td className={`py-1 align-top ${bold ? "font-semibold" : ""}`}>
-        {value}
-      </td>
-    </tr>
   );
 }
