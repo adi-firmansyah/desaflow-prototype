@@ -10,6 +10,10 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import type { JenisSurat, Warga } from "@/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { useMemo } from "react";
+import { z } from "zod";
 
 export function StepLengkapiForm({
   warga,
@@ -27,13 +31,34 @@ export function StepLengkapiForm({
   onNext: () => void;
 }) {
   const fields = jenisSurat.templateFields;
+  const formSchema = useMemo(
+    () =>
+      z.record(z.string(), z.string()).superRefine((values, ctx) => {
+        fields.forEach((field) => {
+          if (field.required && !values[field.key]?.trim()) {
+            ctx.addIssue({
+              code: "custom",
+              path: [field.key],
+              message: `${field.label} wajib diisi.`,
+            });
+          }
+        });
+      }),
+    [fields],
+  );
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<Record<string, string>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: formData,
+  });
 
-  const requiredFieldsFilled = fields
-    .filter((f) => f.required)
-    .every((f) => formData[f.key]?.trim());
-
-  function setField(key: string, value: string) {
-    onChange({ ...formData, [key]: value });
+  function onSubmit(values: Record<string, string>) {
+    onChange(values);
+    onNext();
   }
 
   return (
@@ -74,7 +99,7 @@ export function StepLengkapiForm({
           <h2 className="text-lg font-semibold mb-4">
             Detail {jenisSurat.nama}
           </h2>
-          <div className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {fields.map((field) => (
               <div key={field.key}>
                 <label className="text-sm font-medium mb-1.5 block">
@@ -84,8 +109,8 @@ export function StepLengkapiForm({
 
                 {field.type === "textarea" ? (
                   <Textarea
-                    value={formData[field.key] ?? ""}
-                    onChange={(e) => setField(field.key, e.target.value)}
+                    {...register(field.key)}
+                    aria-invalid={!!errors[field.key]}
                     placeholder={
                       field.placeholder ??
                       "Masukkan detail tambahan jika diperlukan..."
@@ -93,9 +118,13 @@ export function StepLengkapiForm({
                     rows={4}
                   />
                 ) : field.type === "select" ? (
+                  <Controller
+                    name={field.key}
+                    control={control}
+                    render={({ field: controllerField }) => (
                   <Select
-                    value={formData[field.key] ?? ""}
-                    onValueChange={(val) => setField(field.key, val ?? "")}
+                    value={controllerField.value ?? ""}
+                    onValueChange={(val) => controllerField.onChange(val ?? "")}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue
@@ -110,18 +139,25 @@ export function StepLengkapiForm({
                       ))}
                     </SelectContent>
                   </Select>
+                    )}
+                  />
                 ) : (
                   <input
                     type={field.type}
-                    value={formData[field.key] ?? ""}
-                    onChange={(e) => setField(field.key, e.target.value)}
+                    {...register(field.key)}
+                    aria-invalid={!!errors[field.key]}
                     placeholder={field.placeholder}
                     className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-300"
                   />
                 )}
+                {errors[field.key]?.message && (
+                  <p className="text-xs text-red-600 mt-1">
+                    {errors[field.key]?.message}
+                  </p>
+                )}
               </div>
             ))}
-          </div>
+          </form>
         </div>
       </div>
 
@@ -129,7 +165,11 @@ export function StepLengkapiForm({
         <Button variant="outline" onClick={onBack}>
           ← Pilih Jenis Surat
         </Button>
-        <Button onClick={onNext} disabled={!requiredFieldsFilled}>
+        <Button
+          type="button"
+          onClick={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
+        >
           👁 Preview Surat
         </Button>
       </div>

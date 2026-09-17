@@ -1,30 +1,34 @@
 import { Button } from "@/components/ui/button";
 import { statusLabel } from "@/lib/constants";
-import { prisma } from "@/lib/prisma";
+import { getWargaList } from "@/lib/queries";
+import { normalizePagination } from "@/lib/pagination";
 import { EyeIcon, PencilIcon, PlusIcon, SearchIcon } from "lucide-react";
 import Link from "next/link";
 import { DeleteWargaButton } from "./_components/delete-warga-button";
 import { ExportWargaButtons } from "./_components/export-warga-buttons";
 import { WargaFormDialog } from "./_components/warga-form-dialog";
+import { PaginationControls } from "@/components/pagination-controls";
+import { redirect } from "next/navigation";
 
 export default async function DataWargaPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; page?: string; limit?: string }>;
 }) {
-  const { q } = await searchParams;
-
-  const wargaList = await prisma.warga.findMany({
-    where: q
-      ? {
-          OR: [
-            { nik: { contains: q, mode: "insensitive" } },
-            { namaLengkap: { contains: q, mode: "insensitive" } },
-          ],
-        }
-      : undefined,
-    orderBy: { namaLengkap: "asc" },
+  const { q, page, limit } = await searchParams;
+  const pagination = normalizePagination(page, limit);
+  const wargaResult = await getWargaList({
+    ...pagination,
+    query: q,
   });
+  if (wargaResult.currentPage !== pagination.page) {
+    const params = new URLSearchParams();
+    if (q) params.set("q", q);
+    params.set("page", String(wargaResult.currentPage));
+    params.set("limit", String(pagination.limit));
+    redirect(`/data-warga?${params.toString()}`);
+  }
+  const wargaList = wargaResult.data;
 
   return (
     <div>
@@ -121,6 +125,13 @@ export default async function DataWargaPage({
           </table>
         )}
       </div>
+      <PaginationControls
+        pathname="/data-warga"
+        query={q}
+        page={wargaResult.currentPage}
+        limit={pagination.limit}
+        totalPages={wargaResult.totalPages}
+      />
     </div>
   );
 }

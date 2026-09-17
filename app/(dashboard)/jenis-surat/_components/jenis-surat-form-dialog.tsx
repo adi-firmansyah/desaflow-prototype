@@ -21,7 +21,13 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { iconOptions } from "@/lib/constants";
+import {
+  JenisSuratSchema,
+  type JenisSuratInput,
+} from "@/lib/validations/surat";
 import type { FieldSchema, JenisSurat } from "@/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
 import { FieldBuilder } from "./field-builder";
 
@@ -34,59 +40,71 @@ export function JenisSuratFormDialog({
 }) {
   const isEdit = !!jenisSurat;
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const [nama, setNama] = useState(jenisSurat?.nama ?? "");
-  const [deskripsi, setDeskripsi] = useState(jenisSurat?.deskripsi ?? "");
-  const [icon, setIcon] = useState(jenisSurat?.icon ?? "church");
-  const [kodeFormat, setKodeFormat] = useState(jenisSurat?.kodeFormat ?? "");
   const [fields, setFields] = useState<FieldSchema[]>(
     jenisSurat?.templateFields ?? [],
   );
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    setValue,
+    setError: setFieldError,
+    formState: { errors, isSubmitting },
+  } = useForm<JenisSuratInput>({
+    resolver: zodResolver(JenisSuratSchema),
+    defaultValues: {
+      nama: jenisSurat?.nama ?? "",
+      deskripsi: jenisSurat?.deskripsi ?? "",
+      icon: jenisSurat?.icon ?? "church",
+      kodeFormat: jenisSurat?.kodeFormat ?? "",
+      fields: jenisSurat?.templateFields ?? [],
+    },
+  });
 
   function resetForm() {
-    setNama(jenisSurat?.nama ?? "");
-    setDeskripsi(jenisSurat?.deskripsi ?? "");
-    setIcon(jenisSurat?.icon ?? "church");
-    setKodeFormat(jenisSurat?.kodeFormat ?? "");
-    setFields(jenisSurat?.templateFields ?? []);
+    const defaultValues = {
+      nama: jenisSurat?.nama ?? "",
+      deskripsi: jenisSurat?.deskripsi ?? "",
+      icon: jenisSurat?.icon ?? "church",
+      kodeFormat: jenisSurat?.kodeFormat ?? "",
+      fields: jenisSurat?.templateFields ?? [],
+    };
+    reset(defaultValues);
+    setFields(defaultValues.fields);
     setError(null);
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function onSubmit(values: JenisSuratInput) {
     setError(null);
+    setValue("fields", fields, { shouldValidate: true });
+    const payload = {
+      ...values,
+      kodeFormat: values.kodeFormat.toUpperCase(),
+      fields,
+    };
 
-    if (fields.some((f) => !f.label.trim())) {
-      setError("Semua field harus memiliki label.");
+    const result = isEdit
+      ? await updateJenisSurat(jenisSurat.id, payload)
+      : await createJenisSurat(payload);
+
+    if (!result.success) {
+      setError(result.message ?? "Terjadi kesalahan.");
+      if (result.errors) {
+        const fieldMessage = result.errors.fields?.[0];
+        if (fieldMessage) {
+          setFieldError("fields", {
+            type: "server",
+            message: fieldMessage,
+          });
+        }
+      }
       return;
     }
 
-    setLoading(true);
-    try {
-      const payload = {
-        nama,
-        deskripsi,
-        icon,
-        kodeFormat: kodeFormat.toUpperCase(),
-        fields,
-      };
-
-      const result = isEdit
-        ? await updateJenisSurat(jenisSurat.id, payload)
-        : await createJenisSurat(payload);
-
-      if (!result.success) {
-        setError(result.message ?? "Terjadi kesalahan.");
-        return;
-      }
-
-      setOpen(false);
-      if (!isEdit) resetForm();
-    } finally {
-      setLoading(false);
-    }
+    setOpen(false);
+    if (!isEdit) resetForm();
   }
 
   return (
@@ -107,51 +125,52 @@ export function JenisSuratFormDialog({
         </SheetHeader>
 
         {open && (
-          <form onSubmit={handleSubmit} className="space-y-5 px-4 pb-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 px-4 pb-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5 justify-between">
                 <Label>Nama Jenis Surat</Label>
                 <input
                   type="text"
-                  value={nama}
-                  onChange={(e) => setNama(e.target.value)}
+                  {...register("nama")}
                   placeholder="Contoh: Surat Keterangan Pindah"
-                  required
+                  aria-invalid={!!errors.nama}
                   className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-300"
                 />
+                <FieldError message={errors.nama?.message} />
               </div>
               <div className="flex flex-col gap-1.5 justify-between">
                 <Label>Kode Format (untuk nomor surat)</Label>
                 <input
                   type="text"
-                  value={kodeFormat}
-                  onChange={(e) => setKodeFormat(e.target.value)}
+                  {...register("kodeFormat")}
                   placeholder="Contoh: SKP"
                   maxLength={6}
-                  required
+                  aria-invalid={!!errors.kodeFormat}
                   className="w-full px-3 py-2 border rounded-md text-sm uppercase focus:outline-none focus:ring-2 focus:ring-neutral-300"
                 />
+                <FieldError message={errors.kodeFormat?.message} />
               </div>
             </div>
 
             <div className="space-y-1.5">
               <Label>Deskripsi</Label>
               <textarea
-                value={deskripsi}
-                onChange={(e) => setDeskripsi(e.target.value)}
+                {...register("deskripsi")}
                 placeholder="Jelaskan singkat kegunaan surat ini..."
-                required
+                aria-invalid={!!errors.deskripsi}
                 rows={2}
                 className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-300"
               />
+              <FieldError message={errors.deskripsi?.message} />
             </div>
 
             <div className="space-y-1.5">
               <Label>Ikon</Label>
-              <Select
-                value={icon}
-                onValueChange={(val) => setIcon(val ?? "church")}
-              >
+              <Controller
+                name="icon"
+                control={control}
+                render={({ field }) => (
+              <Select value={field.value} onValueChange={field.onChange}>
                 <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
@@ -163,6 +182,9 @@ export function JenisSuratFormDialog({
                   ))}
                 </SelectContent>
               </Select>
+                )}
+              />
+              <FieldError message={errors.icon?.message} />
             </div>
 
             <div className="space-y-1.5">
@@ -170,7 +192,19 @@ export function JenisSuratFormDialog({
               <p className="text-xs text-neutral-500 mb-2">
                 Field ini akan muncul di form saat petugas mengisi detail surat.
               </p>
-              <FieldBuilder fields={fields} onChange={setFields} />
+              <FieldBuilder
+                fields={fields}
+                onChange={(nextFields) => {
+                  setFields(nextFields);
+                  setValue("fields", nextFields, { shouldValidate: true });
+                }}
+              />
+              <FieldError
+                message={
+                  errors.fields?.message ??
+                  errors.fields?.root?.message
+                }
+              />
             </div>
 
             {error && (
@@ -180,8 +214,8 @@ export function JenisSuratFormDialog({
             )}
 
             <SheetFooter className="px-0">
-              <Button type="submit" disabled={loading}>
-                {loading
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting
                   ? "Menyimpan..."
                   : isEdit
                     ? "Simpan Perubahan"
@@ -193,4 +227,8 @@ export function JenisSuratFormDialog({
       </SheetContent>
     </Sheet>
   );
+}
+
+function FieldError({ message }: { message?: string }) {
+  return message ? <p className="text-xs text-red-600">{message}</p> : null;
 }

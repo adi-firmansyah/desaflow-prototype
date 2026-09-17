@@ -1,28 +1,31 @@
 import { DownloadPdfButton } from "@/components/riwayat-surat/download-pdf-button";
 import { statusColor, statusLabel } from "@/lib/constants";
-import { prisma } from "@/lib/prisma";
+import { getSuratList } from "@/lib/queries";
+import { normalizePagination } from "@/lib/pagination";
+import { PaginationControls } from "@/components/pagination-controls";
+import { redirect } from "next/navigation";
 import { EyeIcon } from "lucide-react";
 import Link from "next/link";
 
 export default async function RiwayatSuratPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; page?: string; limit?: string }>;
 }) {
-  const { q } = await searchParams;
-
-  const suratList = await prisma.surat.findMany({
-    where: q
-      ? {
-          OR: [
-            { nomorSurat: { contains: q, mode: "insensitive" } },
-            { warga: { namaLengkap: { contains: q, mode: "insensitive" } } },
-          ],
-        }
-      : undefined,
-    include: { warga: true, jenisSurat: true },
-    orderBy: { tanggalDibuat: "desc" },
+  const { q, page, limit } = await searchParams;
+  const pagination = normalizePagination(page, limit);
+  const suratResult = await getSuratList({
+    ...pagination,
+    query: q,
   });
+  if (suratResult.currentPage !== pagination.page) {
+    const params = new URLSearchParams();
+    if (q) params.set("q", q);
+    params.set("page", String(suratResult.currentPage));
+    params.set("limit", String(pagination.limit));
+    redirect(`/riwayat-surat?${params.toString()}`);
+  }
+  const suratList = suratResult.data;
 
   return (
     <div>
@@ -103,6 +106,13 @@ export default async function RiwayatSuratPage({
           </table>
         )}
       </div>
+      <PaginationControls
+        pathname="/riwayat-surat"
+        query={q}
+        page={suratResult.currentPage}
+        limit={pagination.limit}
+        totalPages={suratResult.totalPages}
+      />
     </div>
   );
 }
