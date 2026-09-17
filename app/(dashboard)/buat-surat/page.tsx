@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
-import { BuatSuratWizard } from "@/components/buat-surat/buat-surat-wizard";
 import type { JenisSurat } from "@/types";
+import { BuatSuratWizard } from "./_components/buat-surat-wizard";
 import { getJenisSuratList } from "./actions";
 
 export default async function BuatSuratPage() {

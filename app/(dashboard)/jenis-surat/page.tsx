@@ -1,9 +1,9 @@
-import { DeleteJenisSuratButton } from "@/components/jenis-surat/delete-jenis-surat-button";
-import { JenisSuratFormDialog } from "@/components/jenis-surat/jenis-surat-form-dialog";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
 import { parseFieldSchemas } from "@/types";
 import { PencilIcon, PlusIcon } from "lucide-react";
+import { DeleteJenisSuratButton } from "./_components/delete-jenis-surat-button";
+import { JenisSuratFormDialog } from "./_components/jenis-surat-form-dialog";
 
 export const dynamic = "force-dynamic";
 
