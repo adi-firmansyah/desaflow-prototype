@@ -2,6 +2,7 @@
 
 import { searchWarga } from "@/app/(dashboard)/buat-surat/actions";
 import { Button } from "@/components/ui/button";
+import { CheckIcon } from "lucide-react";
 import { useState, useTransition } from "react";
 import type { Warga } from "./buat-surat-wizard";
 
@@ -108,7 +109,7 @@ export function StepDataPemohon({
       <div className="border-2 border-neutral-900 rounded-lg p-6 h-fit bg-white">
         <div className="flex items-center gap-2 mb-4">
           <div className="h-5 w-5 rounded-full bg-neutral-900 flex items-center justify-center shrink-0">
-            <span className="text-white text-xs">✓</span>
+            <CheckIcon className="h-3 w-3 text-white" />
           </div>
           <h3 className="font-semibold">Warga Terpilih</h3>
         </div>

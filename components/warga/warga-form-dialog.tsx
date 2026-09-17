@@ -2,13 +2,6 @@
 
 import { createWarga, updateWarga } from "@/app/(dashboard)/data-warga/actions";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -18,6 +11,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { useRef, useState } from "react";
 
 type Warga = {
@@ -69,9 +69,14 @@ export function WargaFormDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Sheet
+      open={open}
+      onOpenChange={(v) => {
+        setError(null);
+        setOpen(v);
+      }}
+    >
       <div
-        className="inline-flex"
         onClick={() => {
           setError(null);
           setOpen(true);
@@ -79,12 +84,13 @@ export function WargaFormDialog({
       >
         {trigger}
       </div>
-      <DialogContent className="max-w-lg">
-        <DialogHeader>
-          <DialogTitle>
+
+      <SheetContent className="data-[side=right]:sm:max-w-lg overflow-y-auto">
+        <SheetHeader>
+          <SheetTitle>
             {isEdit ? "Edit Data Warga" : "Tambah Warga Baru"}
-          </DialogTitle>
-        </DialogHeader>
+          </SheetTitle>
+        </SheetHeader>
 
         {open && (
           <form
@@ -93,7 +99,7 @@ export function WargaFormDialog({
               e.preventDefault();
               handleSubmit(new FormData(e.currentTarget));
             }}
-            className="space-y-4"
+            className="space-y-4 px-4 pb-4"
           >
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
@@ -150,7 +156,7 @@ export function WargaFormDialog({
                   name="jenisKelamin"
                   defaultValue={warga?.jenisKelamin ?? "LAKI_LAKI"}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -195,7 +201,7 @@ export function WargaFormDialog({
                   name="statusKawin"
                   defaultValue={warga?.statusKawin ?? "BELUM_KAWIN"}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -218,12 +224,12 @@ export function WargaFormDialog({
             </div>
 
             {error && (
-              <p className="text-sm text-red-500 bg-red-50 border border-red-200 rounded-md px-3 py-2">
+              <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">
                 {error}
               </p>
             )}
 
-            <DialogFooter>
+            <SheetFooter className="px-0">
               <Button type="submit" disabled={loading}>
                 {loading
                   ? "Menyimpan..."
@@ -231,10 +237,10 @@ export function WargaFormDialog({
                     ? "Simpan Perubahan"
                     : "Tambah Warga"}
               </Button>
-            </DialogFooter>
+            </SheetFooter>
           </form>
         )}
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   );
 }
