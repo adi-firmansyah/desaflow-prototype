@@ -8,8 +8,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { FieldSchema } from "@/types";
+import type { FieldSchema, FieldType } from "@/types";
 import { PlusIcon, Trash2Icon } from "lucide-react";
+
+function isFieldType(value: string | null): value is FieldType {
+  return (
+    value === "text" ||
+    value === "textarea" ||
+    value === "date" ||
+    value === "select"
+  );
+}
 
 export function FieldBuilder({
   fields,
@@ -77,9 +86,9 @@ export function FieldBuilder({
                   </label>
                   <Select
                     value={field.type}
-                    onValueChange={(val) =>
-                      updateField(index, { type: val as FieldSchema["type"] })
-                    }
+                    onValueChange={(val) => {
+                      if (isFieldType(val)) updateField(index, { type: val });
+                    }}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue />

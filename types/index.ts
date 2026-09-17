@@ -67,7 +67,11 @@ function isFieldSchema(value: unknown): value is FieldSchema {
 
 export function parseFieldSchemas(value: unknown): FieldSchema[] {
   if (typeof value === "string") {
-    return parseFieldSchemas(JSON.parse(value));
+    try {
+      return parseFieldSchemas(JSON.parse(value));
+    } catch {
+      return [];
+    }
   }
 
   if (!Array.isArray(value)) return [];
@@ -77,7 +81,11 @@ export function parseFieldSchemas(value: unknown): FieldSchema[] {
 
 export function parseFormData(value: unknown): Record<string, string> {
   if (typeof value === "string") {
-    return parseFormData(JSON.parse(value));
+    try {
+      return parseFormData(JSON.parse(value));
+    } catch {
+      return {};
+    }
   }
 
   if (typeof value !== "object" || value === null || Array.isArray(value)) {

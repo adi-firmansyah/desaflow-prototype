@@ -38,6 +38,7 @@ async function generateNomorSurat(
 ) {
   const year = new Date().getFullYear();
   const sequenceId = `surat-sequence-${year}-${kodeFormat}`;
+  // Upsert atomic ini mencegah dua request mendapatkan nomor urut yang sama.
   const [sequence] = await tx.$queryRaw<Array<{ lastNumber: number }>>`
     INSERT INTO "surat_sequence" ("id", "year", "kodeFormat", "lastNumber")
     VALUES (${sequenceId}, ${year}, ${kodeFormat}, 1)

@@ -46,7 +46,6 @@ export function StepKonfirmasi({
     }
   }
 
-  // Setelah surat berhasil dibuat, tampilkan halaman sukses
   if (suratHasil && !showPreview) {
     return (
       <div className="flex flex-col items-center text-center py-12">
@@ -95,7 +94,6 @@ export function StepKonfirmasi({
     );
   }
 
-  // Preview surat sebelum disimpan
   return (
     <div>
       <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 mb-6">

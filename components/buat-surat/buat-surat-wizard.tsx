@@ -1,7 +1,7 @@
 "use client";
 
-import type { JenisSurat, Warga } from "@/types";
-import { useEffect, useState } from "react";
+import { parseFieldSchemas, type JenisSurat, type Warga } from "@/types";
+import { startTransition, useEffect, useState } from "react";
 import { StepDataPemohon } from "./step-data-pemohon";
 import { StepIndicator } from "./step-indicator";
 import { StepKonfirmasi } from "./step-konfirmasi";
@@ -17,6 +17,129 @@ type WizardState = {
   formData: Record<string, string>;
   suratHasil: { nomorSurat: string; tanggalDibuat: Date } | null;
 };
+
+function toRecord(value: unknown): Record<string, unknown> | null {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    return null;
+  }
+
+  return Object.fromEntries(Object.entries(value));
+}
+
+function normalizeWarga(value: unknown): Warga | null {
+  const record = toRecord(value);
+  if (!record || typeof record.id !== "string") return null;
+
+  const tanggalLahir = new Date(String(record.tanggalLahir));
+  if (Number.isNaN(tanggalLahir.getTime())) return null;
+
+  if (
+    typeof record.nik !== "string" ||
+    typeof record.namaLengkap !== "string" ||
+    typeof record.tempatLahir !== "string" ||
+    (record.jenisKelamin !== "LAKI_LAKI" &&
+      record.jenisKelamin !== "PEREMPUAN") ||
+    typeof record.agama !== "string" ||
+    typeof record.alamat !== "string" ||
+    typeof record.rt !== "string" ||
+    typeof record.rw !== "string" ||
+    (record.statusKawin !== "BELUM_KAWIN" &&
+      record.statusKawin !== "KAWIN" &&
+      record.statusKawin !== "CERAI_HIDUP" &&
+      record.statusKawin !== "CERAI_MATI") ||
+    (record.pekerjaan !== null && typeof record.pekerjaan !== "string")
+  ) {
+    return null;
+  }
+
+  return {
+    id: record.id,
+    nik: record.nik,
+    namaLengkap: record.namaLengkap,
+    tempatLahir: record.tempatLahir,
+    tanggalLahir,
+    jenisKelamin: record.jenisKelamin,
+    agama: record.agama,
+    alamat: record.alamat,
+    rt: record.rt,
+    rw: record.rw,
+    statusKawin: record.statusKawin,
+    pekerjaan: record.pekerjaan,
+  };
+}
+
+function normalizeJenisSurat(value: unknown): JenisSurat | null {
+  const record = toRecord(value);
+  if (
+    !record ||
+    typeof record.id !== "string" ||
+    typeof record.nama !== "string" ||
+    typeof record.deskripsi !== "string" ||
+    typeof record.icon !== "string" ||
+    typeof record.kodeFormat !== "string"
+  ) {
+    return null;
+  }
+
+  return {
+    id: record.id,
+    nama: record.nama,
+    deskripsi: record.deskripsi,
+    icon: record.icon,
+    kodeFormat: record.kodeFormat,
+    templateFields: parseFieldSchemas(record.templateFields),
+  };
+}
+
+function normalizeWizardState(value: unknown): WizardState | null {
+  const record = toRecord(value);
+  if (
+    !record ||
+    typeof record.step !== "number" ||
+    record.step < 1 ||
+    record.step > 4
+  ) {
+    return null;
+  }
+
+  const formDataRecord = toRecord(record.formData);
+  if (!formDataRecord) return null;
+
+  const formData = Object.fromEntries(
+    Object.entries(formDataRecord).filter(
+      (entry): entry is [string, string] => typeof entry[1] === "string",
+    ),
+  );
+  const selectedWarga = normalizeWarga(record.selectedWarga);
+  const selectedJenisSurat = normalizeJenisSurat(record.selectedJenisSurat);
+  const suratRecord = toRecord(record.suratHasil);
+  const nomorSurat = suratRecord?.nomorSurat;
+  const tanggalDibuat = suratRecord
+    ? new Date(String(suratRecord.tanggalDibuat))
+    : null;
+  const suratHasil =
+    typeof nomorSurat === "string" &&
+    tanggalDibuat &&
+    !Number.isNaN(tanggalDibuat.getTime())
+      ? { nomorSurat, tanggalDibuat }
+      : null;
+
+  if (
+    (record.selectedWarga !== null && !selectedWarga) ||
+    (record.selectedJenisSurat !== null && !selectedJenisSurat) ||
+    (suratRecord && (typeof nomorSurat !== "string" || !suratHasil))
+  ) {
+    return null;
+  }
+
+  return {
+    step: record.step,
+    selectedWarga,
+    selectedJenisSurat,
+    formData,
+    suratHasil,
+  };
+}
 
 export function BuatSuratWizard({
   jenisSuratList,
@@ -34,32 +157,31 @@ export function BuatSuratWizard({
   } | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // Load state dari sessionStorage saat pertama kali mount
+  // Sinkronisasi state dari sessionStorage supaya data form tidak hilang saat refresh.
   useEffect(() => {
     const saved = sessionStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
-        const parsed: WizardState = JSON.parse(saved);
+        const parsed = normalizeWizardState(JSON.parse(saved));
 
-        // Kalau surat sudah selesai, atau state tersimpan masih di step 1,
-        // jangan restore apapun — mulai bersih dari awal
-        if (parsed.suratHasil || parsed.step === 1) {
+        if (!parsed || parsed.suratHasil || parsed.step === 1) {
           sessionStorage.removeItem(STORAGE_KEY);
         } else {
-          setStep(parsed.step);
-          setSelectedWarga(parsed.selectedWarga);
-          setSelectedJenisSurat(parsed.selectedJenisSurat);
-          setFormData(parsed.formData);
-          setSuratHasil(parsed.suratHasil);
+          startTransition(() => {
+            setStep(parsed.step);
+            setSelectedWarga(parsed.selectedWarga);
+            setSelectedJenisSurat(parsed.selectedJenisSurat);
+            setFormData(parsed.formData);
+            setSuratHasil(parsed.suratHasil);
+          });
         }
       } catch {
-        // abaikan kalau data corrupt
+        sessionStorage.removeItem(STORAGE_KEY);
       }
     }
-    setIsHydrated(true);
+    startTransition(() => setIsHydrated(true));
   }, []);
 
-  // Simpan ke sessionStorage tiap kali ada perubahan (setelah hydrate awal selesai)
   useEffect(() => {
     if (!isHydrated) return;
     const state: WizardState = {
@@ -88,7 +210,7 @@ export function BuatSuratWizard({
     sessionStorage.removeItem(STORAGE_KEY);
   }
 
-  if (!isHydrated) return null; // hindari flash konten sebelum data ke-load
+  if (!isHydrated) return null;
 
   return (
     <div>
