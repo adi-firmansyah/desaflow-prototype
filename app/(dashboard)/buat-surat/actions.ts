@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { Prisma, prisma } from "@/lib/prisma";
 import { requireSession } from "@/lib/require-session";
 import { parseFieldSchemas } from "@/types";
 import { revalidatePath } from "next/cache";
@@ -32,12 +32,25 @@ export async function getJenisSuratList() {
   }));
 }
 
-async function generateNomorSurat(kodeFormat: string) {
+async function generateNomorSurat(
+  tx: Prisma.TransactionClient,
+  kodeFormat: string,
+) {
   const year = new Date().getFullYear();
-  const count = await prisma.surat.count({
-    where: { nomorSurat: { endsWith: `/${kodeFormat}/${year}` } },
-  });
-  const nomorUrut = String(count + 1).padStart(3, "0");
+  const sequenceId = `surat-sequence-${year}-${kodeFormat}`;
+  const [sequence] = await tx.$queryRaw<Array<{ lastNumber: number }>>`
+    INSERT INTO "surat_sequence" ("id", "year", "kodeFormat", "lastNumber")
+    VALUES (${sequenceId}, ${year}, ${kodeFormat}, 1)
+    ON CONFLICT ("year", "kodeFormat")
+    DO UPDATE SET "lastNumber" = "surat_sequence"."lastNumber" + 1
+    RETURNING "lastNumber"
+  `;
+
+  if (!sequence) {
+    throw new Error("Nomor surat gagal dibuat.");
+  }
+
+  const nomorUrut = String(sequence.lastNumber).padStart(3, "0");
   return `${nomorUrut}/${kodeFormat}/${year}`;
 }
 
@@ -48,21 +61,23 @@ export async function createSurat(params: {
   status: "DRAFT" | "FINAL";
 }) {
   await requireSession();
-  const jenisSurat = await prisma.jenisSurat.findUniqueOrThrow({
-    where: { id: params.jenisSuratId },
-  });
+  const surat = await prisma.$transaction(async (tx) => {
+    const jenisSurat = await tx.jenisSurat.findUniqueOrThrow({
+      where: { id: params.jenisSuratId },
+    });
 
-  const nomorSurat = await generateNomorSurat(jenisSurat.kodeFormat);
+    const nomorSurat = await generateNomorSurat(tx, jenisSurat.kodeFormat);
 
-  const surat = await prisma.surat.create({
-    data: {
-      nomorSurat,
-      wargaId: params.wargaId,
-      jenisSuratId: params.jenisSuratId,
-      dataForm: JSON.stringify(params.dataForm),
-      status: params.status,
-    },
-    include: { warga: true, jenisSurat: true },
+    return tx.surat.create({
+      data: {
+        nomorSurat,
+        wargaId: params.wargaId,
+        jenisSuratId: params.jenisSuratId,
+        dataForm: JSON.stringify(params.dataForm),
+        status: params.status,
+      },
+      include: { warga: true, jenisSurat: true },
+    });
   });
 
   revalidatePath("/dashboard");

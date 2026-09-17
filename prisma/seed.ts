@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 async function main() {
   // Hapus data lama biar seed idempotent
   await prisma.surat.deleteMany();
+  await prisma.suratSequence.deleteMany();
   await prisma.jenisSurat.deleteMany();
   await prisma.warga.deleteMany();
 
