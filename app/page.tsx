@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/server";
 import { ArrowRightIcon } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";

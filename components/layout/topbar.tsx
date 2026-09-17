@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/server";
 import { HelpCircleIcon } from "lucide-react";
 import { headers } from "next/headers";
 import { GlobalSearch } from "./global-search";

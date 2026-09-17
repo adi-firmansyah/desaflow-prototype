@@ -10,7 +10,7 @@ export const auth = betterAuth({
     enabled: true,
   },
   session: {
-    expiresIn: 60 * 60 * 8, // 8 jam
-    updateAge: 60 * 30, // perpanjang sesi setiap 30 menit
+    expiresIn: 60 * 60 * 8,
+    updateAge: 60 * 30,
   },
 });
