@@ -1,35 +1,12 @@
 "use client";
 
+import type { JenisSurat, Warga } from "@/types";
 import { useEffect, useState } from "react";
 import { StepDataPemohon } from "./step-data-pemohon";
 import { StepIndicator } from "./step-indicator";
 import { StepKonfirmasi } from "./step-konfirmasi";
 import { StepLengkapiForm } from "./step-lengkapi-form";
 import { StepPilihJenisSurat } from "./step-pilih-jenis-surat";
-
-export type Warga = {
-  id: string;
-  nik: string;
-  namaLengkap: string;
-  tempatLahir: string;
-  tanggalLahir: Date;
-  jenisKelamin: "LAKI_LAKI" | "PEREMPUAN";
-  agama: string;
-  alamat: string;
-  rt: string;
-  rw: string;
-  statusKawin: string;
-  pekerjaan: string | null;
-};
-
-export type JenisSurat = {
-  id: string;
-  nama: string;
-  deskripsi: string;
-  icon: string;
-  kodeFormat: string;
-  templateFields: string;
-};
 
 const STORAGE_KEY = "desaflow-wizard-state";
 

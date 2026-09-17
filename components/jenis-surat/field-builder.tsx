@@ -1,6 +1,5 @@
 "use client";
 
-import type { FieldSchema } from "@/app/(dashboard)/jenis-surat/actions";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -9,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import type { FieldSchema } from "@/types";
 import { PlusIcon, Trash2Icon } from "lucide-react";
 
 export function FieldBuilder({

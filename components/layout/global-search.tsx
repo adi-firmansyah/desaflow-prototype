@@ -1,27 +1,18 @@
 "use client";
 
 import { globalSearch } from "@/app/actions/global-search";
+import type { SuratSearchResult, WargaSearchResult } from "@/types";
 import { FileTextIcon, Loader2Icon, SearchIcon, UserIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 
-type Warga = {
-  id: string;
-  nik: string;
-  namaLengkap: string;
-};
-
-type Surat = {
-  id: string;
-  nomorSurat: string;
-  warga: { namaLengkap: string };
-  jenisSurat: { nama: string };
-};
-
 export function GlobalSearch() {
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<{ warga: Warga[]; surat: Surat[] }>({
+  const [results, setResults] = useState<{
+    warga: WargaSearchResult[];
+    surat: SuratSearchResult[];
+  }>({
     warga: [],
     surat: [],
   });

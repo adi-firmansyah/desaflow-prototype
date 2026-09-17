@@ -3,7 +3,6 @@
 import {
   createJenisSurat,
   updateJenisSurat,
-  type FieldSchema,
 } from "@/app/(dashboard)/jenis-surat/actions";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -21,38 +20,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { iconOptions } from "@/lib/constants";
+import type { FieldSchema, JenisSurat } from "@/types";
 import { useState } from "react";
 import { FieldBuilder } from "./field-builder";
-
-const iconOptions = [
-  { value: "church", label: "Gereja (Kematian)" },
-  { value: "users", label: "Orang Banyak (Status Kawin)" },
-  { value: "user", label: "Orang (Individu)" },
-  { value: "user-check", label: "Orang Tercentang (Verifikasi)" },
-  { value: "briefcase", label: "Koper (Usaha)" },
-  { value: "map-pin", label: "Pin Lokasi (Domisili)" },
-  { value: "home", label: "Rumah (Tempat Tinggal)" },
-  { value: "heart-handshake", label: "Bantuan (Tidak Mampu)" },
-  { value: "baby", label: "Bayi (Kelahiran)" },
-  { value: "heart", label: "Hati (Pernikahan)" },
-  { value: "shield-check", label: "Perisai (Catatan Kepolisian)" },
-  { value: "graduation-cap", label: "Topi Wisuda (Pendidikan)" },
-  { value: "car", label: "Mobil (Kendaraan)" },
-  { value: "land-plot", label: "Bidang Tanah (Kepemilikan Lahan)" },
-  { value: "coins", label: "Koin (Keuangan/Pajak)" },
-  { value: "id-card", label: "Kartu Identitas" },
-  { value: "file-text", label: "Dokumen Umum" },
-  { value: "ellipsis", label: "Titik Tiga (Lainnya)" },
-];
-
-type JenisSurat = {
-  id: string;
-  nama: string;
-  deskripsi: string;
-  icon: string;
-  kodeFormat: string;
-  templateFields: string;
-};
 
 export function JenisSuratFormDialog({
   jenisSurat,
@@ -71,7 +42,7 @@ export function JenisSuratFormDialog({
   const [icon, setIcon] = useState(jenisSurat?.icon ?? "church");
   const [kodeFormat, setKodeFormat] = useState(jenisSurat?.kodeFormat ?? "");
   const [fields, setFields] = useState<FieldSchema[]>(
-    jenisSurat ? JSON.parse(jenisSurat.templateFields) : [],
+    jenisSurat?.templateFields ?? [],
   );
 
   function resetForm() {
@@ -79,7 +50,7 @@ export function JenisSuratFormDialog({
     setDeskripsi(jenisSurat?.deskripsi ?? "");
     setIcon(jenisSurat?.icon ?? "church");
     setKodeFormat(jenisSurat?.kodeFormat ?? "");
-    setFields(jenisSurat ? JSON.parse(jenisSurat.templateFields) : []);
+    setFields(jenisSurat?.templateFields ?? []);
     setError(null);
   }
 

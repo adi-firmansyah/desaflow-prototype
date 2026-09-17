@@ -2,16 +2,10 @@ import { Button } from "@/components/ui/button";
 import { DeleteWargaButton } from "@/components/warga/delete-warga-button";
 import { ExportWargaButtons } from "@/components/warga/export-warga-buttons";
 import { WargaFormDialog } from "@/components/warga/warga-form-dialog";
+import { statusLabel } from "@/lib/constants";
 import { prisma } from "@/lib/prisma";
 import { EyeIcon, PencilIcon, PlusIcon, SearchIcon } from "lucide-react";
 import Link from "next/link";
-
-const statusLabel: Record<string, string> = {
-  BELUM_KAWIN: "Belum Kawin",
-  KAWIN: "Kawin",
-  CERAI_HIDUP: "Cerai Hidup",
-  CERAI_MATI: "Cerai Mati",
-};
 
 export default async function DataWargaPage({
   searchParams,

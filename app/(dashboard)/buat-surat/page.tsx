@@ -1,9 +1,7 @@
 export const dynamic = "force-dynamic";
 
-import {
-  BuatSuratWizard,
-  type JenisSurat,
-} from "@/components/buat-surat/buat-surat-wizard";
+import { BuatSuratWizard } from "@/components/buat-surat/buat-surat-wizard";
+import type { JenisSurat } from "@/types";
 import { getJenisSuratList } from "./actions";
 
 export default async function BuatSuratPage() {
@@ -17,9 +15,7 @@ export default async function BuatSuratPage() {
         baru.
       </p>
 
-      <BuatSuratWizard
-        jenisSuratList={jenisSuratList as unknown as JenisSurat[]}
-      />
+      <BuatSuratWizard jenisSuratList={jenisSuratList satisfies JenisSurat[]} />
     </div>
   );
 }

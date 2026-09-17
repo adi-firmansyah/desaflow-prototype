@@ -18,22 +18,8 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import type { Warga } from "@/types";
 import { useRef, useState } from "react";
-
-type Warga = {
-  id: string;
-  nik: string;
-  namaLengkap: string;
-  tempatLahir: string;
-  tanggalLahir: Date;
-  jenisKelamin: "LAKI_LAKI" | "PEREMPUAN";
-  agama: string;
-  alamat: string;
-  rt: string;
-  rw: string;
-  statusKawin: "BELUM_KAWIN" | "KAWIN" | "CERAI_HIDUP" | "CERAI_MATI";
-  pekerjaan: string | null;
-};
 
 export function WargaFormDialog({
   warga,

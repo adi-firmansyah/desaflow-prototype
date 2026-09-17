@@ -9,16 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import type { JenisSurat, Warga } from "./buat-surat-wizard";
-
-type FieldSchema = {
-  key: string;
-  label: string;
-  type: "text" | "date" | "select" | "textarea";
-  required: boolean;
-  placeholder?: string;
-  options?: string[];
-};
+import type { JenisSurat, Warga } from "@/types";
 
 export function StepLengkapiForm({
   warga,
@@ -35,7 +26,7 @@ export function StepLengkapiForm({
   onBack: () => void;
   onNext: () => void;
 }) {
-  const fields: FieldSchema[] = JSON.parse(jenisSurat.templateFields);
+  const fields = jenisSurat.templateFields;
 
   const requiredFieldsFilled = fields
     .filter((f) => f.required)

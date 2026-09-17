@@ -1,16 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import type { FieldSchema } from "@/types";
 import { revalidatePath } from "next/cache";
-
-export type FieldSchema = {
-  key: string;
-  label: string;
-  type: "text" | "date" | "select" | "textarea";
-  required: boolean;
-  placeholder?: string;
-  options?: string[];
-};
 
 export async function createJenisSurat(data: {
   nama: string;

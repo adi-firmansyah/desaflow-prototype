@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { parseFieldSchemas } from "@/types";
 
 export async function searchWarga(query: string) {
   if (!query.trim()) return [];
@@ -18,7 +19,14 @@ export async function searchWarga(query: string) {
 }
 
 export async function getJenisSuratList() {
-  return prisma.jenisSurat.findMany({ orderBy: { nama: "asc" } });
+  const jenisSuratList = await prisma.jenisSurat.findMany({
+    orderBy: { nama: "asc" },
+  });
+
+  return jenisSuratList.map((jenisSurat) => ({
+    ...jenisSurat,
+    templateFields: parseFieldSchemas(jenisSurat.templateFields),
+  }));
 }
 
 async function generateNomorSurat(kodeFormat: string) {

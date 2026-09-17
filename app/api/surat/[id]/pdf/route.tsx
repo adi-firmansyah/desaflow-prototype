@@ -1,5 +1,6 @@
 import { SuratPdfDocument } from "@/components/pdf/surat-pdf-document";
 import { prisma } from "@/lib/prisma";
+import { parseFieldSchemas, parseFormData } from "@/types";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -21,8 +22,8 @@ export async function GET(
     );
   }
 
-  const fields = JSON.parse(surat.jenisSurat.templateFields as string);
-  const dataForm = JSON.parse(surat.dataForm as string);
+  const fields = parseFieldSchemas(surat.jenisSurat.templateFields);
+  const dataForm = parseFormData(surat.dataForm);
 
   const pdfBuffer = await renderToBuffer(
     <SuratPdfDocument

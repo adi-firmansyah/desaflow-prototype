@@ -2,16 +2,9 @@
 
 import { createSurat } from "@/app/(dashboard)/buat-surat/actions";
 import { Button } from "@/components/ui/button";
+import type { FieldSchema, JenisSurat, Warga } from "@/types";
 import { CheckIcon, EyeIcon, PlusIcon, PrinterIcon } from "lucide-react";
 import { useState } from "react";
-import type { JenisSurat, Warga } from "./buat-surat-wizard";
-
-type FieldSchema = {
-  key: string;
-  label: string;
-  type: string;
-  required: boolean;
-};
 
 export function StepKonfirmasi({
   warga,
@@ -32,7 +25,7 @@ export function StepKonfirmasi({
 }) {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
-  const fields: FieldSchema[] = JSON.parse(jenisSurat.templateFields);
+  const fields: FieldSchema[] = jenisSurat.templateFields;
 
   async function handleSimpan(status: "DRAFT" | "FINAL") {
     setLoading(true);

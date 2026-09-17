@@ -1,10 +1,8 @@
 import { DeleteJenisSuratButton } from "@/components/jenis-surat/delete-jenis-surat-button";
-import {
-  JenisSurat,
-  JenisSuratFormDialog,
-} from "@/components/jenis-surat/jenis-surat-form-dialog";
+import { JenisSuratFormDialog } from "@/components/jenis-surat/jenis-surat-form-dialog";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
+import { parseFieldSchemas } from "@/types";
 import { PencilIcon, PlusIcon } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -51,7 +49,8 @@ export default async function JenisSuratPage() {
             </thead>
             <tbody>
               {jenisSuratList.map((jenis) => {
-                const fields = JSON.parse(jenis.templateFields as string);
+                const fields = parseFieldSchemas(jenis.templateFields);
+                const jenisSurat = { ...jenis, templateFields: fields };
                 return (
                   <tr key={jenis.id} className="border-t">
                     <td className="px-5 py-4 font-medium">{jenis.nama}</td>
@@ -68,7 +67,7 @@ export default async function JenisSuratPage() {
                       <div className="flex items-center justify-end gap-3">
                         <JenisSuratFormDialog
                           key={jenis.id}
-                          jenisSurat={jenis as JenisSurat}
+                          jenisSurat={jenisSurat}
                           trigger={
                             <button className="text-neutral-400 hover:text-neutral-700">
                               <PencilIcon className="h-4 w-4" />

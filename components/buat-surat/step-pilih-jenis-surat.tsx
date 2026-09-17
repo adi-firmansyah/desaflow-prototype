@@ -1,53 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { iconMap } from "@/lib/constants";
+import type { JenisSurat } from "@/types";
 import {
   ArrowRightIcon,
-  BabyIcon,
-  BriefcaseIcon,
-  CarIcon,
   CheckIcon,
-  ChurchIcon,
-  CoinsIcon,
   EllipsisIcon,
-  FileTextIcon,
-  GraduationCapIcon,
-  HeartHandshakeIcon,
-  HeartIcon,
-  HomeIcon,
-  IdCardIcon,
-  LandPlotIcon,
-  MapPinIcon,
   SearchIcon,
-  ShieldCheckIcon,
-  UserCheckIcon,
-  UserIcon,
-  UsersIcon,
 } from "lucide-react";
 import { useState } from "react";
-import type { JenisSurat } from "./buat-surat-wizard";
-
-const iconMap: Record<string, React.ElementType> = {
-  church: ChurchIcon,
-  users: UsersIcon,
-  user: UserIcon,
-  "user-check": UserCheckIcon,
-  briefcase: BriefcaseIcon,
-  "map-pin": MapPinIcon,
-  home: HomeIcon,
-  "heart-handshake": HeartHandshakeIcon,
-  baby: BabyIcon,
-  heart: HeartIcon,
-  "shield-check": ShieldCheckIcon,
-  "graduation-cap": GraduationCapIcon,
-  car: CarIcon,
-  "land-plot": LandPlotIcon,
-  coins: CoinsIcon,
-  "id-card": IdCardIcon,
-  "file-text": FileTextIcon,
-  ellipsis: EllipsisIcon,
-};
-
 export function StepPilihJenisSurat({
   jenisSuratList,
   selected,

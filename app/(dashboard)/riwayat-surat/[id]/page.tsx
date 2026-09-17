@@ -3,13 +3,9 @@ import { DownloadPdfButton } from "@/components/riwayat-surat/download-pdf-butto
 import { FinalisasiButton } from "@/components/riwayat-surat/finalisasi-button";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
+import { parseFieldSchemas, parseFormData, type FieldSchema } from "@/types";
 import { PrinterIcon } from "lucide-react";
 import { notFound } from "next/navigation";
-
-type FieldSchema = {
-  key: string;
-  label: string;
-};
 
 export default async function DetailSuratPage({
   params,
@@ -25,10 +21,10 @@ export default async function DetailSuratPage({
 
   if (!surat) notFound();
 
-  const fields: FieldSchema[] = JSON.parse(
-    surat.jenisSurat.templateFields as string,
+  const fields: FieldSchema[] = parseFieldSchemas(
+    surat.jenisSurat.templateFields,
   );
-  const dataForm: Record<string, string> = JSON.parse(surat.dataForm as string);
+  const dataForm = parseFormData(surat.dataForm);
   const { warga, jenisSurat } = surat;
 
   return (

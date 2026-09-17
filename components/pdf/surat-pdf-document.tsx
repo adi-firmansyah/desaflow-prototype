@@ -1,9 +1,5 @@
+import type { FieldSchema } from "@/types";
 import { Document, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
-
-type FieldSchema = {
-  key: string;
-  label: string;
-};
 
 type SuratPdfProps = {
   nomorSurat: string;

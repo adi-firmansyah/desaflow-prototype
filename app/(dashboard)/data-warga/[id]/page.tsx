@@ -1,21 +1,10 @@
+import { statusLabel, suratStatusColor } from "@/lib/constants";
 import { prisma } from "@/lib/prisma";
 import { ArrowLeftIcon, EyeIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
-
-const statusLabel: Record<string, string> = {
-  BELUM_KAWIN: "Belum Kawin",
-  KAWIN: "Kawin",
-  CERAI_HIDUP: "Cerai Hidup",
-  CERAI_MATI: "Cerai Mati",
-};
-
-const suratStatusColor: Record<string, string> = {
-  DRAFT: "bg-amber-100 text-amber-700",
-  FINAL: "bg-green-100 text-green-700",
-};
 
 export default async function DetailWargaPage({
   params,

@@ -1,13 +1,7 @@
+import { statusLabel } from "@/lib/constants";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import * as XLSX from "xlsx";
-
-const statusLabel: Record<string, string> = {
-  BELUM_KAWIN: "Belum Kawin",
-  KAWIN: "Kawin",
-  CERAI_HIDUP: "Cerai Hidup",
-  CERAI_MATI: "Cerai Mati",
-};
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;

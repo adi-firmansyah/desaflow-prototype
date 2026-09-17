@@ -1,17 +1,8 @@
 import { DownloadPdfButton } from "@/components/riwayat-surat/download-pdf-button";
+import { statusColor, statusLabel } from "@/lib/constants";
 import { prisma } from "@/lib/prisma";
 import { EyeIcon } from "lucide-react";
 import Link from "next/link";
-
-const statusLabel: Record<string, string> = {
-  DRAFT: "Draft",
-  FINAL: "Final",
-};
-
-const statusColor: Record<string, string> = {
-  DRAFT: "bg-amber-100 text-amber-700",
-  FINAL: "bg-green-100 text-green-700",
-};
 
 export default async function RiwayatSuratPage({
   searchParams,

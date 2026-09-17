@@ -2,9 +2,9 @@
 
 import { searchWarga } from "@/app/(dashboard)/buat-surat/actions";
 import { Button } from "@/components/ui/button";
+import type { Warga } from "@/types";
 import { CheckIcon } from "lucide-react";
 import { useState, useTransition } from "react";
-import type { Warga } from "./buat-surat-wizard";
 
 export function StepDataPemohon({
   selectedWarga,
