@@ -25,6 +25,7 @@ export function StepKonfirmasi({
   onReset: () => void;
 }) {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const fields: FieldSchema[] = jenisSurat.templateFields;
 
@@ -37,6 +38,12 @@ export function StepKonfirmasi({
         dataForm: formData,
         status,
       });
+      if (!("nomorSurat" in surat)) {
+        setError(surat.message);
+        return;
+      }
+
+      setError(null);
       onSuratCreated({
         nomorSurat: surat.nomorSurat,
         tanggalDibuat: surat.tanggalDibuat,
@@ -209,6 +216,11 @@ export function StepKonfirmasi({
       </div>
 
       <div className="flex justify-start">
+        {error && (
+          <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">
+            {error}
+          </p>
+        )}
         <Button
           variant="outline"
           onClick={() => (suratHasil ? setShowPreview(false) : onBack())}

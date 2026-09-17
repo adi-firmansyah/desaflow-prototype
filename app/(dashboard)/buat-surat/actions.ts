@@ -2,6 +2,7 @@
 
 import { Prisma, prisma } from "@/lib/prisma";
 import { requireSession } from "@/lib/require-session";
+import { SuratSchema, type CreateSuratInput } from "@/lib/validations/surat";
 import { parseFieldSchemas } from "@/types";
 import { revalidatePath } from "next/cache";
 
@@ -55,16 +56,21 @@ async function generateNomorSurat(
   return `${nomorUrut}/${kodeFormat}/${year}`;
 }
 
-export async function createSurat(params: {
-  wargaId: string;
-  jenisSuratId: string;
-  dataForm: Record<string, string>;
-  status: "DRAFT" | "FINAL";
-}) {
+export async function createSurat(params: CreateSuratInput) {
   await requireSession();
+  const result = SuratSchema.safeParse(params);
+
+  if (!result.success) {
+    return {
+      success: false,
+      errors: result.error.flatten().fieldErrors,
+      message: "Validasi gagal",
+    };
+  }
+
   const surat = await prisma.$transaction(async (tx) => {
     const jenisSurat = await tx.jenisSurat.findUniqueOrThrow({
-      where: { id: params.jenisSuratId },
+      where: { id: result.data.jenisSuratId },
     });
 
     const nomorSurat = await generateNomorSurat(tx, jenisSurat.kodeFormat);
@@ -72,10 +78,10 @@ export async function createSurat(params: {
     return tx.surat.create({
       data: {
         nomorSurat,
-        wargaId: params.wargaId,
-        jenisSuratId: params.jenisSuratId,
-        dataForm: JSON.stringify(params.dataForm),
-        status: params.status,
+        wargaId: result.data.wargaId,
+        jenisSuratId: result.data.jenisSuratId,
+        dataForm: JSON.stringify(result.data.dataForm),
+        status: result.data.status,
       },
       include: { warga: true, jenisSurat: true },
     });
