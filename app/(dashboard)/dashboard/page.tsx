@@ -2,7 +2,13 @@ export const dynamic = "force-dynamic";
 
 import { DownloadPdfButton } from "@/components/riwayat-surat/download-pdf-button";
 import { prisma } from "@/lib/prisma";
-import { CalendarIcon, EyeIcon, FileTextIcon, PlusIcon } from "lucide-react";
+import {
+  ArrowRightIcon,
+  CalendarIcon,
+  EyeIcon,
+  FileTextIcon,
+  PlusIcon,
+} from "lucide-react";
 import Link from "next/link";
 
 export default async function DashboardPage() {
@@ -62,9 +68,10 @@ export default async function DashboardPage() {
           <h2 className="font-semibold text-lg">Daftar Surat Terbaru</h2>
           <Link
             href="/riwayat-surat"
-            className="text-sm font-medium text-neutral-600 hover:text-neutral-900"
+            className="flex items-center gap-1 text-sm font-medium text-neutral-600 hover:text-neutral-900"
           >
-            Lihat Semua →
+            <span>Lihat Semua</span>
+            <ArrowRightIcon className="h-4 w-4" />
           </Link>
         </div>
 

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { iconMap } from "@/lib/constants";
 import type { JenisSurat } from "@/types";
 import {
+  ArrowLeftIcon,
   ArrowRightIcon,
   CheckIcon,
   EllipsisIcon,
@@ -62,7 +63,7 @@ export function StepPilihJenisSurat({
                   onClick={() => onSelect(jenis)}
                   className={`text-left border rounded-lg p-5 flex flex-col transition-colors ${
                     isSelected
-                      ? "border-2 border-neutral-900"
+                      ? "border-neutral-900 ring-1 ring-neutral-900"
                       : "hover:border-neutral-400"
                   }`}
                 >
@@ -95,10 +96,12 @@ export function StepPilihJenisSurat({
 
       <div className="flex justify-between">
         <Button variant="outline" onClick={onBack}>
-          ← Data Pemohon
+          <ArrowLeftIcon className="h-4 w-4" />
+          <span>Data Pemohon</span>
         </Button>
         <Button onClick={onNext} disabled={!selected}>
-          Lengkapi Form →
+          <span>Lengkapi Form</span>
+          <ArrowRightIcon className="h-4 w-4" />
         </Button>
       </div>
     </div>

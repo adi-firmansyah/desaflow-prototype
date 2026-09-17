@@ -1,6 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -14,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { useMemo } from "react";
 import { z } from "zod";
+import { ArrowLeftIcon, EyeIcon } from "lucide-react";
 
 export function StepLengkapiForm({
   warga,
@@ -101,14 +104,15 @@ export function StepLengkapiForm({
           </h2>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {fields.map((field) => (
-              <div key={field.key}>
-                <label className="text-sm font-medium mb-1.5 block">
+              <div key={field.key} className="space-y-1.5">
+                <Label htmlFor={field.key}>
                   {field.label}
                   {field.required && <span className="text-red-500"> *</span>}
-                </label>
+                </Label>
 
                 {field.type === "textarea" ? (
                   <Textarea
+                    id={field.key}
                     {...register(field.key)}
                     aria-invalid={!!errors[field.key]}
                     placeholder={
@@ -122,39 +126,37 @@ export function StepLengkapiForm({
                     name={field.key}
                     control={control}
                     render={({ field: controllerField }) => (
-                  <Select
-                    value={controllerField.value ?? ""}
-                    onValueChange={(val) => controllerField.onChange(val ?? "")}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue
-                        placeholder={`Pilih ${field.label.toLowerCase()}...`}
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {field.options?.map((opt) => (
-                        <SelectItem key={opt} value={opt}>
-                          {opt}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                      <Select
+                        value={controllerField.value ?? ""}
+                        onValueChange={(val) =>
+                          controllerField.onChange(val ?? "")
+                        }
+                      >
+                        <SelectTrigger id={field.key} className="w-full">
+                          <SelectValue
+                            placeholder={`Pilih ${field.label.toLowerCase()}...`}
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {field.options?.map((opt) => (
+                            <SelectItem key={opt} value={opt}>
+                              {opt}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     )}
                   />
                 ) : (
-                  <input
+                  <Input
+                    id={field.key}
                     type={field.type}
                     {...register(field.key)}
                     aria-invalid={!!errors[field.key]}
                     placeholder={field.placeholder}
-                    className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-300"
                   />
                 )}
-                {errors[field.key]?.message && (
-                  <p className="text-xs text-red-600 mt-1">
-                    {errors[field.key]?.message}
-                  </p>
-                )}
+                <FieldError message={errors[field.key]?.message} />
               </div>
             ))}
           </form>
@@ -163,14 +165,16 @@ export function StepLengkapiForm({
 
       <div className="flex justify-between">
         <Button variant="outline" onClick={onBack}>
-          ← Pilih Jenis Surat
+          <ArrowLeftIcon className="h-4 w-4" />
+          <span>Pilih Jenis Surat</span>
         </Button>
         <Button
           type="button"
           onClick={handleSubmit(onSubmit)}
           disabled={isSubmitting}
         >
-          👁 Preview Surat
+          <EyeIcon className="h-4 w-4" />
+          <span>Preview Surat</span>
         </Button>
       </div>
     </div>
@@ -186,4 +190,8 @@ function ReadOnlyField({ label, value }: { label: string; value: string }) {
       </div>
     </div>
   );
+}
+
+function FieldError({ message }: { message?: string }) {
+  return message ? <p className="text-xs text-red-600">{message}</p> : null;
 }

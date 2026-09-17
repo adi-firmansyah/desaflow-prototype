@@ -15,7 +15,6 @@ import { usePathname } from "next/navigation";
 const navItems = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboardIcon },
   { label: "Buat Surat", href: "/buat-surat", icon: FileTextIcon },
-  { label: "Register Surat", href: "/register-surat", icon: ListChecksIcon },
   { label: "Riwayat Surat", href: "/riwayat-surat", icon: HistoryIcon },
   { label: "Data Warga", href: "/data-warga", icon: UsersIcon },
   { label: "Jenis Surat", href: "/jenis-surat", icon: FileStackIcon },

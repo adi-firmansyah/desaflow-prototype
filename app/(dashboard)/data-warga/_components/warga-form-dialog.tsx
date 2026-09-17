@@ -103,6 +103,7 @@ export function WargaFormDialog({
       }}
     >
       <div
+        className="inline-flex"
         onClick={() => {
           setError(null);
           setOpen(true);
@@ -174,15 +175,15 @@ export function WargaFormDialog({
                   name="jenisKelamin"
                   control={control}
                   render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="LAKI_LAKI">Laki-laki</SelectItem>
-                    <SelectItem value="PEREMPUAN">Perempuan</SelectItem>
-                  </SelectContent>
-                </Select>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="LAKI_LAKI">Laki-laki</SelectItem>
+                        <SelectItem value="PEREMPUAN">Perempuan</SelectItem>
+                      </SelectContent>
+                    </Select>
                   )}
                 />
                 <FieldError message={errors.jenisKelamin?.message} />
@@ -225,17 +226,17 @@ export function WargaFormDialog({
                   name="statusKawin"
                   control={control}
                   render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="BELUM_KAWIN">Belum Kawin</SelectItem>
-                    <SelectItem value="KAWIN">Kawin</SelectItem>
-                    <SelectItem value="CERAI_HIDUP">Cerai Hidup</SelectItem>
-                    <SelectItem value="CERAI_MATI">Cerai Mati</SelectItem>
-                  </SelectContent>
-                </Select>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="BELUM_KAWIN">Belum Kawin</SelectItem>
+                        <SelectItem value="KAWIN">Kawin</SelectItem>
+                        <SelectItem value="CERAI_HIDUP">Cerai Hidup</SelectItem>
+                        <SelectItem value="CERAI_MATI">Cerai Mati</SelectItem>
+                      </SelectContent>
+                    </Select>
                   )}
                 />
                 <FieldError message={errors.statusKawin?.message} />

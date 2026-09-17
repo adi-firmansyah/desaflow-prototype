@@ -3,8 +3,15 @@
 import { searchWarga } from "@/app/(dashboard)/buat-surat/actions";
 import { Button } from "@/components/ui/button";
 import type { Warga } from "@/types";
-import { CheckIcon } from "lucide-react";
-import { useState, useTransition } from "react";
+import { cn } from "cn";
+import {
+  ArrowRightIcon,
+  CheckIcon,
+  Loader2Icon,
+  SearchIcon,
+  XIcon,
+} from "lucide-react";
+import { useEffect, useState, useTransition } from "react";
 
 export function StepDataPemohon({
   selectedWarga,
@@ -12,7 +19,7 @@ export function StepDataPemohon({
   onNext,
 }: {
   selectedWarga: Warga | null;
-  onSelect: (warga: Warga) => void;
+  onSelect: (warga: Warga | null) => void;
   onNext: () => void;
 }) {
   const [query, setQuery] = useState("");
@@ -20,98 +27,178 @@ export function StepDataPemohon({
   const [isPending, startTransition] = useTransition();
   const [hasSearched, setHasSearched] = useState(false);
 
-  function handleSearch() {
-    startTransition(async () => {
-      const data = await searchWarga(query);
-      setResults(data);
-      setHasSearched(true);
-    });
-  }
+  useEffect(() => {
+    const trimmed = query.trim();
+    if (!trimmed) {
+      setResults([]);
+      setHasSearched(false);
+      return;
+    }
+
+    let isSubscribed = true;
+
+    const timer = setTimeout(() => {
+      startTransition(async () => {
+        try {
+          const data = await searchWarga(trimmed);
+          if (isSubscribed) {
+            setResults(data);
+            setHasSearched(true);
+          }
+        } catch (error) {
+          console.error("Gagal mencari data warga:", error);
+          if (isSubscribed) {
+            setResults([]);
+            setHasSearched(true);
+          }
+        }
+      });
+    }, 350);
+
+    return () => {
+      isSubscribed = false;
+      clearTimeout(timer);
+    };
+  }, [query]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 space-y-6">
         <div className="border rounded-lg p-6 bg-white">
-          <h2 className="text-xl font-semibold mb-4">Pencarian Data Warga</h2>
+          <h2 className="text-xl font-semibold mb-1">Pencarian Data Warga</h2>
+          <p className="text-neutral-500 text-sm mb-4">
+            Ketik NIK atau nama warga untuk mencari data pemohon secara
+            otomatis.
+          </p>
           <label className="text-sm font-medium mb-1.5 block">
-            Nomor Induk Kependudukan (NIK)
+            Nomor Induk Kependudukan (NIK) atau Nama
           </label>
-          <div className="flex gap-3">
+          <div className="relative">
+            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 pointer-events-none" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              placeholder="Masukkan NIK atau Nama..."
-              className="flex-1 px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-300"
+              placeholder="Masukkan NIK atau Nama warga..."
+              className="w-full pl-9 pr-14 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-300"
             />
-            <Button
-              onClick={handleSearch}
-              disabled={isPending || !query.trim()}
-            >
-              {isPending ? "Mencari..." : "Cari Data"}
-            </Button>
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+              {isPending && (
+                <Loader2Icon className="h-4 w-4 text-neutral-400 animate-spin" />
+              )}
+              {query && (
+                <button
+                  type="button"
+                  onClick={() => setQuery("")}
+                  className="text-neutral-400 hover:text-neutral-600 rounded p-0.5"
+                  title="Hapus pencarian"
+                >
+                  <XIcon className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
         {hasSearched && (
           <div className="border rounded-lg p-6 bg-white">
-            <h3 className="text-xs font-semibold tracking-wider text-neutral-500 mb-4">
-              HASIL PENCARIAN ({results.length})
-            </h3>
-
             {results.length === 0 ? (
               <p className="text-sm text-neutral-500 py-4 text-center">
                 Tidak ditemukan warga dengan kata kunci tersebut.
               </p>
             ) : (
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="text-left text-neutral-500 border-b">
-                    <th className="pb-2 pr-3 font-medium">NIK</th>
-                    <th className="pb-2 px-3 font-medium text-nowrap">Nama Lengkap</th>
-                    <th className="pb-2 px-3 font-medium">Alamat</th>
-                    <th className="pb-2 pl-3 font-medium text-right">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {results.map((warga) => (
-                    <tr key={warga.id} className="border-b last:border-0">
-                      <td className="py-3 pr-3">{warga.nik}</td>
-                      <td className="py-3 px-3 font-medium">{warga.namaLengkap}</td>
-                      <td className="py-3 px-3 text-neutral-500">
-                        {warga.alamat}, RT {warga.rt}/RW {warga.rw}
-                      </td>
-                      <td className="py-3 pl-3 text-right">
-                        <Button
-                          size="sm"
-                          variant={
-                            selectedWarga?.id === warga.id
-                              ? "default"
-                              : "outline"
-                          }
-                          onClick={() => onSelect(warga)}
-                        >
-                          {selectedWarga?.id === warga.id
-                            ? "Terpilih"
-                            : "Pilih"}
-                        </Button>
-                      </td>
+              <div className="overflow-x-auto -mx-2 px-2">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-left text-neutral-500 border-b">
+                      <th className="pb-2.5 pr-4 font-medium w-44 whitespace-nowrap">
+                        NIK
+                      </th>
+                      <th className="pb-2.5 px-4 font-medium whitespace-nowrap">
+                        Nama Lengkap
+                      </th>
+                      <th className="pb-2.5 px-4 font-medium min-w-[200px]">
+                        Alamat
+                      </th>
+                      <th className="pb-2.5 pl-4 font-medium text-right w-28 whitespace-nowrap">
+                        Aksi
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {results.map((warga) => {
+                      const isSelected = selectedWarga?.id === warga.id;
+                      return (
+                        <tr
+                          key={warga.id}
+                          className="border-b last:border-0 hover:bg-neutral-50/60 transition-colors"
+                        >
+                          <td className="py-3 pr-4 font-mono text-xs text-neutral-700 whitespace-nowrap">
+                            {warga.nik}
+                          </td>
+                          <td className="py-3 px-4 font-medium whitespace-nowrap">
+                            {warga.namaLengkap}
+                          </td>
+                          <td className="py-3 px-4 text-neutral-500 text-xs leading-relaxed">
+                            {warga.alamat}, RT {warga.rt}/RW {warga.rw}
+                          </td>
+                          <td className="py-3 pl-4 text-right whitespace-nowrap">
+                            <Button
+                              size="sm"
+                              variant={isSelected ? "default" : "outline"}
+                              onClick={() =>
+                                onSelect(isSelected ? null : warga)
+                              }
+                              title={
+                                isSelected
+                                  ? "Klik untuk membatalkan pilihan"
+                                  : "Pilih warga ini"
+                              }
+                            >
+                              {isSelected ? (
+                                <span className="flex items-center gap-2">
+                                  <CheckIcon className="h-3.5 w-3.5" />
+                                  Terpilih
+                                </span>
+                              ) : (
+                                "Pilih"
+                              )}
+                            </Button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         )}
       </div>
 
-      <div className="border-2 border-neutral-900 rounded-lg p-6 h-fit bg-white">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="h-5 w-5 rounded-full bg-neutral-900 flex items-center justify-center shrink-0">
-            <CheckIcon className="h-3 w-3 text-white" />
+      <div
+        className={cn(
+          "border rounded-lg p-6 h-fit bg-white",
+          selectedWarga && "border-neutral-900 ring-1 ring-neutral-900",
+        )}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <div className="h-5 w-5 rounded-full bg-neutral-900 flex items-center justify-center shrink-0">
+              <CheckIcon className="h-3 w-3 text-white" />
+            </div>
+            <h3 className="font-semibold">Warga Terpilih</h3>
           </div>
-          <h3 className="font-semibold">Warga Terpilih</h3>
+          {selectedWarga && (
+            <button
+              type="button"
+              onClick={() => onSelect(null)}
+              className="text-xs text-neutral-500 hover:text-red-600 transition-colors"
+              title="Batalkan pilihan warga"
+            >
+              Batal
+            </button>
+          )}
         </div>
 
         {selectedWarga ? (
@@ -142,8 +229,9 @@ export function StepDataPemohon({
               </div>
             </div>
 
-            <Button className="w-full mt-6" onClick={onNext}>
-              Pilih Jenis Surat →
+            <Button className="w-full mt-6 gap-2" onClick={onNext}>
+              <span>Pilih Jenis Surat</span>
+              <ArrowRightIcon className="h-4 w-4" />
             </Button>
           </>
         ) : (

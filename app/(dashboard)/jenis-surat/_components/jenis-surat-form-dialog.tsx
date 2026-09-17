@@ -5,6 +5,7 @@ import {
   updateJenisSurat,
 } from "@/app/(dashboard)/jenis-surat/actions";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -20,6 +21,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { Textarea } from "@/components/ui/textarea";
 import { iconOptions } from "@/lib/constants";
 import {
   JenisSuratSchema,
@@ -111,11 +113,20 @@ export function JenisSuratFormDialog({
     <Sheet
       open={open}
       onOpenChange={(v) => {
+        setError(null);
         setOpen(v);
         if (v) resetForm();
       }}
     >
-      <div onClick={() => setOpen(true)}>{trigger}</div>
+      <div
+        className="inline-flex"
+        onClick={() => {
+          setError(null);
+          setOpen(true);
+        }}
+      >
+        {trigger}
+      </div>
 
       <SheetContent className="data-[side=right]:sm:max-w-lg overflow-y-auto">
         <SheetHeader>
@@ -125,63 +136,67 @@ export function JenisSuratFormDialog({
         </SheetHeader>
 
         {open && (
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 px-4 pb-4">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-4 px-4 pb-4"
+          >
             <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1.5 justify-between">
-                <Label>Nama Jenis Surat</Label>
-                <input
-                  type="text"
+              <div className="space-y-1.5">
+                <Label htmlFor="nama">Nama Jenis Surat</Label>
+                <Input
+                  id="nama"
                   {...register("nama")}
                   placeholder="Contoh: Surat Keterangan Pindah"
                   aria-invalid={!!errors.nama}
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-300"
                 />
                 <FieldError message={errors.nama?.message} />
               </div>
-              <div className="flex flex-col gap-1.5 justify-between">
-                <Label>Kode Format (untuk nomor surat)</Label>
-                <input
-                  type="text"
+              <div className="space-y-1.5">
+                <Label htmlFor="kodeFormat">
+                  Kode Format (untuk nomor surat)
+                </Label>
+                <Input
+                  id="kodeFormat"
                   {...register("kodeFormat")}
                   placeholder="Contoh: SKP"
                   maxLength={6}
                   aria-invalid={!!errors.kodeFormat}
-                  className="w-full px-3 py-2 border rounded-md text-sm uppercase focus:outline-none focus:ring-2 focus:ring-neutral-300"
+                  className="uppercase"
                 />
                 <FieldError message={errors.kodeFormat?.message} />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <Label>Deskripsi</Label>
-              <textarea
+              <Label htmlFor="deskripsi">Deskripsi</Label>
+              <Textarea
+                id="deskripsi"
                 {...register("deskripsi")}
                 placeholder="Jelaskan singkat kegunaan surat ini..."
                 aria-invalid={!!errors.deskripsi}
                 rows={2}
-                className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-300"
               />
               <FieldError message={errors.deskripsi?.message} />
             </div>
 
             <div className="space-y-1.5">
-              <Label>Ikon</Label>
+              <Label htmlFor="icon">Ikon</Label>
               <Controller
                 name="icon"
                 control={control}
                 render={({ field }) => (
-              <Select value={field.value} onValueChange={field.onChange}>
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {iconOptions.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger id="icon" className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {iconOptions.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 )}
               />
               <FieldError message={errors.icon?.message} />
@@ -200,10 +215,7 @@ export function JenisSuratFormDialog({
                 }}
               />
               <FieldError
-                message={
-                  errors.fields?.message ??
-                  errors.fields?.root?.message
-                }
+                message={errors.fields?.message ?? errors.fields?.root?.message}
               />
             </div>
 

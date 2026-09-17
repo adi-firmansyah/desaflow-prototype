@@ -4,7 +4,13 @@ import { createSurat } from "@/app/(dashboard)/buat-surat/actions";
 import { Button } from "@/components/ui/button";
 import { PreviewRow } from "@/components/ui/detail-rows";
 import type { FieldSchema, JenisSurat, Warga } from "@/types";
-import { CheckIcon, EyeIcon, PlusIcon, PrinterIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  CheckIcon,
+  EyeIcon,
+  PlusIcon,
+  PrinterIcon,
+} from "lucide-react";
 import { useState } from "react";
 
 export function StepKonfirmasi({
@@ -225,7 +231,8 @@ export function StepKonfirmasi({
           variant="outline"
           onClick={() => (suratHasil ? setShowPreview(false) : onBack())}
         >
-          ← {suratHasil ? "Kembali" : "Kembali Edit"}
+          <ArrowLeftIcon className="h-4 w-4" />
+          <span>{suratHasil ? "Kembali" : "Kembali Edit"}</span>
         </Button>
       </div>
     </div>
