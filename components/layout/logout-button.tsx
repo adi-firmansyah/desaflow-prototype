@@ -16,7 +16,7 @@ export function LogoutButton() {
   return (
     <button
       onClick={handleLogout}
-      className="text-neutral-500 hover:text-red-600 transition-colors"
+      className="text-neutral-500 hover:text-red-500 transition-colors cursor-pointer"
       title="Keluar"
     >
       <LogOutIcon className="h-5 w-5" />

@@ -20,7 +20,7 @@ export default async function LandingPage() {
           backgroundSize: "24px 24px",
         }}
       />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white via-transparent to-white" />
+      <div className="absolute inset-0 -z-10 bg-linear-to-b from-white via-transparent to-white" />
 
       <header className="border-b px-8 py-6 bg-white/80 backdrop-blur-sm flex items-center justify-between">
         <h1 className="text-xl font-bold">DesaFlow</h1>

@@ -143,7 +143,7 @@ export function FieldBuilder({
             <button
               type="button"
               onClick={() => removeField(index)}
-              className="text-neutral-400 hover:text-red-600 transition-colors mt-1"
+              className="text-neutral-400 hover:text-red-500 transition-colors mt-1"
             >
               <Trash2Icon className="h-4 w-4" />
             </button>

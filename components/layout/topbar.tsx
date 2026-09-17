@@ -12,7 +12,7 @@ export async function Topbar() {
   const name = session?.user?.name ?? "Admin Desa";
 
   return (
-    <header className="h-[73px] border-b flex items-center justify-between px-6 gap-4">
+    <header className="h-18.25 border-b flex items-center justify-between px-6 gap-4">
       <GlobalSearch />
 
       <div className="flex items-center gap-4 shrink-0">

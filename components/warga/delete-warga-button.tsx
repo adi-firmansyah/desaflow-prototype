@@ -28,7 +28,7 @@ export function DeleteWargaButton({ id, nama }: { id: string; nama: string }) {
     <Dialog open={open} onOpenChange={setOpen}>
       <button
         onClick={() => setOpen(true)}
-        className="text-neutral-400 hover:text-red-600 transition-colors"
+        className="text-neutral-400 hover:text-red-500 transition-colors"
         title="Hapus warga"
       >
         <Trash2Icon className="h-4 w-4" />

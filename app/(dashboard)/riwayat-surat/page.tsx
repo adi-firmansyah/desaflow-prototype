@@ -91,7 +91,7 @@ export default async function RiwayatSuratPage({
                       {statusLabel[surat.status]}
                     </span>
                   </td>
-                  <td className="px-5 py-4 text-right flex items-center justify-end gap-3">
+                  <td className="px-5 py-4 flex items-center justify-end gap-3">
                     <Link
                       href={`/riwayat-surat/${surat.id}`}
                       className="text-neutral-400 hover:text-neutral-700"

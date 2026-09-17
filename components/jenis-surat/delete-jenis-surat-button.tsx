@@ -41,7 +41,7 @@ export function DeleteJenisSuratButton({
     <Dialog open={open} onOpenChange={setOpen}>
       <button
         onClick={() => setOpen(true)}
-        className="text-neutral-400 hover:text-red-600 transition-colors"
+        className="text-neutral-400 hover:text-red-500 transition-colors"
       >
         <Trash2Icon className="h-4 w-4" />
       </button>
@@ -53,7 +53,7 @@ export function DeleteJenisSuratButton({
           </DialogDescription>
         </DialogHeader>
         {error && (
-          <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">
+          <p className="text-sm text-red-500 bg-red-50 border border-red-200 rounded-md px-3 py-2">
             {error}
           </p>
         )}

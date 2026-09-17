@@ -25,13 +25,13 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 shrink-0 border-r bg-neutral-50 min-h-screen flex flex-col">
+    <aside className="w-64 shrink-0 border-r bg-white min-h-screen flex flex-col">
       <div className="px-6 py-6">
         <h1 className="text-xl font-bold">DesaFlow</h1>
         <p className="text-sm text-neutral-500 mt-1">Admin Sistem Desa</p>
       </div>
 
-      <nav className="flex-1 px-3 space-y-1">
+      <nav className="flex-1 px-3">
         {navItems.map((item) => {
           const isActive = pathname.startsWith(item.href);
           const Icon = item.icon;
@@ -40,10 +40,10 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors border-l-2",
+                "flex items-center gap-3 px-3 py-2.5 rounded-md rounded-l-none text-sm font-medium transition-colors border-l-2",
                 isActive
-                  ? "bg-neutral-200/70 border-neutral-900 text-neutral-900"
-                  : "border-transparent text-neutral-600 hover:bg-neutral-100",
+                  ? "bg-neutral-100 border-neutral-900 text-neutral-900"
+                  : "border-transparent text-neutral-600 hover:bg-neutral-50",
               )}
             >
               <Icon className="h-4 w-4" />
