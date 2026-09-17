@@ -1,10 +1,12 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { requireSession } from "@/lib/require-session";
 import { parseFieldSchemas } from "@/types";
+import { revalidatePath } from "next/cache";
 
 export async function searchWarga(query: string) {
+  await requireSession();
   if (!query.trim()) return [];
 
   return prisma.warga.findMany({
@@ -19,6 +21,7 @@ export async function searchWarga(query: string) {
 }
 
 export async function getJenisSuratList() {
+  await requireSession();
   const jenisSuratList = await prisma.jenisSurat.findMany({
     orderBy: { nama: "asc" },
   });
@@ -44,6 +47,7 @@ export async function createSurat(params: {
   dataForm: Record<string, string>;
   status: "DRAFT" | "FINAL";
 }) {
+  await requireSession();
   const jenisSurat = await prisma.jenisSurat.findUniqueOrThrow({
     where: { id: params.jenisSuratId },
   });
@@ -68,6 +72,7 @@ export async function createSurat(params: {
 }
 
 export async function getSuratById(id: string) {
+  await requireSession();
   return prisma.surat.findUnique({
     where: { id },
     include: { warga: true, jenisSurat: true },
@@ -75,6 +80,7 @@ export async function getSuratById(id: string) {
 }
 
 export async function finalisasiSurat(id: string) {
+  await requireSession();
   await prisma.surat.update({
     where: { id },
     data: { status: "FINAL" },

@@ -1,6 +1,7 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { prisma, Prisma } from "@/lib/prisma";
+import { requireSession } from "@/lib/require-session";
 import type { FieldSchema } from "@/types";
 import { revalidatePath } from "next/cache";
 
@@ -11,6 +12,7 @@ export async function createJenisSurat(data: {
   kodeFormat: string;
   fields: FieldSchema[];
 }) {
+  await requireSession();
   try {
     await prisma.jenisSurat.create({
       data: {
@@ -24,8 +26,11 @@ export async function createJenisSurat(data: {
     revalidatePath("/jenis-surat");
     revalidatePath("/buat-surat");
     return { success: true };
-  } catch (error: any) {
-    if (error.code === "P2002") {
+  } catch (error: unknown) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
       return { success: false, message: "Nama jenis surat sudah digunakan." };
     }
     return { success: false, message: "Terjadi kesalahan. Silakan coba lagi." };
@@ -42,6 +47,7 @@ export async function updateJenisSurat(
     fields: FieldSchema[];
   },
 ) {
+  await requireSession();
   try {
     await prisma.jenisSurat.update({
       where: { id },
@@ -56,8 +62,11 @@ export async function updateJenisSurat(
     revalidatePath("/jenis-surat");
     revalidatePath("/buat-surat");
     return { success: true };
-  } catch (error: any) {
-    if (error.code === "P2002") {
+  } catch (error: unknown) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
       return { success: false, message: "Nama jenis surat sudah digunakan." };
     }
     return { success: false, message: "Terjadi kesalahan. Silakan coba lagi." };
@@ -65,6 +74,7 @@ export async function updateJenisSurat(
 }
 
 export async function deleteJenisSurat(id: string) {
+  await requireSession();
   const jumlahSurat = await prisma.surat.count({ where: { jenisSuratId: id } });
 
   if (jumlahSurat > 0) {

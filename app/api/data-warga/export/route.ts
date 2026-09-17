@@ -1,9 +1,15 @@
 import { statusLabel } from "@/lib/constants";
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/require-session";
 import { NextRequest, NextResponse } from "next/server";
 import * as XLSX from "xlsx";
 
 export async function GET(request: NextRequest) {
+  const session = await getSession(request.headers);
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const searchParams = request.nextUrl.searchParams;
   const q = searchParams.get("q") ?? undefined;
   const format = searchParams.get("format") ?? "xlsx";

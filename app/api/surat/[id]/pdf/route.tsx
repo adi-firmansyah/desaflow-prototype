@@ -1,5 +1,6 @@
 import { SuratPdfDocument } from "@/components/pdf/surat-pdf-document";
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/require-session";
 import { parseFieldSchemas, parseFormData } from "@/types";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { NextRequest, NextResponse } from "next/server";
@@ -8,6 +9,11 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const session = await getSession(request.headers);
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { id } = await params;
 
   const surat = await prisma.surat.findUnique({

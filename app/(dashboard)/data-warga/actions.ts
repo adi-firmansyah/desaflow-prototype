@@ -1,9 +1,11 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { prisma, Prisma } from "@/lib/prisma";
+import { requireSession } from "@/lib/require-session";
 import { revalidatePath } from "next/cache";
 
 export async function createWarga(formData: FormData) {
+  await requireSession();
   const nik = formData.get("nik") as string;
   const namaLengkap = formData.get("namaLengkap") as string;
   const tempatLahir = formData.get("tempatLahir") as string;
@@ -40,8 +42,11 @@ export async function createWarga(formData: FormData) {
     });
     revalidatePath("/data-warga");
     return { success: true };
-  } catch (error: any) {
-    if (error.code === "P2002") {
+  } catch (error: unknown) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
       return {
         success: false,
         message: "NIK sudah terdaftar. Gunakan NIK yang berbeda.",
@@ -52,6 +57,7 @@ export async function createWarga(formData: FormData) {
 }
 
 export async function updateWarga(id: string, formData: FormData) {
+  await requireSession();
   const nik = formData.get("nik") as string;
   const namaLengkap = formData.get("namaLengkap") as string;
   const tempatLahir = formData.get("tempatLahir") as string;
@@ -89,8 +95,11 @@ export async function updateWarga(id: string, formData: FormData) {
     });
     revalidatePath("/data-warga");
     return { success: true };
-  } catch (error: any) {
-    if (error.code === "P2002") {
+  } catch (error: unknown) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
       return {
         success: false,
         message: "NIK sudah terdaftar. Gunakan NIK yang berbeda.",
@@ -101,6 +110,7 @@ export async function updateWarga(id: string, formData: FormData) {
 }
 
 export async function deleteWarga(id: string) {
+  await requireSession();
   await prisma.warga.delete({ where: { id } });
   revalidatePath("/data-warga");
 }

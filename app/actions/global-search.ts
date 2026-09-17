@@ -1,8 +1,10 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { requireSession } from "@/lib/require-session";
 
 export async function globalSearch(query: string) {
+  await requireSession();
   if (!query.trim() || query.trim().length < 2) {
     return { warga: [], surat: [] };
   }
