@@ -18,8 +18,14 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { WargaSchema } from "@/lib/validations/warga";
 import type { Warga } from "@/types";
-import { useRef, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { useState } from "react";
+import type { z } from "zod";
+
+type WargaFormValues = z.input<typeof WargaSchema>;
 
 export function WargaFormDialog({
   warga,
@@ -29,29 +35,63 @@ export function WargaFormDialog({
   trigger: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const formRef = useRef<HTMLFormElement>(null);
   const isEdit = !!warga;
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    setError: setFieldError,
+    formState: { errors, isSubmitting },
+  } = useForm<WargaFormValues>({
+    resolver: zodResolver(WargaSchema),
+    defaultValues: {
+      nik: warga?.nik ?? "",
+      namaLengkap: warga?.namaLengkap ?? "",
+      tempatLahir: warga?.tempatLahir ?? "",
+      tanggalLahir: warga?.tanggalLahir
+        ? new Date(warga.tanggalLahir).toISOString().split("T")[0]
+        : "",
+      jenisKelamin: warga?.jenisKelamin ?? "LAKI_LAKI",
+      agama: warga?.agama ?? "Islam",
+      alamat: warga?.alamat ?? "",
+      rt: warga?.rt ?? "",
+      rw: warga?.rw ?? "",
+      statusKawin: warga?.statusKawin ?? "BELUM_KAWIN",
+      pekerjaan: warga?.pekerjaan ?? null,
+    },
+  });
 
-  async function handleSubmit(formData: FormData) {
-    setLoading(true);
+  async function onSubmit(values: WargaFormValues) {
     setError(null);
-    try {
-      const result = isEdit
-        ? await updateWarga(warga.id, formData)
-        : await createWarga(formData);
+    const formData = new FormData();
+    Object.entries(values).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) formData.set(key, String(value));
+    });
 
-      if (!result.success) {
-        setError(result.message ?? "Terjadi kesalahan.");
-        return;
+    const result = isEdit
+      ? await updateWarga(warga.id, formData)
+      : await createWarga(formData);
+
+    if (!result.success) {
+      setError(result.message ?? "Terjadi kesalahan.");
+      if (result.errors) {
+        Object.entries(result.errors).forEach(([field, messages]) => {
+          const message = messages?.[0];
+          if (message) {
+            setFieldError(field as keyof WargaFormValues, {
+              type: "server",
+              message,
+            });
+          }
+        });
       }
-
-      setOpen(false);
-      formRef.current?.reset();
-    } finally {
-      setLoading(false);
+      return;
     }
+
+    setOpen(false);
+    reset();
   }
 
   return (
@@ -80,11 +120,7 @@ export function WargaFormDialog({
 
         {open && (
           <form
-            ref={formRef}
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSubmit(new FormData(e.currentTarget));
-            }}
+            onSubmit={handleSubmit(onSubmit)}
             className="space-y-4 px-4 pb-4"
           >
             <div className="grid grid-cols-2 gap-4">
@@ -92,20 +128,20 @@ export function WargaFormDialog({
                 <Label htmlFor="nik">NIK</Label>
                 <Input
                   id="nik"
-                  name="nik"
-                  defaultValue={warga?.nik}
-                  required
+                  {...register("nik")}
+                  aria-invalid={!!errors.nik}
                   maxLength={16}
                 />
+                <FieldError message={errors.nik?.message} />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="namaLengkap">Nama Lengkap</Label>
                 <Input
                   id="namaLengkap"
-                  name="namaLengkap"
-                  defaultValue={warga?.namaLengkap}
-                  required
+                  {...register("namaLengkap")}
+                  aria-invalid={!!errors.namaLengkap}
                 />
+                <FieldError message={errors.namaLengkap?.message} />
               </div>
             </div>
 
@@ -114,34 +150,31 @@ export function WargaFormDialog({
                 <Label htmlFor="tempatLahir">Tempat Lahir</Label>
                 <Input
                   id="tempatLahir"
-                  name="tempatLahir"
-                  defaultValue={warga?.tempatLahir}
-                  required
+                  {...register("tempatLahir")}
+                  aria-invalid={!!errors.tempatLahir}
                 />
+                <FieldError message={errors.tempatLahir?.message} />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="tanggalLahir">Tanggal Lahir</Label>
                 <Input
                   id="tanggalLahir"
-                  name="tanggalLahir"
+                  {...register("tanggalLahir")}
                   type="date"
-                  defaultValue={
-                    warga?.tanggalLahir
-                      ? new Date(warga.tanggalLahir).toISOString().split("T")[0]
-                      : undefined
-                  }
-                  required
+                  aria-invalid={!!errors.tanggalLahir}
                 />
+                <FieldError message={errors.tanggalLahir?.message} />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label>Jenis Kelamin</Label>
-                <Select
+                <Controller
                   name="jenisKelamin"
-                  defaultValue={warga?.jenisKelamin ?? "LAKI_LAKI"}
-                >
+                  control={control}
+                  render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
@@ -150,15 +183,18 @@ export function WargaFormDialog({
                     <SelectItem value="PEREMPUAN">Perempuan</SelectItem>
                   </SelectContent>
                 </Select>
+                  )}
+                />
+                <FieldError message={errors.jenisKelamin?.message} />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="agama">Agama</Label>
                 <Input
                   id="agama"
-                  name="agama"
-                  defaultValue={warga?.agama ?? "Islam"}
-                  required
+                  {...register("agama")}
+                  aria-invalid={!!errors.agama}
                 />
+                <FieldError message={errors.agama?.message} />
               </div>
             </div>
 
@@ -166,27 +202,30 @@ export function WargaFormDialog({
               <Label htmlFor="alamat">Alamat</Label>
               <Input
                 id="alamat"
-                name="alamat"
-                defaultValue={warga?.alamat}
-                required
+                {...register("alamat")}
+                aria-invalid={!!errors.alamat}
               />
+              <FieldError message={errors.alamat?.message} />
             </div>
 
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="rt">RT</Label>
-                <Input id="rt" name="rt" defaultValue={warga?.rt} required />
+                <Input id="rt" {...register("rt")} aria-invalid={!!errors.rt} />
+                <FieldError message={errors.rt?.message} />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="rw">RW</Label>
-                <Input id="rw" name="rw" defaultValue={warga?.rw} required />
+                <Input id="rw" {...register("rw")} aria-invalid={!!errors.rw} />
+                <FieldError message={errors.rw?.message} />
               </div>
               <div className="space-y-1.5">
                 <Label>Status Kawin</Label>
-                <Select
+                <Controller
                   name="statusKawin"
-                  defaultValue={warga?.statusKawin ?? "BELUM_KAWIN"}
-                >
+                  control={control}
+                  render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
@@ -197,6 +236,9 @@ export function WargaFormDialog({
                     <SelectItem value="CERAI_MATI">Cerai Mati</SelectItem>
                   </SelectContent>
                 </Select>
+                  )}
+                />
+                <FieldError message={errors.statusKawin?.message} />
               </div>
             </div>
 
@@ -204,9 +246,9 @@ export function WargaFormDialog({
               <Label htmlFor="pekerjaan">Pekerjaan (Opsional)</Label>
               <Input
                 id="pekerjaan"
-                name="pekerjaan"
-                defaultValue={warga?.pekerjaan ?? ""}
+                {...register("pekerjaan")}
               />
+              <FieldError message={errors.pekerjaan?.message} />
             </div>
 
             {error && (
@@ -216,8 +258,8 @@ export function WargaFormDialog({
             )}
 
             <SheetFooter className="px-0">
-              <Button type="submit" disabled={loading}>
-                {loading
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting
                   ? "Menyimpan..."
                   : isEdit
                     ? "Simpan Perubahan"
@@ -229,4 +271,8 @@ export function WargaFormDialog({
       </SheetContent>
     </Sheet>
   );
+}
+
+function FieldError({ message }: { message?: string }) {
+  return message ? <p className="text-xs text-red-600">{message}</p> : null;
 }
