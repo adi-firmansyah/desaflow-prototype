@@ -68,21 +68,21 @@ export function StepDataPemohon({
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-left text-neutral-500 border-b">
-                    <th className="pb-2 font-medium">NIK</th>
-                    <th className="pb-2 font-medium">Nama Lengkap</th>
-                    <th className="pb-2 font-medium">Alamat</th>
-                    <th className="pb-2 font-medium text-right">Aksi</th>
+                    <th className="pb-2 pr-3 font-medium">NIK</th>
+                    <th className="pb-2 px-3 font-medium text-nowrap">Nama Lengkap</th>
+                    <th className="pb-2 px-3 font-medium">Alamat</th>
+                    <th className="pb-2 pl-3 font-medium text-right">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
                   {results.map((warga) => (
                     <tr key={warga.id} className="border-b last:border-0">
-                      <td className="py-3">{warga.nik}</td>
-                      <td className="py-3 font-medium">{warga.namaLengkap}</td>
-                      <td className="py-3 text-neutral-500">
+                      <td className="py-3 pr-3">{warga.nik}</td>
+                      <td className="py-3 px-3 font-medium">{warga.namaLengkap}</td>
+                      <td className="py-3 px-3 text-neutral-500">
                         {warga.alamat}, RT {warga.rt}/RW {warga.rw}
                       </td>
-                      <td className="py-3 text-right">
+                      <td className="py-3 pl-3 text-right">
                         <Button
                           size="sm"
                           variant={

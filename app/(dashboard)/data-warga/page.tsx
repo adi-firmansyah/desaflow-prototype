@@ -2,12 +2,13 @@ import { Button } from "@/components/ui/button";
 import { statusLabel } from "@/lib/constants";
 import { getWargaList } from "@/lib/queries";
 import { normalizePagination } from "@/lib/pagination";
-import { EyeIcon, PencilIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { EyeIcon, PencilIcon, PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { DeleteWargaButton } from "./_components/delete-warga-button";
 import { ExportWargaButtons } from "./_components/export-warga-buttons";
 import { WargaFormDialog } from "./_components/warga-form-dialog";
 import { PaginationControls } from "@/components/pagination-controls";
+import { SearchInput } from "@/components/search-input";
 import { redirect } from "next/navigation";
 
 export default async function DataWargaPage({
@@ -50,16 +51,12 @@ export default async function DataWargaPage({
       </div>
 
       <div className="flex items-center justify-between mb-4 gap-4">
-        <form className="relative max-w-sm flex-1 bg-white">
-          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
-          <input
-            type="text"
-            name="q"
-            defaultValue={q}
+        <div className="max-w-sm flex-1">
+          <SearchInput
             placeholder="Cari NIK atau nama..."
-            className="w-full pl-9 pr-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-neutral-300"
+            defaultValue={q}
           />
-        </form>
+        </div>
         <ExportWargaButtons query={q} />
       </div>
 

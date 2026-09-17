@@ -3,6 +3,7 @@ import { statusColor, statusLabel } from "@/lib/constants";
 import { getSuratList } from "@/lib/queries";
 import { normalizePagination } from "@/lib/pagination";
 import { PaginationControls } from "@/components/pagination-controls";
+import { SearchInput } from "@/components/search-input";
 import { redirect } from "next/navigation";
 import { EyeIcon } from "lucide-react";
 import Link from "next/link";
@@ -34,15 +35,12 @@ export default async function RiwayatSuratPage({
         Daftar seluruh surat yang pernah dibuat dan tersimpan di sistem.
       </p>
 
-      <form className="max-w-sm mb-4 bg-white">
-        <input
-          type="text"
-          name="q"
-          defaultValue={q}
+      <div className="max-w-sm mb-4">
+        <SearchInput
           placeholder="Cari nomor surat atau nama warga..."
-          className="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-neutral-300"
+          defaultValue={q}
         />
-      </form>
+      </div>
 
       <div className="border rounded-lg bg-white overflow-x-auto">
         {suratList.length === 0 ? (

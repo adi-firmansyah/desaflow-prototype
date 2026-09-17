@@ -1,16 +1,35 @@
 import { Button } from "@/components/ui/button";
-import { prisma } from "@/lib/prisma";
+import { PaginationControls } from "@/components/pagination-controls";
+import { normalizePagination } from "@/lib/pagination";
+import { getJenisSuratList } from "@/lib/queries";
 import { parseFieldSchemas } from "@/types";
 import { PencilIcon, PlusIcon } from "lucide-react";
+import { SearchInput } from "@/components/search-input";
+import { redirect } from "next/navigation";
 import { DeleteJenisSuratButton } from "./_components/delete-jenis-surat-button";
 import { JenisSuratFormDialog } from "./_components/jenis-surat-form-dialog";
 
-export const dynamic = "force-dynamic";
-
-export default async function JenisSuratPage() {
-  const jenisSuratList = await prisma.jenisSurat.findMany({
-    orderBy: { nama: "asc" },
+export default async function JenisSuratPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; page?: string; limit?: string }>;
+}) {
+  const { q, page, limit } = await searchParams;
+  const pagination = normalizePagination(page, limit);
+  const jenisSuratResult = await getJenisSuratList({
+    ...pagination,
+    query: q,
   });
+
+  if (jenisSuratResult.currentPage !== pagination.page) {
+    const params = new URLSearchParams();
+    if (q) params.set("q", q);
+    params.set("page", String(jenisSuratResult.currentPage));
+    params.set("limit", String(pagination.limit));
+    redirect(`/jenis-surat?${params.toString()}`);
+  }
+
+  const jenisSuratList = jenisSuratResult.data;
 
   return (
     <div>
@@ -31,10 +50,19 @@ export default async function JenisSuratPage() {
         />
       </div>
 
+      <div className="max-w-sm mb-4">
+        <SearchInput
+          placeholder="Cari nama atau kode format..."
+          defaultValue={q}
+        />
+      </div>
+
       <div className="border rounded-lg bg-white overflow-x-auto">
         {jenisSuratList.length === 0 ? (
           <div className="px-5 py-10 text-center text-neutral-500 text-sm">
-            Belum ada jenis surat. Tambahkan jenis surat pertama.
+            {q
+              ? `Tidak ada jenis surat dengan kata kunci "${q}".`
+              : "Belum ada jenis surat. Tambahkan jenis surat pertama."}
           </div>
         ) : (
           <table className="w-full text-sm">
@@ -87,6 +115,14 @@ export default async function JenisSuratPage() {
           </table>
         )}
       </div>
+
+      <PaginationControls
+        pathname="/jenis-surat"
+        query={q}
+        page={jenisSuratResult.currentPage}
+        limit={pagination.limit}
+        totalPages={jenisSuratResult.totalPages}
+      />
     </div>
   );
 }

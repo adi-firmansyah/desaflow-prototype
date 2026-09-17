@@ -76,3 +76,41 @@ export async function getSuratList({
     currentPage: Math.min(page, totalPages),
   };
 }
+
+export async function getJenisSuratList({
+  page = 1,
+  limit = 10,
+  query,
+}: {
+  page?: number;
+  limit?: number;
+  query?: string;
+}) {
+  const where = query
+    ? {
+        OR: [
+          { nama: { contains: query, mode: "insensitive" as const } },
+          { kodeFormat: { contains: query, mode: "insensitive" as const } },
+          { deskripsi: { contains: query, mode: "insensitive" as const } },
+        ],
+      }
+    : undefined;
+
+  const [data, total] = await Promise.all([
+    prisma.jenisSurat.findMany({
+      where,
+      orderBy: { nama: "asc" },
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
+    prisma.jenisSurat.count({ where }),
+  ]);
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+
+  return {
+    data,
+    totalPages,
+    currentPage: Math.min(page, totalPages),
+  };
+}
+
