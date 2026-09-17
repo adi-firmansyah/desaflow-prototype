@@ -2,25 +2,32 @@
 
 import { prisma, Prisma } from "@/lib/prisma";
 import { requireSession } from "@/lib/require-session";
-import type { FieldSchema } from "@/types";
+import {
+  JenisSuratSchema,
+  type JenisSuratInput,
+} from "@/lib/validations/surat";
 import { revalidatePath } from "next/cache";
 
-export async function createJenisSurat(data: {
-  nama: string;
-  deskripsi: string;
-  icon: string;
-  kodeFormat: string;
-  fields: FieldSchema[];
-}) {
+export async function createJenisSurat(data: JenisSuratInput) {
   await requireSession();
+  const result = JenisSuratSchema.safeParse(data);
+
+  if (!result.success) {
+    return {
+      success: false,
+      errors: result.error.flatten().fieldErrors,
+      message: "Validasi gagal",
+    };
+  }
+
   try {
     await prisma.jenisSurat.create({
       data: {
-        nama: data.nama,
-        deskripsi: data.deskripsi,
-        icon: data.icon,
-        kodeFormat: data.kodeFormat,
-        templateFields: JSON.stringify(data.fields),
+        nama: result.data.nama,
+        deskripsi: result.data.deskripsi,
+        icon: result.data.icon,
+        kodeFormat: result.data.kodeFormat,
+        templateFields: JSON.stringify(result.data.fields),
       },
     });
     revalidatePath("/jenis-surat");
@@ -39,24 +46,28 @@ export async function createJenisSurat(data: {
 
 export async function updateJenisSurat(
   id: string,
-  data: {
-    nama: string;
-    deskripsi: string;
-    icon: string;
-    kodeFormat: string;
-    fields: FieldSchema[];
-  },
+  data: JenisSuratInput,
 ) {
   await requireSession();
+  const result = JenisSuratSchema.safeParse(data);
+
+  if (!result.success) {
+    return {
+      success: false,
+      errors: result.error.flatten().fieldErrors,
+      message: "Validasi gagal",
+    };
+  }
+
   try {
     await prisma.jenisSurat.update({
       where: { id },
       data: {
-        nama: data.nama,
-        deskripsi: data.deskripsi,
-        icon: data.icon,
-        kodeFormat: data.kodeFormat,
-        templateFields: JSON.stringify(data.fields),
+        nama: result.data.nama,
+        deskripsi: result.data.deskripsi,
+        icon: result.data.icon,
+        kodeFormat: result.data.kodeFormat,
+        templateFields: JSON.stringify(result.data.fields),
       },
     });
     revalidatePath("/jenis-surat");
