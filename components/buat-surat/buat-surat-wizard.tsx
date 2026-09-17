@@ -64,8 +64,9 @@ export function BuatSuratWizard({
       try {
         const parsed: WizardState = JSON.parse(saved);
 
-        // Kalau surat sudah selesai dibuat, jangan restore state lama — mulai baru
-        if (parsed.suratHasil) {
+        // Kalau surat sudah selesai, atau state tersimpan masih di step 1,
+        // jangan restore apapun — mulai bersih dari awal
+        if (parsed.suratHasil || parsed.step === 1) {
           sessionStorage.removeItem(STORAGE_KEY);
         } else {
           setStep(parsed.step);

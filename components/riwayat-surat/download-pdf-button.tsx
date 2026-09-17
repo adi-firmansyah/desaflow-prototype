@@ -50,6 +50,7 @@ export function DownloadPdfButton({
           ? "text-neutral-400 hover:text-neutral-700"
           : "w-full inline-flex items-center justify-center gap-2 px-4 py-2 border rounded-md text-sm font-medium hover:bg-neutral-50",
       )}
+      title={iconOnly ? "Unduh PDF" : undefined}
     >
       {loading ? (
         <>
