@@ -27,7 +27,7 @@ import {
   JenisSuratSchema,
   type JenisSuratInput,
 } from "@/lib/validations/surat";
-import type { FieldSchema, JenisSurat } from "@/types";
+import { parseFieldSchemas, type FieldSchema, type JenisSurat } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
@@ -43,9 +43,8 @@ export function JenisSuratFormDialog({
   const isEdit = !!jenisSurat;
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [fields, setFields] = useState<FieldSchema[]>(
-    jenisSurat?.templateFields ?? [],
-  );
+  const initialFields = parseFieldSchemas(jenisSurat?.templateFields);
+  const [fields, setFields] = useState<FieldSchema[]>(initialFields);
   const {
     register,
     control,
@@ -61,17 +60,18 @@ export function JenisSuratFormDialog({
       deskripsi: jenisSurat?.deskripsi ?? "",
       icon: jenisSurat?.icon ?? "church",
       kodeFormat: jenisSurat?.kodeFormat ?? "",
-      fields: jenisSurat?.templateFields ?? [],
+      fields: initialFields,
     },
   });
 
   function resetForm() {
+    const currentFields = parseFieldSchemas(jenisSurat?.templateFields);
     const defaultValues = {
       nama: jenisSurat?.nama ?? "",
       deskripsi: jenisSurat?.deskripsi ?? "",
       icon: jenisSurat?.icon ?? "church",
       kodeFormat: jenisSurat?.kodeFormat ?? "",
-      fields: jenisSurat?.templateFields ?? [],
+      fields: currentFields,
     };
     reset(defaultValues);
     setFields(defaultValues.fields);

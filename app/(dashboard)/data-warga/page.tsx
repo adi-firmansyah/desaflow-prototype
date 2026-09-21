@@ -1,33 +1,85 @@
-import { Button } from "@/components/ui/button";
-import { statusLabel } from "@/lib/constants";
-import { getWargaList } from "@/lib/queries";
-import { normalizePagination } from "@/lib/pagination";
-import { EyeIcon, PencilIcon, PlusIcon } from "lucide-react";
-import Link from "next/link";
-import { DeleteWargaButton } from "./_components/delete-warga-button";
-import { ExportWargaButtons } from "./_components/export-warga-buttons";
-import { WargaFormDialog } from "./_components/warga-form-dialog";
 import { PaginationControls } from "@/components/pagination-controls";
 import { SearchInput } from "@/components/search-input";
+import { Button } from "@/components/ui/button";
+import { statusLabel } from "@/lib/constants";
+import { normalizePagination } from "@/lib/pagination";
+import { getWargaList } from "@/lib/queries";
+import { EyeIcon, PencilIcon, PlusIcon } from "lucide-react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import { DeleteWargaButton } from "./_components/delete-warga-button";
+import { ExportWargaButtons } from "./_components/export-warga-buttons";
+import { WargaFilterBar } from "./_components/warga-filter-bar";
+import { WargaFormDialog } from "./_components/warga-form-dialog";
 
 export default async function DataWargaPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; page?: string; limit?: string }>;
+  searchParams: Promise<{
+    q?: string;
+    page?: string;
+    limit?: string;
+    jenisKelamin?: string;
+    agama?: string;
+    golonganDarah?: string;
+    statusPerkawinan?: string;
+    statusHubunganKeluarga?: string;
+    pendidikanTerakhir?: string;
+    jenisPekerjaan?: string;
+    kewarganegaraan?: string;
+  }>;
 }) {
-  const { q, page, limit } = await searchParams;
+  const params = await searchParams;
+  const {
+    q,
+    page,
+    limit,
+    jenisKelamin,
+    agama,
+    golonganDarah,
+    statusPerkawinan,
+    statusHubunganKeluarga,
+    pendidikanTerakhir,
+    jenisPekerjaan,
+    kewarganegaraan,
+  } = params;
+
+  const filterParams: Record<string, string | undefined> = {
+    jenisKelamin,
+    agama,
+    golonganDarah,
+    statusPerkawinan,
+    statusHubunganKeluarga,
+    pendidikanTerakhir,
+    jenisPekerjaan,
+    kewarganegaraan,
+  };
+
+  const hasActiveFilters = Object.values(filterParams).some(Boolean);
+
   const pagination = normalizePagination(page, limit);
   const wargaResult = await getWargaList({
     ...pagination,
     query: q,
+    jenisKelamin,
+    agama,
+    golonganDarah,
+    statusPerkawinan,
+    statusHubunganKeluarga,
+    pendidikanTerakhir,
+    jenisPekerjaan,
+    kewarganegaraan,
   });
+
   if (wargaResult.currentPage !== pagination.page) {
-    const params = new URLSearchParams();
-    if (q) params.set("q", q);
-    params.set("page", String(wargaResult.currentPage));
-    params.set("limit", String(pagination.limit));
-    redirect(`/data-warga?${params.toString()}`);
+    const nextParams = new URLSearchParams();
+    if (q) nextParams.set("q", q);
+    Object.entries(filterParams).forEach(([k, v]) => {
+      if (v) nextParams.set(k, v);
+    });
+    nextParams.set("page", String(wargaResult.currentPage));
+    nextParams.set("limit", String(pagination.limit));
+    redirect(`/data-warga?${nextParams.toString()}`);
   }
   const wargaList = wargaResult.data;
 
@@ -50,22 +102,26 @@ export default async function DataWargaPage({
         />
       </div>
 
-      <div className="flex items-center justify-between mb-4 gap-4">
-        <div className="max-w-sm flex-1">
+      <div className="mb-4">
+        <WargaFilterBar
+          exportButtons={
+            <ExportWargaButtons query={q} filters={filterParams} />
+          }
+        >
           <SearchInput
             placeholder="Cari NIK atau nama..."
             defaultValue={q}
+            className="max-w-sm"
           />
-        </div>
-        <ExportWargaButtons query={q} />
+        </WargaFilterBar>
       </div>
 
       <div className="border rounded-lg bg-white overflow-x-auto">
         {wargaList.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-3 px-5 py-12 text-center">
             <p className="text-sm text-neutral-500">
-              {q
-                ? `Tidak ada warga dengan kata kunci "${q}".`
+              {q || hasActiveFilters
+                ? "Tidak ada data warga yang sesuai dengan kriteria pencarian dan filter."
                 : "Belum ada data warga."}
             </p>
             <WargaFormDialog
@@ -94,10 +150,10 @@ export default async function DataWargaPage({
                   <td className="px-5 py-4">{warga.nik}</td>
                   <td className="px-5 py-4 font-medium">{warga.namaLengkap}</td>
                   <td className="px-5 py-4 text-neutral-500">
-                    {warga.alamat}, RT {warga.rt}/RW {warga.rw}
+                    {warga.alamatKtp}, RT {warga.noRt}/RW {warga.noRw}
                   </td>
                   <td className="px-5 py-4 text-neutral-500">
-                    {statusLabel[warga.statusKawin]}
+                    {statusLabel[warga.statusPerkawinan]}
                   </td>
                   <td className="px-5 py-4">
                     <div className="flex items-center justify-end gap-3">
@@ -135,6 +191,7 @@ export default async function DataWargaPage({
       <PaginationControls
         pathname="/data-warga"
         query={q}
+        extraParams={filterParams}
         page={wargaResult.currentPage}
         limit={pagination.limit}
         totalPages={wargaResult.totalPages}

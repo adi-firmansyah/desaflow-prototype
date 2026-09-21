@@ -13,16 +13,25 @@ function getText(formData: FormData, key: string) {
 function parseWargaInput(formData: FormData) {
   return {
     nik: getText(formData, "nik"),
+    noKk: getText(formData, "noKk"),
     namaLengkap: getText(formData, "namaLengkap"),
     tempatLahir: getText(formData, "tempatLahir"),
     tanggalLahir: getText(formData, "tanggalLahir"),
     jenisKelamin: getText(formData, "jenisKelamin"),
+    golonganDarah: getText(formData, "golonganDarah"),
     agama: getText(formData, "agama"),
-    alamat: getText(formData, "alamat"),
-    rt: getText(formData, "rt"),
-    rw: getText(formData, "rw"),
-    statusKawin: getText(formData, "statusKawin"),
-    pekerjaan: getText(formData, "pekerjaan") || null,
+    statusPerkawinan: getText(formData, "statusPerkawinan"),
+    statusHubunganKeluarga: getText(formData, "statusHubunganKeluarga"),
+    pendidikanTerakhir: getText(formData, "pendidikanTerakhir"),
+    jenisPekerjaan: getText(formData, "jenisPekerjaan"),
+    kewarganegaraan: getText(formData, "kewarganegaraan"),
+    namaAyah: getText(formData, "namaAyah"),
+    namaIbu: getText(formData, "namaIbu"),
+    anakKe: getText(formData, "anakKe"),
+    alamatKtp: getText(formData, "alamatKtp"),
+    alamatDomisili: getText(formData, "alamatDomisili"),
+    noRt: getText(formData, "noRt"),
+    noRw: getText(formData, "noRw"),
   };
 }
 
