@@ -62,10 +62,20 @@ export default async function DataWargaPage({
 
       <div className="border rounded-lg bg-white overflow-x-auto">
         {wargaList.length === 0 ? (
-          <div className="px-5 py-10 text-center text-neutral-500 text-sm">
-            {q
-              ? `Tidak ada warga dengan kata kunci "${q}".`
-              : "Belum ada data warga."}
+          <div className="flex flex-col items-center justify-center gap-3 px-5 py-12 text-center">
+            <p className="text-sm text-neutral-500">
+              {q
+                ? `Tidak ada warga dengan kata kunci "${q}".`
+                : "Belum ada data warga."}
+            </p>
+            <WargaFormDialog
+              trigger={
+                <Button>
+                  <PlusIcon className="h-4 w-4" />
+                  Tambah Warga
+                </Button>
+              }
+            />
           </div>
         ) : (
           <table className="w-full text-sm">
