@@ -16,7 +16,7 @@ export async function Topbar() {
 
       <div className="flex items-center gap-4 shrink-0">
         <span className="text-sm font-medium">{name}</span>
-        <div className="h-6 w-px bg-neutral-200" />
+        <div className="h-6 w-px bg-border" />
         <LogoutButton />
       </div>
     </header>

@@ -2,6 +2,7 @@
 
 import { searchWarga } from "@/app/(dashboard)/buat-surat/actions";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import type { Warga } from "@/types";
 import { cn } from "cn";
 import {
@@ -74,15 +75,15 @@ export function StepDataPemohon({
             Nomor Induk Kependudukan (NIK) atau Nama
           </label>
           <div className="relative">
-            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 pointer-events-none" />
-            <input
+            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 pointer-events-none z-10" />
+            <Input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Masukkan NIK atau Nama warga..."
-              className="w-full pl-9 pr-14 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-neutral-300"
+              className="pl-9 pr-14 bg-white"
             />
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 z-10">
               {isPending && (
                 <Loader2Icon className="h-4 w-4 text-neutral-400 animate-spin" />
               )}
@@ -117,7 +118,7 @@ export function StepDataPemohon({
                       <th className="pb-2.5 px-4 font-medium whitespace-nowrap">
                         Nama Lengkap
                       </th>
-                      <th className="pb-2.5 px-4 font-medium min-w-[200px]">
+                      <th className="pb-2.5 px-4 font-medium min-w-50">
                         Alamat
                       </th>
                       <th className="pb-2.5 pl-4 font-medium text-right w-28 whitespace-nowrap">
