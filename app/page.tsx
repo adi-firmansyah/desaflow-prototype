@@ -1,3 +1,4 @@
+import { InteractiveDotBackground } from "@/components/interactive-dot-background";
 import { auth } from "@/lib/auth/server";
 import { ArrowRightIcon } from "lucide-react";
 import { headers } from "next/headers";
@@ -12,17 +13,9 @@ export default async function LandingPage() {
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
-      <div
-        className="absolute inset-0 -z-10"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, #d4d4d4 1.1px, transparent 1.1px)",
-          backgroundSize: "24px 24px",
-        }}
-      />
-      <div className="absolute inset-0 -z-10 bg-linear-to-b from-white via-transparent to-white" />
+      <InteractiveDotBackground />
 
-      <header className="border-b px-8 py-6 bg-white/80 backdrop-blur-sm flex items-center justify-between">
+      <header className="relative z-10 border-b px-8 py-6 bg-white/80 backdrop-blur-sm flex items-center justify-between">
         <h1 className="text-xl font-bold">DesaFlow</h1>
 
         <Link
@@ -33,7 +26,7 @@ export default async function LandingPage() {
         </Link>
       </header>
 
-      <main className="flex-1 flex flex-col items-center justify-center text-center px-6">
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6">
         <span className="inline-block text-xs font-semibold tracking-wider text-neutral-500 border rounded-full px-4 py-1.5 mb-6 bg-white">
           DESAFLOW
         </span>
@@ -53,7 +46,7 @@ export default async function LandingPage() {
         </Link>
       </main>
 
-      <footer className="border-t px-6 py-6 text-center text-sm text-neutral-500 bg-white/80 backdrop-blur-sm">
+      <footer className="relative z-10 border-t px-6 py-6 text-center text-sm text-neutral-500 bg-white/80 backdrop-blur-sm">
         © 2024 DesaFlow - Sistem Administrasi Wireframe.
       </footer>
     </div>
