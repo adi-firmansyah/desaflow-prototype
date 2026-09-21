@@ -13,20 +13,29 @@ datasource db {
 }
 
 model Warga {
-  id           String       @id @default(cuid())
-  nik          String       @unique
-  namaLengkap  String
-  tempatLahir  String
-  tanggalLahir DateTime
-  jenisKelamin JenisKelamin
-  agama        String
-  alamat       String
-  rt           String
-  rw           String
-  statusKawin  StatusKawin  @default(BELUM_KAWIN)
-  pekerjaan    String?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  id                     String                 @id @default(cuid())
+  nik                    String                 @unique
+  noKk                   String
+  namaLengkap            String
+  tempatLahir            String
+  tanggalLahir           DateTime
+  jenisKelamin           JenisKelamin
+  golonganDarah          GolonganDarah
+  agama                  Agama
+  statusPerkawinan       StatusPerkawinan
+  statusHubunganKeluarga StatusHubunganKeluarga
+  pendidikanTerakhir     PendidikanTerakhir
+  jenisPekerjaan         JenisPekerjaan
+  kewarganegaraan        Kewarganegaraan
+  namaAyah               String
+  namaIbu                String
+  anakKe                 Int
+  alamatKtp              String
+  alamatDomisili         String
+  noRt                   String
+  noRw                   String
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @updatedAt
 
   surat Surat[]
 
@@ -38,11 +47,75 @@ enum JenisKelamin {
   PEREMPUAN
 }
 
-enum StatusKawin {
+enum GolonganDarah {
+  A
+  B
+  AB
+  O
+  TIDAK_TAHU
+}
+
+enum Agama {
+  ISLAM
+  KRISTEN_PROTESTAN
+  KATOLIK
+  HINDU
+  BUDDHA
+  KHONGHUCU
+  PENGHAYAT_KEPERCAYAAN
+}
+
+enum StatusPerkawinan {
   BELUM_KAWIN
   KAWIN
   CERAI_HIDUP
   CERAI_MATI
+}
+
+enum StatusHubunganKeluarga {
+  KEPALA_KELUARGA
+  SUAMI
+  ISTRI
+  ANAK
+  MENANTU
+  CUCU
+  ORANG_TUA
+  MERTUA
+  FAMILI_LAIN
+  PEMBANTU
+  LAINNYA
+}
+
+enum PendidikanTerakhir {
+  TIDAK_BELUM_SEKOLAH
+  BELUM_TAMAT_SD
+  TAMAT_SD
+  SLTP
+  SLTA
+  DIPLOMA_I_II
+  DIPLOMA_III
+  DIPLOMA_IV_STRATA_I
+  STRATA_II
+  STRATA_III
+}
+
+enum JenisPekerjaan {
+  BELUM_TIDAK_BEKERJA
+  MENGURUS_RUMAH_TANGGA
+  PELAJAR_MAHASISWA
+  PENSIUNAN
+  PEGAWAI_NEGERI_SIPIL
+  TNI
+  POLRI
+  KARYAWAN_SWASTA
+  WIRASWASTA
+  BURUH_HARIAN_LEPAS
+  LAINNYA
+}
+
+enum Kewarganegaraan {
+  WNI
+  WNA
 }
 
 model JenisSurat {

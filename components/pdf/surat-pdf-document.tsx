@@ -11,9 +11,9 @@ type SuratPdfProps = {
     tanggalLahir: Date;
     jenisKelamin: string;
     agama: string;
-    alamat: string;
-    rt: string;
-    rw: string;
+    alamatKtp: string;
+    noRt: string;
+    noRw: string;
   };
   fields: FieldSchema[];
   dataForm: Record<string, string>;
@@ -128,7 +128,7 @@ export function SuratPdfDocument({
           <Row label="Agama" value={warga.agama} />
           <Row
             label="Alamat"
-            value={`${warga.alamat}, RT ${warga.rt}/RW ${warga.rw}`}
+            value={`${warga.alamatKtp}, RT ${warga.noRt}/RW ${warga.noRw}`}
           />
         </View>
 

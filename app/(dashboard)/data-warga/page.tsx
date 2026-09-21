@@ -84,10 +84,10 @@ export default async function DataWargaPage({
                   <td className="px-5 py-4">{warga.nik}</td>
                   <td className="px-5 py-4 font-medium">{warga.namaLengkap}</td>
                   <td className="px-5 py-4 text-neutral-500">
-                    {warga.alamat}, RT {warga.rt}/RW {warga.rw}
+                    {warga.alamatKtp}, RT {warga.noRt}/RW {warga.noRw}
                   </td>
                   <td className="px-5 py-4 text-neutral-500">
-                    {statusLabel[warga.statusKawin]}
+                    {statusLabel[warga.statusPerkawinan]}
                   </td>
                   <td className="px-5 py-4">
                     <div className="flex items-center justify-end gap-3">

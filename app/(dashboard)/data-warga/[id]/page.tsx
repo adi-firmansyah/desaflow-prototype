@@ -59,14 +59,38 @@ export default async function DetailWargaPage({
               }
             />
             <InfoRow label="Agama" value={warga.agama} />
+            <InfoRow label="No KK" value={warga.noKk} />
             <InfoRow
-              label="Status Kawin"
-              value={statusLabel[warga.statusKawin]}
+              label="Gol. Darah"
+              value={warga.golonganDarah.replace(/_/g, " ")}
             />
-            <InfoRow label="Pekerjaan" value={warga.pekerjaan ?? "-"} />
             <InfoRow
-              label="Alamat"
-              value={`${warga.alamat}, RT ${warga.rt}/RW ${warga.rw}`}
+              label="Status Perkawinan"
+              value={statusLabel[warga.statusPerkawinan]}
+            />
+            <InfoRow
+              label="Status Hub. Keluarga"
+              value={warga.statusHubunganKeluarga.replace(/_/g, " ")}
+            />
+            <InfoRow
+              label="Pendidikan Terakhir"
+              value={warga.pendidikanTerakhir.replace(/_/g, " ")}
+            />
+            <InfoRow
+              label="Pekerjaan"
+              value={warga.jenisPekerjaan.replace(/_/g, " ")}
+            />
+            <InfoRow label="Kewarganegaraan" value={warga.kewarganegaraan} />
+            <InfoRow label="Nama Ayah" value={warga.namaAyah} />
+            <InfoRow label="Nama Ibu" value={warga.namaIbu} />
+            <InfoRow label="Anak Ke" value={warga.anakKe.toString()} />
+            <InfoRow
+              label="Alamat KTP"
+              value={`${warga.alamatKtp}, RT ${warga.noRt}/RW ${warga.noRw}`}
+            />
+            <InfoRow
+              label="Alamat Domisili"
+              value={`${warga.alamatDomisili}`}
             />
           </div>
         </div>

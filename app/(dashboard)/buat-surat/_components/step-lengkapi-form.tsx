@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import type { JenisSurat, Warga } from "@/types";
+import { parseFieldSchemas, type JenisSurat, type Warga } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeftIcon, EyeIcon } from "lucide-react";
 import { useMemo } from "react";
@@ -33,7 +33,10 @@ export function StepLengkapiForm({
   onBack: () => void;
   onNext: () => void;
 }) {
-  const fields = jenisSurat.templateFields;
+  const fields = useMemo(
+    () => parseFieldSchemas(jenisSurat.templateFields),
+    [jenisSurat.templateFields],
+  );
   const formSchema = useMemo(
     () =>
       z.record(z.string(), z.string()).superRefine((values, ctx) => {
@@ -92,8 +95,8 @@ export function StepLengkapiForm({
               <ReadOnlyField label="Agama" value={warga.agama} />
             </div>
             <ReadOnlyField
-              label="Alamat"
-              value={`${warga.alamat}, RT ${warga.rt}/RW ${warga.rw}`}
+              label="Alamat KTP"
+              value={`${warga.alamatKtp}, RT ${warga.noRt}/RW ${warga.noRw}`}
             />
           </div>
         </div>

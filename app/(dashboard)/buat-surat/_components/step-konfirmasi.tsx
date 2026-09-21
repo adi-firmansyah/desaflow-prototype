@@ -3,7 +3,7 @@
 import { createSurat } from "@/app/(dashboard)/buat-surat/actions";
 import { Button } from "@/components/ui/button";
 import { PreviewRow } from "@/components/ui/detail-rows";
-import type { FieldSchema, JenisSurat, Warga } from "@/types";
+import { parseFieldSchemas, type FieldSchema, type JenisSurat, type Warga } from "@/types";
 import {
   ArrowLeftIcon,
   CheckIcon,
@@ -33,7 +33,7 @@ export function StepKonfirmasi({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
-  const fields: FieldSchema[] = jenisSurat.templateFields;
+  const fields: FieldSchema[] = parseFieldSchemas(jenisSurat.templateFields);
 
   async function handleSimpan(status: "DRAFT" | "FINAL") {
     setLoading(true);
@@ -201,7 +201,7 @@ export function StepKonfirmasi({
               <PreviewRow label="Agama" value={warga.agama} />
               <PreviewRow
                 label="Alamat"
-                value={`${warga.alamat}, RT ${warga.rt}/RW ${warga.rw}`}
+                value={`${warga.alamatKtp}, RT ${warga.noRt}/RW ${warga.noRw}`}
               />
             </tbody>
           </table>

@@ -35,19 +35,24 @@ function normalizeWarga(value: unknown): Warga | null {
 
   if (
     typeof record.nik !== "string" ||
+    typeof record.noKk !== "string" ||
     typeof record.namaLengkap !== "string" ||
     typeof record.tempatLahir !== "string" ||
-    (record.jenisKelamin !== "LAKI_LAKI" &&
-      record.jenisKelamin !== "PEREMPUAN") ||
+    typeof record.jenisKelamin !== "string" ||
+    typeof record.golonganDarah !== "string" ||
     typeof record.agama !== "string" ||
-    typeof record.alamat !== "string" ||
-    typeof record.rt !== "string" ||
-    typeof record.rw !== "string" ||
-    (record.statusKawin !== "BELUM_KAWIN" &&
-      record.statusKawin !== "KAWIN" &&
-      record.statusKawin !== "CERAI_HIDUP" &&
-      record.statusKawin !== "CERAI_MATI") ||
-    (record.pekerjaan !== null && typeof record.pekerjaan !== "string")
+    typeof record.statusPerkawinan !== "string" ||
+    typeof record.statusHubunganKeluarga !== "string" ||
+    typeof record.pendidikanTerakhir !== "string" ||
+    typeof record.jenisPekerjaan !== "string" ||
+    typeof record.kewarganegaraan !== "string" ||
+    typeof record.namaAyah !== "string" ||
+    typeof record.namaIbu !== "string" ||
+    typeof record.anakKe !== "number" ||
+    typeof record.alamatKtp !== "string" ||
+    typeof record.alamatDomisili !== "string" ||
+    typeof record.noRt !== "string" ||
+    typeof record.noRw !== "string"
   ) {
     return null;
   }
@@ -55,17 +60,26 @@ function normalizeWarga(value: unknown): Warga | null {
   return {
     id: record.id,
     nik: record.nik,
+    noKk: record.noKk,
     namaLengkap: record.namaLengkap,
     tempatLahir: record.tempatLahir,
     tanggalLahir,
-    jenisKelamin: record.jenisKelamin,
-    agama: record.agama,
-    alamat: record.alamat,
-    rt: record.rt,
-    rw: record.rw,
-    statusKawin: record.statusKawin,
-    pekerjaan: record.pekerjaan,
-  };
+    jenisKelamin: record.jenisKelamin as any,
+    golonganDarah: record.golonganDarah as any,
+    agama: record.agama as any,
+    statusPerkawinan: record.statusPerkawinan as any,
+    statusHubunganKeluarga: record.statusHubunganKeluarga as any,
+    pendidikanTerakhir: record.pendidikanTerakhir as any,
+    jenisPekerjaan: record.jenisPekerjaan as any,
+    kewarganegaraan: record.kewarganegaraan as any,
+    namaAyah: record.namaAyah,
+    namaIbu: record.namaIbu,
+    anakKe: record.anakKe,
+    alamatKtp: record.alamatKtp,
+    alamatDomisili: record.alamatDomisili,
+    noRt: record.noRt,
+    noRw: record.noRw,
+  } as Warga;
 }
 
 function normalizeJenisSurat(value: unknown): JenisSurat | null {
@@ -88,6 +102,18 @@ function normalizeJenisSurat(value: unknown): JenisSurat | null {
     icon: record.icon,
     kodeFormat: record.kodeFormat,
     templateFields: parseFieldSchemas(record.templateFields),
+    createdAt:
+      record.createdAt instanceof Date
+        ? record.createdAt
+        : typeof record.createdAt === "string"
+          ? new Date(record.createdAt)
+          : new Date(),
+    updatedAt:
+      record.updatedAt instanceof Date
+        ? record.updatedAt
+        : typeof record.updatedAt === "string"
+          ? new Date(record.updatedAt)
+          : new Date(),
   };
 }
 

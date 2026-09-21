@@ -25,17 +25,26 @@ export async function GET(request: NextRequest) {
 
   const rows = wargaList.map((warga) => ({
     NIK: warga.nik,
+    "No KK": warga.noKk,
     "Nama Lengkap": warga.namaLengkap,
     "Tempat Lahir": warga.tempatLahir,
     "Tanggal Lahir": new Date(warga.tanggalLahir).toLocaleDateString("id-ID"),
     "Jenis Kelamin":
       warga.jenisKelamin === "LAKI_LAKI" ? "Laki-laki" : "Perempuan",
+    "Golongan Darah": warga.golonganDarah,
     Agama: warga.agama,
-    Alamat: warga.alamat,
-    RT: warga.rt,
-    RW: warga.rw,
-    "Status Kawin": statusLabel[warga.statusKawin],
-    Pekerjaan: warga.pekerjaan ?? "-",
+    "Status Perkawinan": statusLabel[warga.statusPerkawinan],
+    "Status Hubungan Keluarga": warga.statusHubunganKeluarga,
+    "Pendidikan Terakhir": warga.pendidikanTerakhir,
+    "Jenis Pekerjaan": warga.jenisPekerjaan,
+    Kewarganegaraan: warga.kewarganegaraan,
+    "Nama Ayah": warga.namaAyah,
+    "Nama Ibu": warga.namaIbu,
+    "Anak Ke": warga.anakKe,
+    "Alamat KTP": warga.alamatKtp,
+    "Alamat Domisili": warga.alamatDomisili,
+    RT: warga.noRt,
+    RW: warga.noRw,
   }));
 
   const worksheet = XLSX.utils.json_to_sheet(rows);

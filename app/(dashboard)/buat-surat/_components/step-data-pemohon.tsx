@@ -141,7 +141,7 @@ export function StepDataPemohon({
                             {warga.namaLengkap}
                           </td>
                           <td className="py-3 px-4 text-neutral-500 text-xs leading-relaxed">
-                            {warga.alamat}, RT {warga.rt}/RW {warga.rw}
+                            {warga.alamatKtp}, RT {warga.noRt}/RW {warga.noRw}
                           </td>
                           <td className="py-3 pl-4 text-right whitespace-nowrap">
                             <Button
@@ -224,8 +224,8 @@ export function StepDataPemohon({
               <div>
                 <p className="text-neutral-500 text-xs mb-1">Alamat</p>
                 <p className="font-medium">
-                  {selectedWarga.alamat}, RT {selectedWarga.rt}/RW{" "}
-                  {selectedWarga.rw}
+                  {selectedWarga.alamatKtp}, RT {selectedWarga.noRt}/RW{" "}
+                  {selectedWarga.noRw}
                 </p>
               </div>
             </div>

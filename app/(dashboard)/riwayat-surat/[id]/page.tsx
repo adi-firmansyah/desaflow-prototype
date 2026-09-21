@@ -113,7 +113,7 @@ export default async function DetailSuratPage({
               <PreviewRow label="Agama" value={warga.agama} />
               <PreviewRow
                 label="Alamat"
-                value={`${warga.alamat}, RT ${warga.rt}/RW ${warga.rw}`}
+                value={`${warga.alamatKtp}, RT ${warga.noRt}/RW ${warga.noRw}`}
               />
             </tbody>
           </table>
