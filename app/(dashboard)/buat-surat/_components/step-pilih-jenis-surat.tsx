@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { iconMap } from "@/lib/constants";
 import type { JenisSurat } from "@/types";
 import {
@@ -36,13 +37,13 @@ export function StepPilihJenisSurat({
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold">Pilih Jenis Surat</h2>
           <div className="relative w-64">
-            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
-            <input
+            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 pointer-events-none z-10" />
+            <Input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Cari jenis surat..."
-              className="w-full pl-9 pr-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-neutral-300"
+              className="pl-9 bg-white"
             />
           </div>
         </div>

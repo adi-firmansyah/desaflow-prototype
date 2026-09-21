@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { SearchIcon, Loader2Icon, XIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 interface SearchInputProps {
@@ -78,8 +79,8 @@ export function SearchInput({
 
   return (
     <div className={cn("relative w-full bg-white", className)}>
-      <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 pointer-events-none" />
-      <input
+      <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 pointer-events-none z-10" />
+      <Input
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
@@ -89,9 +90,9 @@ export function SearchInput({
           }
         }}
         placeholder={placeholder}
-        className="w-full pl-9 pr-14 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-neutral-300"
+        className="pl-9 pr-14 bg-white"
       />
-      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 z-10">
         {isPending && (
           <Loader2Icon className="h-4 w-4 text-neutral-400 animate-spin" />
         )}

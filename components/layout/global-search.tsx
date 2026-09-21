@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
+import { Input } from "@/components/ui/input";
 
 export function GlobalSearch() {
   const router = useRouter();
@@ -79,16 +80,16 @@ export function GlobalSearch() {
 
   return (
     <div ref={containerRef} className="relative w-full max-w-md">
-      <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 pointer-events-none" />
-      <input
+      <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 pointer-events-none z-10" />
+      <Input
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onFocus={() => query.trim().length >= 2 && setIsOpen(true)}
         placeholder="Cari surat atau warga..."
-        className="w-full pl-9 pr-14 py-2 text-sm border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-neutral-300"
+        className="pl-9 pr-14 bg-white"
       />
-      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 z-10">
         {isPending && (
           <Loader2Icon className="h-4 w-4 text-neutral-400 animate-spin" />
         )}
