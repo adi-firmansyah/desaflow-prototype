@@ -20,7 +20,13 @@ import { useState } from "react";
 type ExportFileFormat = "xlsx" | "csv";
 type ExportDataMode = "formatted" | "backup";
 
-export function ExportWargaButtons({ query }: { query?: string }) {
+export function ExportWargaButtons({
+  query,
+  filters,
+}: {
+  query?: string;
+  filters?: Record<string, string | undefined>;
+}) {
   const [open, setOpen] = useState(false);
   const [fileFormat, setFileFormat] = useState<ExportFileFormat>("xlsx");
   const [dataMode, setDataMode] = useState<ExportDataMode>("formatted");
@@ -36,6 +42,11 @@ export function ExportWargaButtons({ query }: { query?: string }) {
     try {
       const params = new URLSearchParams();
       if (query) params.set("q", query);
+      if (filters) {
+        Object.entries(filters).forEach(([key, val]) => {
+          if (val) params.set(key, val);
+        });
+      }
       params.set("format", fileFormat);
       params.set("mode", dataMode);
 
@@ -77,7 +88,7 @@ export function ExportWargaButtons({ query }: { query?: string }) {
           onClick={() => handleOpen("xlsx")}
           className="inline-flex items-center gap-2"
         >
-          <FileSpreadsheetIcon className="h-4 w-4 text-emerald-600" />
+          <FileSpreadsheetIcon className="h-4 w-4" />
           Excel
         </Button>
         <Button
@@ -85,7 +96,7 @@ export function ExportWargaButtons({ query }: { query?: string }) {
           onClick={() => handleOpen("csv")}
           className="inline-flex items-center gap-2"
         >
-          <FileTextIcon className="h-4 w-4 text-blue-600" />
+          <FileTextIcon className="h-4 w-4" />
           CSV
         </Button>
       </div>

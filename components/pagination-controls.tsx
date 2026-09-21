@@ -3,23 +3,31 @@ import Link from "next/link";
 export function PaginationControls({
   pathname,
   query,
+  extraParams,
   page,
   limit,
   totalPages,
 }: {
   pathname: string;
   query?: string;
+  extraParams?: Record<string, string | undefined>;
   page: number;
   limit: number;
   totalPages: number;
 }) {
+  const cleanExtra = Object.fromEntries(
+    Object.entries(extraParams ?? {}).filter(([_, v]) => v !== undefined && v !== "")
+  ) as Record<string, string>;
+
   const previousHref = `${pathname}?${new URLSearchParams({
     ...(query ? { q: query } : {}),
+    ...cleanExtra,
     page: String(page - 1),
     limit: String(limit),
   })}`;
   const nextHref = `${pathname}?${new URLSearchParams({
     ...(query ? { q: query } : {}),
+    ...cleanExtra,
     page: String(page + 1),
     limit: String(limit),
   })}`;
