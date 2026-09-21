@@ -40,7 +40,7 @@ export default function LoginPage() {
         className="absolute inset-0 -z-10"
         style={{
           backgroundImage:
-            "radial-gradient(circle, #d4d4d4 1px, transparent 1px)",
+            "radial-gradient(circle, #d4d4d4 1.1px, transparent 1.1px)",
           backgroundSize: "24px 24px",
         }}
       />

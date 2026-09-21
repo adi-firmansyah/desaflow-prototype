@@ -28,7 +28,7 @@ async function DashboardLayoutContent({
           className="flex-1 p-6 relative"
           style={{
             backgroundImage:
-              "radial-gradient(circle, #e5e5e5 1px, transparent 1px)",
+              "radial-gradient(circle, #d4d4d4 1.1px, transparent 1.1px)",
             backgroundSize: "24px 24px",
           }}
         >
