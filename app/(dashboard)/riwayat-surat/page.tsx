@@ -2,10 +2,11 @@ import { DownloadPdfButton } from "@/components/riwayat-surat/download-pdf-butto
 import { statusColor, statusLabel } from "@/lib/constants";
 import { getSuratList } from "@/lib/queries";
 import { normalizePagination } from "@/lib/pagination";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { PaginationControls } from "@/components/pagination-controls";
 import { SearchInput } from "@/components/search-input";
 import { redirect } from "next/navigation";
-import { EyeIcon } from "lucide-react";
+import { EyeIcon, PlusIcon } from "lucide-react";
 import Link from "next/link";
 
 export default async function RiwayatSuratPage({
@@ -44,10 +45,16 @@ export default async function RiwayatSuratPage({
 
       <div className="border rounded-lg bg-white overflow-x-auto">
         {suratList.length === 0 ? (
-          <div className="px-5 py-10 text-center text-neutral-500 text-sm">
-            {q
-              ? `Tidak ada surat dengan kata kunci "${q}".`
-              : "Belum ada surat yang dibuat."}
+          <div className="flex flex-col items-center justify-center gap-3 px-5 py-12 text-center">
+            <p className="text-sm text-neutral-500">
+              {q
+                ? `Tidak ada surat dengan kata kunci "${q}".`
+                : "Belum ada surat yang dibuat."}
+            </p>
+            <Link href="/buat-surat" className={buttonVariants()}>
+              <PlusIcon className="h-4 w-4" />
+              Buat Surat Baru
+            </Link>
           </div>
         ) : (
           <table className="w-full text-sm">

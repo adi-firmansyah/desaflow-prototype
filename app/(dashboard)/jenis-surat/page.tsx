@@ -59,10 +59,20 @@ export default async function JenisSuratPage({
 
       <div className="border rounded-lg bg-white overflow-x-auto">
         {jenisSuratList.length === 0 ? (
-          <div className="px-5 py-10 text-center text-neutral-500 text-sm">
-            {q
-              ? `Tidak ada jenis surat dengan kata kunci "${q}".`
-              : "Belum ada jenis surat. Tambahkan jenis surat pertama."}
+          <div className="flex flex-col items-center justify-center gap-3 px-5 py-12 text-center">
+            <p className="text-sm text-neutral-500">
+              {q
+                ? `Tidak ada jenis surat dengan kata kunci "${q}".`
+                : "Belum ada jenis surat. Tambahkan jenis surat pertama."}
+            </p>
+            <JenisSuratFormDialog
+              trigger={
+                <Button>
+                  <PlusIcon className="h-4 w-4" />
+                  Tambah Jenis Surat
+                </Button>
+              }
+            />
           </div>
         ) : (
           <table className="w-full text-sm">
