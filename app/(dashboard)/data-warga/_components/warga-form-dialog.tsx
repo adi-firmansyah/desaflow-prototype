@@ -21,8 +21,8 @@ import {
 import { WargaSchema } from "@/lib/validations/warga";
 import type { Warga } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import type { z } from "zod";
 
 type WargaFormValues = z.input<typeof WargaSchema>;
@@ -58,7 +58,8 @@ export function WargaFormDialog({
       golonganDarah: warga?.golonganDarah ?? "TIDAK_TAHU",
       agama: warga?.agama ?? "ISLAM",
       statusPerkawinan: warga?.statusPerkawinan ?? "BELUM_KAWIN",
-      statusHubunganKeluarga: warga?.statusHubunganKeluarga ?? "KEPALA_KELUARGA",
+      statusHubunganKeluarga:
+        warga?.statusHubunganKeluarga ?? "KEPALA_KELUARGA",
       pendidikanTerakhir: warga?.pendidikanTerakhir ?? "SLTA",
       jenisPekerjaan: warga?.jenisPekerjaan ?? "LAINNYA",
       kewarganegaraan: warga?.kewarganegaraan ?? "WNI",
@@ -76,7 +77,8 @@ export function WargaFormDialog({
     setError(null);
     const formData = new FormData();
     Object.entries(values).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) formData.set(key, String(value));
+      if (value !== null && value !== undefined)
+        formData.set(key, String(value));
     });
 
     const result = isEdit
@@ -242,12 +244,16 @@ export function WargaFormDialog({
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="ISLAM">Islam</SelectItem>
-                        <SelectItem value="KRISTEN_PROTESTAN">Kristen Protestan</SelectItem>
+                        <SelectItem value="KRISTEN_PROTESTAN">
+                          Kristen Protestan
+                        </SelectItem>
                         <SelectItem value="KATOLIK">Katolik</SelectItem>
                         <SelectItem value="HINDU">Hindu</SelectItem>
                         <SelectItem value="BUDDHA">Buddha</SelectItem>
                         <SelectItem value="KHONGHUCU">Khonghucu</SelectItem>
-                        <SelectItem value="PENGHAYAT_KEPERCAYAAN">Penghayat Kepercayaan</SelectItem>
+                        <SelectItem value="PENGHAYAT_KEPERCAYAAN">
+                          Penghayat Kepercayaan
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   )}
@@ -257,7 +263,7 @@ export function WargaFormDialog({
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-               <div className="space-y-1.5">
+              <div className="space-y-1.5">
                 <Label>Status Perkawinan</Label>
                 <Controller
                   name="statusPerkawinan"
@@ -289,7 +295,9 @@ export function WargaFormDialog({
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="KEPALA_KELUARGA">Kepala Keluarga</SelectItem>
+                        <SelectItem value="KEPALA_KELUARGA">
+                          Kepala Keluarga
+                        </SelectItem>
                         <SelectItem value="SUAMI">Suami</SelectItem>
                         <SelectItem value="ISTRI">Istri</SelectItem>
                         <SelectItem value="ANAK">Anak</SelectItem>
@@ -320,14 +328,22 @@ export function WargaFormDialog({
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="TIDAK_BELUM_SEKOLAH">Tidak/Belum Sekolah</SelectItem>
-                        <SelectItem value="BELUM_TAMAT_SD">Belum Tamat SD</SelectItem>
+                        <SelectItem value="TIDAK_BELUM_SEKOLAH">
+                          Tidak/Belum Sekolah
+                        </SelectItem>
+                        <SelectItem value="BELUM_TAMAT_SD">
+                          Belum Tamat SD
+                        </SelectItem>
                         <SelectItem value="TAMAT_SD">Tamat SD</SelectItem>
                         <SelectItem value="SLTP">SLTP/Sederajat</SelectItem>
                         <SelectItem value="SLTA">SLTA/Sederajat</SelectItem>
-                        <SelectItem value="DIPLOMA_I_II">Diploma I/II</SelectItem>
+                        <SelectItem value="DIPLOMA_I_II">
+                          Diploma I/II
+                        </SelectItem>
                         <SelectItem value="DIPLOMA_III">Diploma III</SelectItem>
-                        <SelectItem value="DIPLOMA_IV_STRATA_I">Diploma IV/Strata I</SelectItem>
+                        <SelectItem value="DIPLOMA_IV_STRATA_I">
+                          Diploma IV/Strata I
+                        </SelectItem>
                         <SelectItem value="STRATA_II">Strata II</SelectItem>
                         <SelectItem value="STRATA_III">Strata III</SelectItem>
                       </SelectContent>
@@ -336,7 +352,7 @@ export function WargaFormDialog({
                 />
                 <FieldError message={errors.pendidikanTerakhir?.message} />
               </div>
-               <div className="space-y-1.5">
+              <div className="space-y-1.5">
                 <Label>Jenis Pekerjaan</Label>
                 <Controller
                   name="jenisPekerjaan"
@@ -347,16 +363,28 @@ export function WargaFormDialog({
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="BELUM_TIDAK_BEKERJA">Belum/Tidak Bekerja</SelectItem>
-                        <SelectItem value="MENGURUS_RUMAH_TANGGA">Mengurus Rumah Tangga</SelectItem>
-                        <SelectItem value="PELAJAR_MAHASISWA">Pelajar/Mahasiswa</SelectItem>
+                        <SelectItem value="BELUM_TIDAK_BEKERJA">
+                          Belum/Tidak Bekerja
+                        </SelectItem>
+                        <SelectItem value="MENGURUS_RUMAH_TANGGA">
+                          Mengurus Rumah Tangga
+                        </SelectItem>
+                        <SelectItem value="PELAJAR_MAHASISWA">
+                          Pelajar/Mahasiswa
+                        </SelectItem>
                         <SelectItem value="PENSIUNAN">Pensiunan</SelectItem>
-                        <SelectItem value="PEGAWAI_NEGERI_SIPIL">PNS</SelectItem>
+                        <SelectItem value="PEGAWAI_NEGERI_SIPIL">
+                          PNS
+                        </SelectItem>
                         <SelectItem value="TNI">TNI</SelectItem>
                         <SelectItem value="POLRI">POLRI</SelectItem>
-                        <SelectItem value="KARYAWAN_SWASTA">Karyawan Swasta</SelectItem>
+                        <SelectItem value="KARYAWAN_SWASTA">
+                          Karyawan Swasta
+                        </SelectItem>
                         <SelectItem value="WIRASWASTA">Wiraswasta</SelectItem>
-                        <SelectItem value="BURUH_HARIAN_LEPAS">Buruh Harian Lepas</SelectItem>
+                        <SelectItem value="BURUH_HARIAN_LEPAS">
+                          Buruh Harian Lepas
+                        </SelectItem>
                         <SelectItem value="LAINNYA">Lainnya</SelectItem>
                       </SelectContent>
                     </Select>
@@ -387,7 +415,7 @@ export function WargaFormDialog({
             </div>
 
             <div className="grid grid-cols-3 gap-4">
-               <div className="space-y-1.5">
+              <div className="space-y-1.5">
                 <Label htmlFor="namaAyah">Nama Ayah</Label>
                 <Input
                   id="namaAyah"
@@ -396,7 +424,7 @@ export function WargaFormDialog({
                 />
                 <FieldError message={errors.namaAyah?.message} />
               </div>
-               <div className="space-y-1.5">
+              <div className="space-y-1.5">
                 <Label htmlFor="namaIbu">Nama Ibu</Label>
                 <Input
                   id="namaIbu"
@@ -405,7 +433,7 @@ export function WargaFormDialog({
                 />
                 <FieldError message={errors.namaIbu?.message} />
               </div>
-               <div className="space-y-1.5">
+              <div className="space-y-1.5">
                 <Label htmlFor="anakKe">Anak Ke-</Label>
                 <Input
                   id="anakKe"
@@ -439,12 +467,20 @@ export function WargaFormDialog({
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="noRt">RT</Label>
-                <Input id="noRt" {...register("noRt")} aria-invalid={!!errors.noRt} />
+                <Input
+                  id="noRt"
+                  {...register("noRt")}
+                  aria-invalid={!!errors.noRt}
+                />
                 <FieldError message={errors.noRt?.message} />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="noRw">RW</Label>
-                <Input id="noRw" {...register("noRw")} aria-invalid={!!errors.noRw} />
+                <Input
+                  id="noRw"
+                  {...register("noRw")}
+                  aria-invalid={!!errors.noRw}
+                />
                 <FieldError message={errors.noRw?.message} />
               </div>
             </div>
