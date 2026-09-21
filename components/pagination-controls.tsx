@@ -33,24 +33,24 @@ export function PaginationControls({
         {page > 1 ? (
           <Link
             href={previousHref}
-            className="rounded-md border px-3 py-2 hover:bg-neutral-50"
+            className="rounded-md border px-3 py-2 hover:bg-neutral-50 bg-white"
           >
             Sebelumnya
           </Link>
         ) : (
-          <span className="rounded-md border px-3 py-2 text-neutral-300">
+          <span className="rounded-md border px-3 py-2 text-neutral-300 bg-white">
             Sebelumnya
           </span>
         )}
         {page < totalPages ? (
           <Link
             href={nextHref}
-            className="rounded-md border px-3 py-2 hover:bg-neutral-50"
+            className="rounded-md border px-3 py-2 hover:bg-neutral-50 bg-white"
           >
             Berikutnya
           </Link>
         ) : (
-          <span className="rounded-md border px-3 py-2 text-neutral-300">
+          <span className="rounded-md border px-3 py-2 text-neutral-300 bg-white">
             Berikutnya
           </span>
         )}
