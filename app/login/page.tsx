@@ -1,5 +1,6 @@
 "use client";
 
+import { InteractiveDotBackground } from "@/components/interactive-dot-background";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth/client";
 import { ArrowLeftIcon } from "lucide-react";
@@ -36,25 +37,17 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden px-4">
-      <div
-        className="absolute inset-0 -z-10"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, #d4d4d4 1.1px, transparent 1.1px)",
-          backgroundSize: "24px 24px",
-        }}
-      />
-      <div className="absolute inset-0 -z-10 bg-linear-to-b from-white via-transparent to-white" />
+      <InteractiveDotBackground />
 
       <Link
         href="/"
-        className="absolute top-6 left-6 inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900"
+        className="absolute top-6 left-6 z-10 inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900"
       >
         <ArrowLeftIcon className="h-4 w-4" />
         Kembali
       </Link>
 
-      <div className="w-full max-w-sm border rounded-lg p-8 bg-white">
+      <div className="relative z-10 w-full max-w-sm border rounded-lg p-8 bg-white">
         <h1 className="text-2xl font-bold mb-1">DesaFlow</h1>
         <p className="text-neutral-500 text-sm mb-6">
           Masuk ke Admin Sistem Desa
