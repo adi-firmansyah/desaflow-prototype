@@ -1,6 +1,5 @@
 "use client";
 
-import { InteractiveDotBackground } from "@/components/interactive-dot-background";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth/client";
 import { ArrowLeftIcon } from "lucide-react";
@@ -37,8 +36,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden px-4">
-      <InteractiveDotBackground />
-
       <Link
         href="/"
         className="absolute top-6 left-6 z-10 inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900"

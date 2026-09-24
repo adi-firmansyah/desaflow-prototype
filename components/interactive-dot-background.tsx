@@ -161,6 +161,7 @@ export function InteractiveDotBackground({
       rawMouse.active = false;
     };
 
+    window.addEventListener("resize", resize);
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
     window.addEventListener("pointerleave", handlePointerLeave);
     document.addEventListener("mouseleave", handlePointerLeave);
@@ -264,6 +265,7 @@ export function InteractiveDotBackground({
     return () => {
       cancelAnimationFrame(animationFrameId);
       resizeObserver.disconnect();
+      window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerleave", handlePointerLeave);
       document.removeEventListener("mouseleave", handlePointerLeave);
@@ -284,7 +286,7 @@ export function InteractiveDotBackground({
       ref={canvasRef}
       aria-hidden="true"
       className={cn(
-        "absolute inset-0 h-full w-full pointer-events-none z-0",
+        "fixed inset-0 h-full w-full pointer-events-none z-0",
         className,
       )}
     />
