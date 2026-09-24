@@ -1,4 +1,3 @@
-import { InteractiveDotBackground } from "@/components/interactive-dot-background";
 import { auth } from "@/lib/auth/server";
 import { ArrowRightIcon } from "lucide-react";
 import { headers } from "next/headers";
@@ -13,8 +12,6 @@ export default async function LandingPage() {
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
-      <InteractiveDotBackground />
-
       <header className="relative z-10 border-b px-8 py-6 bg-white/80 backdrop-blur-sm flex items-center justify-between">
         <h1 className="text-xl font-bold">DesaFlow</h1>
 
