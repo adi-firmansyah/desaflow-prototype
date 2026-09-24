@@ -1,7 +1,7 @@
 import { PaginationControls } from "@/components/pagination-controls";
 import { SearchInput } from "@/components/search-input";
 import { Button } from "@/components/ui/button";
-import { statusLabel } from "@/lib/constants";
+import { statusPerkawinanLabel } from "@/lib/constants";
 import { normalizePagination } from "@/lib/pagination";
 import { getWargaList } from "@/lib/queries";
 import { EyeIcon, PencilIcon, PlusIcon } from "lucide-react";
@@ -85,9 +85,9 @@ export default async function DataWargaPage({
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold mb-1">Data Warga</h1>
+          <h1 className="mb-1 text-3xl font-bold">Data Warga</h1>
           <p className="text-neutral-500">
             Kelola data kependudukan sebagai sumber data surat.
           </p>
@@ -95,7 +95,7 @@ export default async function DataWargaPage({
         <WargaFormDialog
           trigger={
             <Button>
-              <PlusIcon className="h-4 w-4 mr-2" />
+              <PlusIcon className="mr-2 h-4 w-4" />
               Tambah Warga
             </Button>
           }
@@ -116,7 +116,7 @@ export default async function DataWargaPage({
         </WargaFilterBar>
       </div>
 
-      <div className="border rounded-lg bg-white overflow-x-auto">
+      <div className="overflow-x-auto rounded-lg border bg-white">
         {wargaList.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-3 px-5 py-12 text-center">
             <p className="text-sm text-neutral-500">
@@ -141,7 +141,7 @@ export default async function DataWargaPage({
                 <th className="px-5 py-3 font-medium">Nama Lengkap</th>
                 <th className="px-5 py-3 font-medium">Alamat</th>
                 <th className="px-5 py-3 font-medium">Status</th>
-                <th className="px-5 py-3 font-medium text-right">Aksi</th>
+                <th className="px-5 py-3 text-right font-medium">Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -153,13 +153,13 @@ export default async function DataWargaPage({
                     {warga.alamatKtp}, RT {warga.noRt}/RW {warga.noRw}
                   </td>
                   <td className="px-5 py-4 text-neutral-500">
-                    {statusLabel[warga.statusPerkawinan]}
+                    {statusPerkawinanLabel[warga.statusPerkawinan]}
                   </td>
                   <td className="px-5 py-4">
                     <div className="flex items-center justify-end gap-3">
                       <Link
                         href={`/data-warga/${warga.id}`}
-                        className="hover:text-neutral-700 text-neutral-400"
+                        className="text-neutral-400 hover:text-neutral-700"
                         title="Detail warga"
                       >
                         <EyeIcon className="h-4 w-4" />

@@ -1,5 +1,5 @@
 import { InfoRow } from "@/components/ui/detail-rows";
-import { statusLabel, suratStatusColor } from "@/lib/constants";
+import { statusPerkawinanLabel, suratStatusColor } from "@/lib/constants";
 import { prisma } from "@/lib/prisma";
 import { ArrowLeftIcon, EyeIcon } from "lucide-react";
 import Link from "next/link";
@@ -30,16 +30,16 @@ export default async function DetailWargaPage({
     <div>
       <Link
         href="/data-warga"
-        className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900 mb-6"
+        className="mb-6 inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900"
       >
         <ArrowLeftIcon className="h-4 w-4" />
         Kembali ke Data Warga
       </Link>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-6">
-        <div className="border rounded-lg p-6 h-fit bg-white">
-          <h2 className="text-xl font-bold mb-1">{warga.namaLengkap}</h2>
-          <p className="text-neutral-500 text-sm mb-6">NIK: {warga.nik}</p>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[360px_1fr]">
+        <div className="h-fit rounded-lg border bg-white p-6">
+          <h2 className="mb-1 text-xl font-bold">{warga.namaLengkap}</h2>
+          <p className="mb-6 text-sm text-neutral-500">NIK: {warga.nik}</p>
 
           <div className="space-y-3 text-sm">
             <InfoRow
@@ -66,7 +66,7 @@ export default async function DetailWargaPage({
             />
             <InfoRow
               label="Status Perkawinan"
-              value={statusLabel[warga.statusPerkawinan]}
+              value={statusPerkawinanLabel[warga.statusPerkawinan]}
             />
             <InfoRow
               label="Status Hub. Keluarga"
@@ -95,16 +95,16 @@ export default async function DetailWargaPage({
           </div>
         </div>
 
-        <div className="border rounded-lg bg-white">
-          <div className="px-5 py-4 border-b">
-            <h3 className="font-semibold text-lg">Riwayat Surat</h3>
+        <div className="rounded-lg border bg-white">
+          <div className="border-b px-5 py-4">
+            <h3 className="text-lg font-semibold">Riwayat Surat</h3>
             <p className="text-sm text-neutral-500">
               Surat yang pernah dibuat atas nama warga ini.
             </p>
           </div>
 
           {warga.surat.length === 0 ? (
-            <div className="px-5 py-10 text-center text-neutral-500 text-sm">
+            <div className="px-5 py-10 text-center text-sm text-neutral-500">
               Belum ada surat yang dibuat untuk warga ini.
             </div>
           ) : (
@@ -115,7 +115,7 @@ export default async function DetailWargaPage({
                   <th className="px-5 py-3 font-medium">Jenis Surat</th>
                   <th className="px-5 py-3 font-medium">Tanggal</th>
                   <th className="px-5 py-3 font-medium">Status</th>
-                  <th className="px-5 py-3 font-medium text-right">Aksi</th>
+                  <th className="px-5 py-3 text-right font-medium">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -137,7 +137,7 @@ export default async function DetailWargaPage({
                     </td>
                     <td className="px-5 py-4">
                       <span
-                        className={`text-xs font-medium px-2 py-1 rounded-full ${
+                        className={`rounded-full px-2 py-1 text-xs font-medium ${
                           suratStatusColor[surat.status]
                         }`}
                       >
@@ -147,7 +147,7 @@ export default async function DetailWargaPage({
                     <td className="px-5 py-4 text-right">
                       <Link
                         href={`/riwayat-surat/${surat.id}?from=warga&wargaId=${warga.id}`}
-                        className="text-neutral-400 hover:text-neutral-700 inline-flex"
+                        className="inline-flex text-neutral-400 hover:text-neutral-700"
                         title="Detail surat"
                       >
                         <EyeIcon className="h-4 w-4" />
