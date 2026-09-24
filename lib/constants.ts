@@ -20,16 +20,17 @@ import {
 } from "lucide-react";
 import type { ElementType } from "react";
 
-export const statusLabel: Record<string, string> = {
-  BELUM_KAWIN: "Belum Kawin",
-  KAWIN: "Kawin",
-  CERAI_HIDUP: "Cerai Hidup",
-  CERAI_MATI: "Cerai Mati",
+export const statusSuratLabel: Record<string, string> = {
   DRAFT: "Draft",
   FINAL: "Final",
 };
 
-export const statusPerkawinanLabel = statusLabel;
+export const statusPerkawinanLabel: Record<string, string> = {
+  BELUM_KAWIN: "Belum Kawin",
+  KAWIN: "Kawin",
+  CERAI_HIDUP: "Cerai Hidup",
+  CERAI_MATI: "Cerai Mati",
+};
 
 export const jenisKelaminLabel: Record<string, string> = {
   LAKI_LAKI: "Laki-laki",
