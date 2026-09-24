@@ -2,6 +2,21 @@
 
 import { Button } from "@/components/ui/button";
 import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Field, FieldLabel } from "@/components/ui/field";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   agamaLabel,
   golonganDarahLabel,
   jenisKelaminLabel,
@@ -86,7 +101,6 @@ export function WargaFilterBar({
 
   const [isOpen, setIsOpen] = useState(false);
 
-  // Hitung filter yang sedang aktif
   const activeFilters = useMemo(() => {
     const list: {
       key: string;
@@ -149,12 +163,10 @@ export function WargaFilterBar({
 
   return (
     <div className="w-full space-y-3">
-      {/* Row: Search Input + Filter Button di sebelah kanan + Export Buttons */}
       <div className="flex items-center justify-between gap-3 flex-wrap sm:flex-nowrap">
         <div className="flex items-center gap-2 w-full">
           {children}
 
-          {/* Tombol Filter di sebelah kanan search */}
           <Button
             type="button"
             variant="outline"
@@ -196,13 +208,14 @@ export function WargaFilterBar({
         {exportButtons}
       </div>
 
-      {/* Expandable Filter Panel */}
       {isOpen && (
-        <div className="rounded-xl border bg-card p-4 shadow-xs transition-all animate-in fade-in-50">
-          <div className="flex items-center justify-between pb-3 mb-3 border-b">
+        <Card size="sm" className="shadow-xs animate-in fade-in-50">
+          <CardHeader className="flex flex-row items-center justify-between pb-3 border-b">
             <div className="flex items-center gap-2">
               <FilterIcon className="h-4 w-4 text-primary" />
-              <span className="text-sm font-semibold">Filter Data Warga</span>
+              <CardTitle className="text-sm font-semibold">
+                Filter Data Warga
+              </CardTitle>
               {activeCount > 0 && (
                 <span className="text-xs text-muted-foreground">
                   ({activeCount} filter aktif)
@@ -210,57 +223,71 @@ export function WargaFilterBar({
               )}
             </div>
             {activeCount > 0 && (
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={resetAllFilters}
-                className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 gap-1 h-7"
-              >
-                <RotateCcwIcon className="h-3 w-3" />
-                <span>Hapus Semua</span>
-              </Button>
+              <CardAction>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={resetAllFilters}
+                  className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 gap-1 h-7"
+                >
+                  <RotateCcwIcon className="h-3 w-3" />
+                  <span>Hapus Semua</span>
+                </Button>
+              </CardAction>
             )}
-          </div>
+          </CardHeader>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-            {FILTER_CONFIGS.map(({ key, label, options }) => {
-              const currentValue = searchParams.get(key) ?? "";
-              return (
-                <div key={key} className="space-y-1.5">
-                  <label
-                    htmlFor={`filter-${key}`}
-                    className="text-xs font-medium text-neutral-600 dark:text-neutral-300 block truncate"
-                  >
-                    {label}
-                  </label>
-                  <select
-                    id={`filter-${key}`}
-                    value={currentValue}
-                    onChange={(e) => updateFilter(key, e.target.value)}
-                    className={cn(
-                      "w-full h-8.5 px-2.5 text-xs rounded-md border bg-background shadow-xs outline-none transition-colors",
-                      "focus:ring-1 focus:ring-primary focus:border-primary",
-                      currentValue
-                        ? "border-primary font-medium text-foreground bg-primary/5"
-                        : "border-input text-muted-foreground",
-                    )}
-                  >
-                    <option value="">Semua {label}</option>
-                    {options.map(([val, optLabel]) => (
-                      <option key={val} value={val} className="text-foreground">
-                        {optLabel}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+          <CardContent className="pt-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              {FILTER_CONFIGS.map(({ key, label, options }) => {
+                const currentValue = searchParams.get(key) ?? "";
+                const selectedLabel = options.find(([v]) => v === currentValue)?.[1];
+
+                return (
+                  <Field key={key} className="gap-1.5">
+                    <FieldLabel
+                      htmlFor={`filter-${key}`}
+                      className="text-xs font-medium text-muted-foreground truncate"
+                    >
+                      {label}
+                    </FieldLabel>
+                    <Select
+                      value={currentValue || ""}
+                      onValueChange={(val) => {
+                        updateFilter(key, !val || val === "ALL" ? "" : val);
+                      }}
+                    >
+                      <SelectTrigger
+                        id={`filter-${key}`}
+                        size="sm"
+                        className={cn(
+                          "w-full text-xs",
+                          currentValue &&
+                            "border-primary font-medium text-foreground bg-primary/5",
+                        )}
+                      >
+                        <SelectValue placeholder="Semua">
+                          {selectedLabel}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ALL">Semua</SelectItem>
+                        {options.map(([val, optLabel]) => (
+                          <SelectItem key={val} value={val} className="text-xs">
+                            {optLabel}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
       )}
 
-      {/* Active Filter Chips / Badges */}
       {activeCount > 0 && (
         <div className="flex flex-wrap items-center gap-1.5 pt-1">
           <span className="text-xs text-muted-foreground mr-1">
@@ -275,14 +302,16 @@ export function WargaFilterBar({
                 {label}:
               </span>
               <span>{displayValue}</span>
-              <button
+              <Button
+                variant="ghost"
+                size="icon-xs"
                 type="button"
                 onClick={() => removeFilter(key)}
-                className="hover:text-red-600 transition-colors p-0.5 rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                className="h-4 w-4 p-0 hover:bg-neutral-200 dark:hover:bg-neutral-700 hover:text-red-600 rounded-full"
                 title={`Hapus filter ${label}`}
               >
                 <XIcon className="h-3 w-3" />
-              </button>
+              </Button>
             </span>
           ))}
         </div>
