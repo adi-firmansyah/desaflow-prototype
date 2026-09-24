@@ -1,5 +1,6 @@
 import { PaginationControls } from "@/components/pagination-controls";
 import { DownloadPdfButton } from "@/components/riwayat-surat/download-pdf-button";
+import { StatusFilter } from "@/components/riwayat-surat/status-filter";
 import { SearchInput } from "@/components/search-input";
 import { buttonVariants } from "@/components/ui/button";
 import { statusColor, statusSuratLabel } from "@/lib/constants";
@@ -12,17 +13,24 @@ import { redirect } from "next/navigation";
 export default async function RiwayatSuratPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; page?: string; limit?: string }>;
+  searchParams: Promise<{
+    q?: string;
+    page?: string;
+    limit?: string;
+    status?: string;
+  }>;
 }) {
-  const { q, page, limit } = await searchParams;
+  const { q, page, limit, status } = await searchParams;
   const pagination = normalizePagination(page, limit);
   const suratResult = await getSuratList({
     ...pagination,
     query: q,
+    status,
   });
   if (suratResult.currentPage !== pagination.page) {
     const params = new URLSearchParams();
     if (q) params.set("q", q);
+    if (status) params.set("status", status);
     params.set("page", String(suratResult.currentPage));
     params.set("limit", String(pagination.limit));
     redirect(`/riwayat-surat?${params.toString()}`);
@@ -36,25 +44,41 @@ export default async function RiwayatSuratPage({
         Daftar seluruh surat yang pernah dibuat dan tersimpan di sistem.
       </p>
 
-      <div className="mb-4 max-w-sm">
-        <SearchInput
-          placeholder="Cari nomor surat atau nama warga..."
-          defaultValue={q}
-        />
+      <div className="mb-4 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+        <div className="w-full sm:max-w-xs">
+          <SearchInput
+            placeholder="Cari nomor surat atau nama warga..."
+            defaultValue={q}
+          />
+        </div>
+        <StatusFilter />
       </div>
 
       <div className="overflow-x-auto rounded-lg border bg-white">
         {suratList.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-3 px-5 py-12 text-center">
             <p className="text-sm text-neutral-500">
-              {q
-                ? `Tidak ada surat dengan kata kunci "${q}".`
-                : "Belum ada surat yang dibuat."}
+              {q && status
+                ? `Tidak ada surat dengan status "${statusSuratLabel[status] || status}" dan kata kunci "${q}".`
+                : q
+                  ? `Tidak ada surat dengan kata kunci "${q}".`
+                  : status
+                    ? `Tidak ada surat dengan status "${statusSuratLabel[status] || status}".`
+                    : "Belum ada surat yang dibuat."}
             </p>
-            <Link href="/buat-surat" className={buttonVariants()}>
-              <PlusIcon className="h-4 w-4" />
-              Buat Surat Baru
-            </Link>
+            {q || status ? (
+              <Link
+                href="/riwayat-surat"
+                className={buttonVariants({ variant: "default" })}
+              >
+                Reset Filter
+              </Link>
+            ) : (
+              <Link href="/buat-surat" className={buttonVariants()}>
+                <PlusIcon className="h-4 w-4" />
+                Buat Surat Baru
+              </Link>
+            )}
           </div>
         ) : (
           <table className="w-full text-sm">
@@ -114,6 +138,7 @@ export default async function RiwayatSuratPage({
       <PaginationControls
         pathname="/riwayat-surat"
         query={q}
+        extraParams={{ status }}
         page={suratResult.currentPage}
         limit={pagination.limit}
         totalPages={suratResult.totalPages}

@@ -65,27 +65,39 @@ export async function getWargaList({
   };
 }
 
+export type SuratFilterOptions = {
+  page?: number;
+  limit?: number;
+  query?: string;
+  status?: string;
+};
+
 export async function getSuratList({
   page = 1,
   limit = 10,
   query,
-}: {
-  page?: number;
-  limit?: number;
-  query?: string;
-}) {
-  const where = query
-    ? {
-        OR: [
-          { nomorSurat: { contains: query, mode: "insensitive" as const } },
-          {
-            warga: {
-              namaLengkap: { contains: query, mode: "insensitive" as const },
+  status,
+}: SuratFilterOptions) {
+  const normalizedStatus =
+    status && (status === "DRAFT" || status === "FINAL")
+      ? (status as any)
+      : undefined;
+
+  const where: Prisma.SuratWhereInput = {
+    ...(query
+      ? {
+          OR: [
+            { nomorSurat: { contains: query, mode: "insensitive" as const } },
+            {
+              warga: {
+                namaLengkap: { contains: query, mode: "insensitive" as const },
+              },
             },
-          },
-        ],
-      }
-    : undefined;
+          ],
+        }
+      : {}),
+    ...(normalizedStatus ? { status: normalizedStatus } : {}),
+  };
 
   const [data, total] = await Promise.all([
     prisma.surat.findMany({
