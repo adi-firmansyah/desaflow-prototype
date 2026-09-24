@@ -1,13 +1,23 @@
 "use client";
 
 import { createSurat } from "@/app/(dashboard)/buat-surat/actions";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PreviewRow } from "@/components/ui/detail-rows";
-import { parseFieldSchemas, type FieldSchema, type JenisSurat, type Warga } from "@/types";
+import { Separator } from "@/components/ui/separator";
 import {
+  parseFieldSchemas,
+  type FieldSchema,
+  type JenisSurat,
+  type Warga,
+} from "@/types";
+import {
+  AlertCircleIcon,
   ArrowLeftIcon,
   CheckIcon,
   EyeIcon,
+  Loader2Icon,
   PlusIcon,
   PrinterIcon,
 } from "lucide-react";
@@ -61,45 +71,52 @@ export function StepKonfirmasi({
 
   if (suratHasil && !showPreview) {
     return (
-      <div className="flex flex-col items-center text-center py-12">
-        <div className="h-16 w-16 rounded-lg bg-neutral-100 flex items-center justify-center mb-6">
+      <div className="flex flex-col items-center pb-12 text-center">
+        <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-lg bg-neutral-100">
           <CheckIcon className="h-8 w-8" />
         </div>
-        <h2 className="text-3xl font-bold mb-2">Surat Berhasil Dibuat</h2>
-        <p className="text-neutral-500 mb-8">
+        <h2 className="mb-2 text-3xl font-bold">Surat Berhasil Dibuat</h2>
+        <p className="mb-8 text-neutral-500">
           Dokumen telah tersimpan di sistem dan siap untuk dicetak atau
           ditandatangani.
         </p>
 
-        <div className="border rounded-lg p-6 w-full max-w-md text-left space-y-3 mb-8 bg-white">
-          <h3 className="font-semibold mb-2">Ringkasan Dokumen</h3>
-          <SummaryRow label="No. Surat" value={suratHasil.nomorSurat} />
-          <SummaryRow label="Nama Warga" value={warga.namaLengkap} />
-          <SummaryRow label="Jenis Surat" value={jenisSurat.nama} />
-          <SummaryRow
-            label="Tanggal Dibuat"
-            value={new Date(suratHasil.tanggalDibuat).toLocaleDateString(
-              "id-ID",
-              {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              },
-            )}
-          />
-        </div>
+        <Card className="mb-8 w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Ringkasan Dokumen</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <SummaryRow label="No. Surat" value={suratHasil.nomorSurat} />
+            <Separator />
+            <SummaryRow label="Nama Warga" value={warga.namaLengkap} />
+            <Separator />
+            <SummaryRow label="Jenis Surat" value={jenisSurat.nama} />
+            <Separator />
+            <SummaryRow
+              label="Tanggal Dibuat"
+              value={new Date(suratHasil.tanggalDibuat).toLocaleDateString(
+                "id-ID",
+                {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                },
+              )}
+            />
+          </CardContent>
+        </Card>
 
         <div className="flex gap-3">
           <Button onClick={() => window.print()}>
-            <PrinterIcon className="h-4 w-4 mr-2" />
+            <PrinterIcon className="mr-2 h-4 w-4" />
             Cetak Surat
           </Button>
           <Button variant="outline" onClick={() => setShowPreview(true)}>
-            <EyeIcon className="h-4 w-4 mr-2" />
+            <EyeIcon className="mr-2 h-4 w-4" />
             Preview Surat
           </Button>
           <Button variant="outline" onClick={onReset}>
-            <PlusIcon className="h-4 w-4 mr-2" />
+            <PlusIcon className="mr-2 h-4 w-4" />
             Buat Surat Baru
           </Button>
         </div>
@@ -108,12 +125,22 @@ export function StepKonfirmasi({
   }
 
   return (
-    <div>
-      <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 mb-6">
+    <div className="space-y-6">
+      {error && (
+        <Alert variant="destructive">
+          <AlertCircleIcon />
+          <AlertTitle>Gagal Menyimpan Surat</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[320px_1fr]">
         <div className="space-y-6">
-          <div className="border rounded-lg p-6 bg-white">
-            <h3 className="font-semibold mb-4">Informasi Surat</h3>
-            <div className="space-y-3 text-sm">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Informasi Surat</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm">
               <SummaryRow
                 label="Jenis Surat"
                 value={jenisSurat.nama}
@@ -138,106 +165,142 @@ export function StepKonfirmasi({
                 value="Admin Desa"
                 vertical
               />
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
           {!suratHasil && (
-            <div className="border rounded-lg p-6 space-y-3 bg-white">
-              <h3 className="font-semibold mb-1">Tindakan</h3>
-              <Button
-                variant="outline"
-                className="w-full justify-center"
-                onClick={() => handleSimpan("DRAFT")}
-                disabled={loading}
-              >
-                Simpan Draft
-              </Button>
-              <Button
-                className="w-full justify-center"
-                onClick={() => handleSimpan("FINAL")}
-                disabled={loading}
-              >
-                {loading ? "Menyimpan..." : "Cetak & Simpan Surat"}
-              </Button>
-            </div>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Tindakan Dokumen</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Button
+                  variant="outline"
+                  className="w-full justify-center"
+                  onClick={() => handleSimpan("DRAFT")}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <Loader2Icon className="h-4 w-4 animate-spin" />
+                  ) : (
+                    "Simpan Sebagai Draft"
+                  )}
+                </Button>
+                <Button
+                  className="w-full justify-center"
+                  onClick={() => handleSimpan("FINAL")}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <span className="flex items-center gap-2">
+                      <Loader2Icon className="h-4 w-4 animate-spin" />
+                      Menyimpan...
+                    </span>
+                  ) : (
+                    "Cetak & Simpan Surat"
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
           )}
         </div>
 
-        <div className="border rounded-lg p-10 bg-white">
-          <div className="text-center border-b-2 border-neutral-900 pb-4 mb-6">
-            <p className="font-bold text-lg uppercase">Pemerintah Desa</p>
-            <p className="text-sm text-neutral-500">Alamat Kantor Desa</p>
-          </div>
+        <Card className="shadow-sm">
+          <CardContent className="p-8 sm:p-12">
+            <div className="border-foreground mb-6 border-b-2 pb-4 text-center">
+              <p className="text-lg font-bold tracking-wider uppercase">
+                Pemerintah Desa
+              </p>
+              <p className="text-muted-foreground text-sm">
+                Kecamatan Wilayah • Kabupaten Wilayah
+              </p>
+            </div>
 
-          <h2 className="text-center font-bold text-lg underline mb-6 uppercase">
-            {jenisSurat.nama}
-          </h2>
+            <h2 className="mb-6 text-center text-lg font-bold tracking-wide uppercase underline">
+              {jenisSurat.nama}
+            </h2>
 
-          <p className="text-sm mb-4">
-            Yang bertanda tangan di bawah ini, Kepala Desa, menerangkan dengan
-            sesungguhnya bahwa:
-          </p>
+            <p className="mb-4 text-sm leading-relaxed">
+              Yang bertanda tangan di bawah ini, Kepala Desa, menerangkan dengan
+              sesungguhnya bahwa:
+            </p>
 
-          <table className="text-sm w-full mb-6 table-fixed">
-            <tbody>
-              <PreviewRow label="Nama Lengkap" value={warga.namaLengkap} bold />
-              <PreviewRow label="NIK" value={warga.nik} />
-              <PreviewRow
-                label="Tempat, Tanggal Lahir"
-                value={`${warga.tempatLahir}, ${new Date(
-                  warga.tanggalLahir,
-                ).toLocaleDateString("id-ID", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}`}
-              />
-              <PreviewRow
-                label="Jenis Kelamin"
-                value={
-                  warga.jenisKelamin === "LAKI_LAKI" ? "Laki-laki" : "Perempuan"
-                }
-              />
-              <PreviewRow label="Agama" value={warga.agama} />
-              <PreviewRow
-                label="Alamat"
-                value={`${warga.alamatKtp}, RT ${warga.noRt}/RW ${warga.noRw}`}
-              />
-            </tbody>
-          </table>
-
-          <p className="text-sm font-medium mb-3">Keterangan:</p>
-          <table className="text-sm w-full">
-            <tbody>
-              {fields.map((field) => (
+            <table className="mb-6 w-full table-fixed text-sm">
+              <tbody>
                 <PreviewRow
-                  key={field.key}
-                  label={field.label}
-                  value={formData[field.key] || "-"}
+                  label="Nama Lengkap"
+                  value={warga.namaLengkap}
+                  bold
                 />
-              ))}
-            </tbody>
-          </table>
-        </div>
+                <PreviewRow label="NIK" value={warga.nik} />
+                <PreviewRow
+                  label="Tempat, Tanggal Lahir"
+                  value={`${warga.tempatLahir}, ${new Date(
+                    warga.tanggalLahir,
+                  ).toLocaleDateString("id-ID", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}`}
+                />
+                <PreviewRow
+                  label="Jenis Kelamin"
+                  value={
+                    warga.jenisKelamin === "LAKI_LAKI"
+                      ? "Laki-laki"
+                      : "Perempuan"
+                  }
+                />
+                <PreviewRow label="Agama" value={warga.agama} />
+                <PreviewRow
+                  label="Alamat"
+                  value={`${warga.alamatKtp}, RT ${warga.noRt}/RW ${warga.noRw}`}
+                />
+              </tbody>
+            </table>
+
+            <p className="mb-3 text-sm font-semibold">Keterangan Tambahan:</p>
+            <table className="mb-8 w-full text-sm">
+              <tbody>
+                {fields.map((field) => (
+                  <PreviewRow
+                    key={field.key}
+                    label={field.label}
+                    value={formData[field.key] || "-"}
+                  />
+                ))}
+              </tbody>
+            </table>
+
+            <div className="mt-12 flex justify-end text-sm">
+              <div className="w-56 text-center">
+                <p className="text-muted-foreground mb-1">
+                  Ditetapkan di Kantor Desa
+                </p>
+                <p className="mb-16">Kepala Desa</p>
+                <p className="border-foreground inline-block border-b pb-0.5 font-bold">
+                  ( Kepala Desa )
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="flex justify-start">
-        {error && (
-          <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">
-            {error}
-          </p>
-        )}
         <Button
           variant="outline"
           onClick={() => (suratHasil ? setShowPreview(false) : onBack())}
+          className="gap-2"
         >
           <ArrowLeftIcon className="h-4 w-4" />
-          <span>{suratHasil ? "Kembali" : "Kembali Edit"}</span>
+          <span>{suratHasil ? "Kembali ke Ringkasan" : "Kembali Edit"}</span>
         </Button>
       </div>
     </div>
   );
 }
+
 function SummaryRow({
   label,
   value,
@@ -249,15 +312,15 @@ function SummaryRow({
 }) {
   if (vertical) {
     return (
-      <div className="pb-3 border-b last:border-0">
-        <p className="text-neutral-500 text-xs mb-1">{label}</p>
+      <div className="border-b pb-3 last:border-0">
+        <p className="text-muted-foreground mb-1 text-xs">{label}</p>
         <p className="font-medium">{value}</p>
       </div>
     );
   }
   return (
-    <div className="flex justify-between">
-      <span className="text-neutral-500">{label}</span>
+    <div className="flex items-center justify-between text-sm">
+      <span className="text-muted-foreground text-xs">{label}</span>
       <span className="font-medium">{value}</span>
     </div>
   );
