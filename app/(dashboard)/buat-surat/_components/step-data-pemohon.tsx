@@ -1,15 +1,35 @@
 "use client";
 
 import { searchWarga } from "@/app/(dashboard)/buat-surat/actions";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 import type { Warga } from "@/types";
-import { cn } from "cn";
 import {
   ArrowRightIcon,
   CheckIcon,
   Loader2Icon,
   SearchIcon,
+  UserXIcon,
   XIcon,
 } from "lucide-react";
 import { useEffect, useState, useTransition } from "react";
@@ -30,15 +50,17 @@ export function StepDataPemohon({
 
   useEffect(() => {
     const trimmed = query.trim();
-    if (!trimmed) {
-      setResults([]);
-      setHasSearched(false);
-      return;
-    }
-
     let isSubscribed = true;
 
     const timer = setTimeout(() => {
+      if (!trimmed) {
+        if (isSubscribed) {
+          setResults([]);
+          setHasSearched(false);
+        }
+        return;
+      }
+
       startTransition(async () => {
         try {
           const data = await searchWarga(trimmed);
@@ -63,87 +85,106 @@ export function StepDataPemohon({
   }, [query]);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div className="lg:col-span-2 space-y-6">
-        <div className="border rounded-lg p-6 bg-white">
-          <h2 className="text-xl font-semibold mb-1">Pencarian Data Warga</h2>
-          <p className="text-neutral-500 text-sm mb-4">
-            Ketik NIK atau nama warga untuk mencari data pemohon secara
-            otomatis.
-          </p>
-          <label className="text-sm font-medium mb-1.5 block">
-            Nomor Induk Kependudukan (NIK) atau Nama
-          </label>
-          <div className="relative">
-            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 pointer-events-none z-10" />
-            <Input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Masukkan NIK atau Nama warga..."
-              className="pl-9 pr-14 bg-white"
-            />
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 z-10">
-              {isPending && (
-                <Loader2Icon className="h-4 w-4 text-neutral-400 animate-spin" />
-              )}
-              {query && (
-                <button
-                  type="button"
-                  onClick={() => setQuery("")}
-                  className="text-neutral-400 hover:text-neutral-600 rounded p-0.5"
-                  title="Hapus pencarian"
-                >
-                  <XIcon className="h-3.5 w-3.5" />
-                </button>
-              )}
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="space-y-6 lg:col-span-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Pencarian Data Warga</CardTitle>
+            <CardDescription>
+              Ketik NIK atau nama warga untuk mencari data pemohon secara
+              otomatis.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <Label htmlFor="search-warga">
+              Nomor Induk Kependudukan (NIK) atau Nama
+            </Label>
+            <div className="relative">
+              <SearchIcon className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 z-10 h-4 w-4 -translate-y-1/2" />
+              <Input
+                id="search-warga"
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Masukkan NIK atau Nama warga..."
+                className="pr-14 pl-9"
+              />
+              <div className="absolute top-1/2 right-3 z-10 flex -translate-y-1/2 items-center gap-1.5">
+                {isPending && (
+                  <Loader2Icon className="text-muted-foreground h-4 w-4 animate-spin" />
+                )}
+                {query && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-xs"
+                    onClick={() => setQuery("")}
+                    className="text-muted-foreground hover:text-foreground"
+                    title="Hapus pencarian"
+                  >
+                    <XIcon className="h-3.5 w-3.5" />
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {hasSearched && (
-          <div className="border rounded-lg p-6 bg-white">
-            {results.length === 0 ? (
-              <p className="text-sm text-neutral-500 py-4 text-center">
-                Tidak ditemukan warga dengan kata kunci tersebut.
-              </p>
-            ) : (
-              <div className="overflow-x-auto -mx-2 px-2">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="text-left text-neutral-500 border-b">
-                      <th className="pb-2.5 pr-4 font-medium w-44 whitespace-nowrap">
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-base">Hasil Pencarian</CardTitle>
+                <Badge variant="secondary">
+                  {results.length} warga ditemukan
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-0">
+              {results.length === 0 ? (
+                <div className="text-muted-foreground flex flex-col items-center justify-center py-8 text-center">
+                  <UserXIcon className="mb-2 h-10 w-10 opacity-50" />
+                  <p className="text-sm font-medium">Warga tidak ditemukan</p>
+                  <p className="text-xs">
+                    Periksa kembali NIK atau nama yang Anda masukkan.
+                  </p>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-44 whitespace-nowrap">
                         NIK
-                      </th>
-                      <th className="pb-2.5 px-4 font-medium whitespace-nowrap">
+                      </TableHead>
+                      <TableHead className="whitespace-nowrap">
                         Nama Lengkap
-                      </th>
-                      <th className="pb-2.5 px-4 font-medium min-w-50">
-                        Alamat
-                      </th>
-                      <th className="pb-2.5 pl-4 font-medium text-right w-28 whitespace-nowrap">
+                      </TableHead>
+                      <TableHead className="min-w-48">Alamat</TableHead>
+                      <TableHead className="w-28 text-right whitespace-nowrap">
                         Aksi
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
                     {results.map((warga) => {
                       const isSelected = selectedWarga?.id === warga.id;
                       return (
-                        <tr
+                        <TableRow
                           key={warga.id}
-                          className="border-b last:border-0 hover:bg-neutral-50/60 transition-colors"
+                          className={cn(
+                            isSelected && "bg-primary/5 dark:bg-primary/10",
+                          )}
                         >
-                          <td className="py-3 pr-4 font-mono text-xs text-neutral-700 whitespace-nowrap">
+                          <TableCell className="text-foreground text-xs whitespace-nowrap">
                             {warga.nik}
-                          </td>
-                          <td className="py-3 px-4 font-medium whitespace-nowrap">
+                          </TableCell>
+                          <TableCell className="font-medium whitespace-nowrap">
                             {warga.namaLengkap}
-                          </td>
-                          <td className="py-3 px-4 text-neutral-500 text-xs leading-relaxed">
+                          </TableCell>
+                          <TableCell className="text-muted-foreground text-xs leading-relaxed">
                             {warga.alamatKtp}, RT {warga.noRt}/RW {warga.noRw}
-                          </td>
-                          <td className="py-3 pl-4 text-right whitespace-nowrap">
+                          </TableCell>
+                          <TableCell className="text-right whitespace-nowrap">
                             <Button
                               size="sm"
                               variant={isSelected ? "default" : "outline"}
@@ -157,7 +198,7 @@ export function StepDataPemohon({
                               }
                             >
                               {isSelected ? (
-                                <span className="flex items-center gap-2">
+                                <span className="flex items-center gap-1.5">
                                   <CheckIcon className="h-3.5 w-3.5" />
                                   Terpilih
                                 </span>
@@ -165,83 +206,107 @@ export function StepDataPemohon({
                                 "Pilih"
                               )}
                             </Button>
-                          </td>
-                        </tr>
+                          </TableCell>
+                        </TableRow>
                       );
                     })}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
+                  </TableBody>
+                </Table>
+              )}
+            </CardContent>
+          </Card>
         )}
       </div>
 
-      <div
+      <Card
         className={cn(
-          "border rounded-lg p-6 h-fit bg-white",
-          selectedWarga && "border-neutral-900 ring-1 ring-neutral-900",
+          "h-fit transition-all",
+          selectedWarga && "ring-primary border-primary ring-2",
         )}
       >
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <div className="h-5 w-5 rounded-full bg-neutral-900 flex items-center justify-center shrink-0">
-              <CheckIcon className="h-3 w-3 text-white" />
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div
+                className={cn(
+                  "flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-colors",
+                  selectedWarga
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground",
+                )}
+              >
+                <CheckIcon className="h-3.5 w-3.5" />
+              </div>
+              <CardTitle className="text-base">Warga Terpilih</CardTitle>
             </div>
-            <h3 className="font-semibold">Warga Terpilih</h3>
+            {selectedWarga && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="xs"
+                onClick={() => onSelect(null)}
+                className="text-muted-foreground hover:text-destructive text-xs"
+                title="Batalkan pilihan warga"
+              >
+                Batal
+              </Button>
+            )}
           </div>
-          {selectedWarga && (
-            <button
-              type="button"
-              onClick={() => onSelect(null)}
-              className="text-xs text-neutral-500 hover:text-red-600 transition-colors"
-              title="Batalkan pilihan warga"
-            >
-              Batal
-            </button>
-          )}
-        </div>
+        </CardHeader>
 
-        {selectedWarga ? (
-          <>
+        <CardContent>
+          {selectedWarga ? (
             <div className="space-y-3 text-sm">
-              <div className="pb-3 border-b">
-                <p className="text-neutral-500 text-xs mb-1">NIK</p>
-                <p className="font-medium">{selectedWarga.nik}</p>
+              <div>
+                <Label className="text-muted-foreground text-xs">NIK</Label>
+                <p className="mt-0.5 font-medium">{selectedWarga.nik}</p>
               </div>
-              <div className="pb-3 border-b">
-                <p className="text-neutral-500 text-xs mb-1">Nama Lengkap</p>
-                <p className="font-medium">{selectedWarga.namaLengkap}</p>
+              <Separator />
+              <div>
+                <Label className="text-muted-foreground text-xs">
+                  Nama Lengkap
+                </Label>
+                <p className="mt-0.5 font-medium">
+                  {selectedWarga.namaLengkap}
+                </p>
               </div>
-              <div className="pb-3 border-b">
-                <p className="text-neutral-500 text-xs mb-1">Jenis Kelamin</p>
-                <p className="font-medium">
+              <Separator />
+              <div>
+                <Label className="text-muted-foreground text-xs">
+                  Jenis Kelamin
+                </Label>
+                <p className="mt-0.5 font-medium">
                   {selectedWarga.jenisKelamin === "LAKI_LAKI"
                     ? "Laki-laki"
                     : "Perempuan"}
                 </p>
               </div>
+              <Separator />
               <div>
-                <p className="text-neutral-500 text-xs mb-1">Alamat</p>
-                <p className="font-medium">
+                <Label className="text-muted-foreground text-xs">Alamat</Label>
+                <p className="mt-0.5 font-medium">
                   {selectedWarga.alamatKtp}, RT {selectedWarga.noRt}/RW{" "}
                   {selectedWarga.noRw}
                 </p>
               </div>
             </div>
+          ) : (
+            <p className="text-muted-foreground py-8 text-center text-sm">
+              Belum ada warga yang dipilih. Cari dan pilih data warga terlebih
+              dahulu.
+            </p>
+          )}
+        </CardContent>
 
-            <Button className="w-full mt-6 gap-2" onClick={onNext}>
+        {selectedWarga && (
+          <CardFooter className="pt-2">
+            <Button className="w-full gap-2" onClick={onNext}>
               <span>Pilih Jenis Surat</span>
               <ArrowRightIcon className="h-4 w-4" />
             </Button>
-          </>
-        ) : (
-          <p className="text-sm text-neutral-500 py-8 text-center">
-            Belum ada warga yang dipilih. Cari dan pilih data warga terlebih
-            dahulu.
-          </p>
+          </CardFooter>
         )}
-      </div>
+      </Card>
     </div>
   );
 }

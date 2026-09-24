@@ -32,11 +32,11 @@ export default async function DetailSuratPage({
     <div>
       <BackButton />
 
-      <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[320px_1fr]">
         <div className="space-y-6">
-          <div className="border rounded-lg p-6 bg-white">
-            <h3 className="font-semibold mb-4">Informasi Surat</h3>
-            <div className="space-y-3 text-sm">
+          <div className="rounded-lg border bg-white p-6">
+            <h3 className="mb-4 font-semibold">Informasi Surat</h3>
+            <div className="space-y-2 text-sm">
               <InfoRow label="Nomor Surat" value={surat.nomorSurat} />
               <InfoRow label="Jenis Surat" value={jenisSurat.nama} />
               <InfoRow label="Nama Pemohon" value={warga.namaLengkap} />
@@ -59,12 +59,12 @@ export default async function DetailSuratPage({
             </div>
           </div>
 
-          <div className="border rounded-lg p-6 space-y-3 bg-white">
-            <h3 className="font-semibold mb-1">Tindakan</h3>
+          <div className="space-y-3 rounded-lg border bg-white p-6">
+            <h3 className="mb-1 font-semibold">Tindakan</h3>
             {surat.status === "DRAFT" && <FinalisasiButton id={surat.id} />}
 
             <Button className="w-full justify-center" onClick={undefined}>
-              <PrinterIcon className="h-4 w-4 mr-2" />
+              <PrinterIcon className="mr-2 h-4 w-4" />
               Cetak Surat
             </Button>
 
@@ -75,22 +75,22 @@ export default async function DetailSuratPage({
           </div>
         </div>
 
-        <div className="border rounded-lg p-10 bg-white">
-          <div className="text-center border-b-2 border-neutral-900 pb-4 mb-6">
-            <p className="font-bold text-lg uppercase">Pemerintah Desa</p>
+        <div className="rounded-lg border bg-white p-10">
+          <div className="mb-6 border-b-2 border-neutral-900 pb-4 text-center">
+            <p className="text-lg font-bold uppercase">Pemerintah Desa</p>
             <p className="text-sm text-neutral-500">Alamat Kantor Desa</p>
           </div>
 
-          <h2 className="text-center font-bold text-lg underline mb-6 uppercase">
+          <h2 className="mb-6 text-center text-lg font-bold uppercase underline">
             {jenisSurat.nama}
           </h2>
 
-          <p className="text-sm mb-4">
+          <p className="mb-4 text-sm">
             Yang bertanda tangan di bawah ini, Kepala Desa, menerangkan dengan
             sesungguhnya bahwa:
           </p>
 
-          <table className="text-sm w-full mb-6 table-fixed">
+          <table className="mb-6 w-full table-fixed text-sm">
             <tbody>
               <PreviewRow label="Nama Lengkap" value={warga.namaLengkap} bold />
               <PreviewRow label="NIK" value={warga.nik} />
@@ -118,8 +118,8 @@ export default async function DetailSuratPage({
             </tbody>
           </table>
 
-          <p className="text-sm font-medium mb-3">Keterangan:</p>
-          <table className="text-sm w-full">
+          <p className="mb-3 text-sm font-medium">Keterangan:</p>
+          <table className="w-full text-sm">
             <tbody>
               {fields.map((field) => (
                 <PreviewRow
