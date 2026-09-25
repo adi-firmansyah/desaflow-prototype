@@ -33,6 +33,7 @@ export async function getWargaList({
       ? {
           OR: [
             { nik: { contains: query, mode: "insensitive" as const } },
+            { noKk: { contains: query, mode: "insensitive" as const } },
             { namaLengkap: { contains: query, mode: "insensitive" as const } },
           ],
         }
@@ -41,8 +42,12 @@ export async function getWargaList({
     ...(agama ? { agama: agama as any } : {}),
     ...(golonganDarah ? { golonganDarah: golonganDarah as any } : {}),
     ...(statusPerkawinan ? { statusPerkawinan: statusPerkawinan as any } : {}),
-    ...(statusHubunganKeluarga ? { statusHubunganKeluarga: statusHubunganKeluarga as any } : {}),
-    ...(pendidikanTerakhir ? { pendidikanTerakhir: pendidikanTerakhir as any } : {}),
+    ...(statusHubunganKeluarga
+      ? { statusHubunganKeluarga: statusHubunganKeluarga as any }
+      : {}),
+    ...(pendidikanTerakhir
+      ? { pendidikanTerakhir: pendidikanTerakhir as any }
+      : {}),
     ...(jenisPekerjaan ? { jenisPekerjaan: jenisPekerjaan as any } : {}),
     ...(kewarganegaraan ? { kewarganegaraan: kewarganegaraan as any } : {}),
   };
@@ -154,4 +159,3 @@ export async function getJenisSuratList({
     currentPage: Math.min(page, totalPages),
   };
 }
-
