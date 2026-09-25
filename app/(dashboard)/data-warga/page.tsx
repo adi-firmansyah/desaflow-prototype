@@ -109,7 +109,7 @@ export default async function DataWargaPage({
           }
         >
           <SearchInput
-            placeholder="Cari NIK atau nama..."
+            placeholder="Cari NIK, No. KK, atau nama..."
             defaultValue={q}
             className="max-w-sm"
           />
@@ -138,6 +138,7 @@ export default async function DataWargaPage({
             <thead>
               <tr className="bg-neutral-50 text-left text-neutral-500">
                 <th className="px-5 py-3 font-medium">NIK</th>
+                <th className="px-5 py-3 font-medium">No. Kartu Keluarga</th>
                 <th className="px-5 py-3 font-medium">Nama Lengkap</th>
                 <th className="px-5 py-3 font-medium">Alamat</th>
                 <th className="px-5 py-3 font-medium">Status</th>
@@ -148,6 +149,11 @@ export default async function DataWargaPage({
               {wargaList.map((warga) => (
                 <tr key={warga.id} className="border-t">
                   <td className="px-5 py-4">{warga.nik}</td>
+                  <td className="px-5 py-4 underline">
+                    <Link href={`/data-warga?q=${warga.noKk}`} title="Cari KK">
+                      {warga.noKk}
+                    </Link>
+                  </td>
                   <td className="px-5 py-4 font-medium">{warga.namaLengkap}</td>
                   <td className="px-5 py-4 text-neutral-500">
                     {warga.alamatKtp}, RT {warga.noRt}/RW {warga.noRw}
