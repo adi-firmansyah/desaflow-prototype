@@ -29,6 +29,34 @@ export default function DashboardLoading() {
         </div>
       </div>
 
+      {/* Chart Skeleton */}
+      <div className="border rounded-lg bg-white mb-8 overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b">
+          <div>
+            <div className="h-5 w-56 bg-neutral-200 rounded mb-2" />
+            <div className="h-3.5 w-72 bg-neutral-200 rounded" />
+          </div>
+          <div className="h-6 w-44 bg-neutral-200 rounded" />
+        </div>
+        <div className="p-5">
+          <div className="h-72 w-full bg-neutral-100/70 rounded-lg flex flex-col justify-around p-4">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <div className="h-3.5 w-36 bg-neutral-200 rounded shrink-0" />
+                <div
+                  className="h-5 bg-neutral-200 rounded"
+                  style={{ width: `${80 - i * 15}%` }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="border-t px-5 py-3 flex items-center justify-between">
+          <div className="h-3.5 w-64 bg-neutral-200 rounded" />
+          <div className="h-3.5 w-24 bg-neutral-200 rounded" />
+        </div>
+      </div>
+
       {/* Recent Letters Table */}
       <div className="border rounded-lg bg-white overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b">

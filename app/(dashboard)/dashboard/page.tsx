@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 import { DownloadPdfButton } from "@/components/riwayat-surat/download-pdf-button";
 import { prisma } from "@/lib/prisma";
 import { buttonVariants } from "@/components/ui/button";
+import { JenisSuratChart } from "@/components/dashboard/jenis-surat-chart";
 import {
   ArrowRightIcon,
   CalendarIcon,
@@ -17,15 +18,35 @@ export default async function DashboardPage() {
   const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-  const [suratHariIni, suratBulanIni, suratTerbaru] = await Promise.all([
-    prisma.surat.count({ where: { tanggalDibuat: { gte: startOfDay } } }),
-    prisma.surat.count({ where: { tanggalDibuat: { gte: startOfMonth } } }),
-    prisma.surat.findMany({
-      take: 4,
-      orderBy: { tanggalDibuat: "desc" },
-      include: { warga: true, jenisSurat: true },
-    }),
-  ]);
+  const [suratHariIni, suratBulanIni, suratTerbaru, jenisSuratRaw] =
+    await Promise.all([
+      prisma.surat.count({ where: { tanggalDibuat: { gte: startOfDay } } }),
+      prisma.surat.count({ where: { tanggalDibuat: { gte: startOfMonth } } }),
+      prisma.surat.findMany({
+        take: 4,
+        orderBy: { tanggalDibuat: "desc" },
+        include: { warga: true, jenisSurat: true },
+      }),
+      prisma.jenisSurat.findMany({
+        select: {
+          id: true,
+          nama: true,
+          kodeFormat: true,
+          _count: {
+            select: {
+              surat: true,
+            },
+          },
+        },
+      }),
+    ]);
+
+  const statistikJenisSurat = jenisSuratRaw.map((item) => ({
+    id: item.id,
+    nama: item.nama,
+    kodeFormat: item.kodeFormat,
+    jumlah: item._count.surat,
+  }));
 
   return (
     <div>
@@ -63,6 +84,8 @@ export default async function DashboardPage() {
           <span className="font-semibold">Buat Surat Baru</span>
         </Link>
       </div>
+
+      <JenisSuratChart data={statistikJenisSurat} />
 
       <div className="border rounded-lg bg-white">
         <div className="flex items-center justify-between px-5 py-4 border-b">
