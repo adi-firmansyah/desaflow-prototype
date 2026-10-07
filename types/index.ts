@@ -1,10 +1,7 @@
-export type JenisKelamin = "LAKI_LAKI" | "PEREMPUAN";
+import type { Warga, JenisSurat } from "../prisma/generated/client";
 
-export type StatusKawin =
-  | "BELUM_KAWIN"
-  | "KAWIN"
-  | "CERAI_HIDUP"
-  | "CERAI_MATI";
+export type { Warga, JenisSurat };
+export * from "../prisma/generated/client";
 
 export type FieldType = "text" | "date" | "select" | "textarea";
 
@@ -15,30 +12,6 @@ export type FieldSchema = {
   required: boolean;
   placeholder?: string;
   options?: string[];
-};
-
-export type Warga = {
-  id: string;
-  nik: string;
-  namaLengkap: string;
-  tempatLahir: string;
-  tanggalLahir: Date;
-  jenisKelamin: JenisKelamin;
-  agama: string;
-  alamat: string;
-  rt: string;
-  rw: string;
-  statusKawin: StatusKawin;
-  pekerjaan: string | null;
-};
-
-export type JenisSurat = {
-  id: string;
-  nama: string;
-  deskripsi: string;
-  icon: string;
-  kodeFormat: string;
-  templateFields: FieldSchema[];
 };
 
 export type WargaSearchResult = Pick<Warga, "id" | "nik" | "namaLengkap">;

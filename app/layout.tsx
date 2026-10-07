@@ -1,3 +1,4 @@
+import { InteractiveDotBackground } from "@/components/interactive-dot-background";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
@@ -34,8 +35,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       )}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        {children}
+      <body className="min-h-full flex flex-col relative" suppressHydrationWarning>
+        <InteractiveDotBackground />
+        <div className="relative z-10 flex-1 flex flex-col">{children}</div>
       </body>
     </html>
   );

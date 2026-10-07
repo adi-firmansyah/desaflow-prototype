@@ -11,12 +11,12 @@ export async function Topbar() {
   const name = session?.user?.name ?? "Admin Desa";
 
   return (
-    <header className="h-18.25 border-b flex items-center justify-between px-6 gap-4">
+    <header className="flex h-18.25 items-center justify-between gap-4 border-b bg-white px-6">
       <GlobalSearch />
 
-      <div className="flex items-center gap-4 shrink-0">
+      <div className="flex shrink-0 items-center gap-4">
         <span className="text-sm font-medium">{name}</span>
-        <div className="h-6 w-px bg-border" />
+        <div className="bg-border h-6 w-px" />
         <LogoutButton />
       </div>
     </header>
